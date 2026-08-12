@@ -14,13 +14,17 @@ agents/shared/project-rules.yaml
 n8n/docs/architecture.md
 n8n/scripts/agent_orchestrator_context.js
 n8n/workflows/EN-AGENT-001-workflow-spec.md
+n8n/workflows/CHAT-GATEWAY-001-spec.md
 n8n/workflows/WF-BACKLOG-RECOMMEND-001-spec.md
+n8n/workflows/imports/CHAT-GATEWAY-001.workflow.json
 n8n/workflows/imports/AGENT-ORCH-001.workflow.json
 n8n/workflows/imports/AGENT-BKL-001.workflow.json
 n8n/workflows/imports/README.md
 n8n/workflows/deployments/AGENT-ORCH-001-local.yaml
 n8n/workflows/deployments/AGENT-BKL-001-local.yaml
+n8n/workflows/deployments/CHAT-GATEWAY-001-local.yaml
 n8n/workflows/inputs/EN-AGENT-001-soil-validation-request.json
+n8n/workflows/inputs/CHAT-GATEWAY-001-example.json
 n8n/workflows/inputs/WF-BACKLOG-RECOMMEND-001-request.json
 n8n/workflows/inputs/WF-BACKLOG-RECOMMEND-001-short-coding.json
 project/agents-operating-model.md

@@ -1,0 +1,52 @@
+{
+  "name": "CHAT-GATEWAY-001 - Project Agent Chat",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-agent-chat",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "chat-webhook",
+      "name": "Chat Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        0
+      ],
+      "webhookId": "project-agent-chat"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst message = String(body.message || body.text || body.request || '').trim();\nconst lower = message.toLowerCase();\n\nlet primaryAgent = 'AGENT-BKL-001';\nlet workflow = 'WF-BACKLOG-RECOMMEND-001';\nlet reply = 'Puedo ayudarte a elegir el siguiente trabajo del backlog. Te recomiendo pedir: \"recomienda siguiente trabajo\".';\nlet nextQuestion = 'Quieres que te recomiende 3 opciones del backlog ahora?';\n\nif (lower.includes('refinar') || lower.includes('refinamiento')) {\n  primaryAgent = 'AGENT-REF-001';\n  workflow = 'WF-REFINE-STORY-001';\n  reply = 'Entendido. Voy a tratar esto como una solicitud de refinamiento de HU o enabler.';\n  nextQuestion = 'Que HU o enabler quieres refinar?';\n} else if (lower.includes('siguiente') || lower.includes('backlog') || lower.includes('trabajar') || lower.includes('recomienda')) {\n  primaryAgent = 'AGENT-BKL-001';\n  workflow = 'WF-BACKLOG-RECOMMEND-001';\n  reply = 'Entendido. La ruta correcta es pedir recomendacion al Backlog Agent usando prioridad, WIP y modo de trabajo.';\n  nextQuestion = 'Cuanto tiempo tienes ahora: corto, medio o largo?';\n} else if (lower.includes('arquitectura') || lower.includes('decision') || lower.includes('decisión')) {\n  primaryAgent = 'AGENT-ARCH-001';\n  workflow = 'WF-ARCH-REVIEW-001';\n  reply = 'Entendido. Esto debe ir a revision arquitectonica o decision tecnica.';\n  nextQuestion = 'Cual es la decision o cambio arquitectonico que quieres evaluar?';\n} else if (lower.includes('mercado') || lower.includes('contenido') || lower.includes('growth')) {\n  primaryAgent = lower.includes('contenido') || lower.includes('growth') ? 'AGENT-GROW-001' : 'AGENT-MKT-001';\n  workflow = 'WF-MARKET-GROWTH-001';\n  reply = 'Entendido. Esto debe pasar por mercado/growth respetando la politica de claims.';\n  nextQuestion = 'Quieres trabajar mercado, contenido educativo o validacion de claims?';\n} else if (lower.includes('sensor') || lower.includes('suelo') || lower.includes('mqtt') || lower.includes('web')) {\n  primaryAgent = 'AGENT-BKL-001';\n  workflow = 'WF-BACKLOG-RECOMMEND-001';\n  reply = 'Entendido. Lo ubicaria dentro del backlog tecnico y luego lo refinaria por rol experto.';\n  nextQuestion = 'Quieres que lo tratemos como trabajo fisico, codigo, o refinamiento/documentacion?';\n}\n\nreturn [{\n  json: {\n    chat_id: body.chat_id || 'local-project-chat',\n    received_message: message,\n    status: 'SUCCESS',\n    reply,\n    route: {\n      workflow,\n      primary_agent: primaryAgent,\n      authority: 'A1',\n      review_required: true\n    },\n    constraints: [\n      'No modificar HU congeladas.',\n      'No mover estados sin aprobacion humana.',\n      'No marcar DONE sin evidencia.',\n      'Hacer una sola pregunta al humano por turno.'\n    ],\n    next_question: nextQuestion,\n    suggested_payloads: {\n      backlog_recommendation: {\n        message: 'recomienda siguiente trabajo',\n        available_time: 'unknown',\n        preferred_mode: 'any'\n      },\n      refine_story: {\n        message: 'refinar EN-AGENT-001',\n        backlog_id: 'EN-AGENT-001'\n      }\n    }\n  }\n}];"
+      },
+      "id": "chat-router",
+      "name": "Chat Router",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -360,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Chat Webhook": {
+      "main": [
+        [
+          {
+            "node": "Chat Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
