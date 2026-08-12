@@ -11,16 +11,24 @@ POST /kiro/run
 
 ## Start
 
+Node runtime:
+
 ```bash
 cd /home/chuchosam/Documentos/github/invernadero-central/n8n/kiro/runner
 KIRO_API_KEY=ksk_xxxxx npm start
+```
+
+Python runtime, useful for the current `agent-runner` container:
+
+```bash
+KIRO_RUNNER_HOST=0.0.0.0 KIRO_API_KEY=ksk_xxxxx python3 kiro_runner.py
 ```
 
 If running inside the existing Docker Compose network, start it from the `agent-runner`
 service and keep port `8080` listening inside the container:
 
 ```bash
-KIRO_RUNNER_HOST=0.0.0.0 KIRO_API_KEY=ksk_xxxxx npm start
+KIRO_RUNNER_HOST=0.0.0.0 KIRO_API_KEY=ksk_xxxxx python3 /workspace/work/kiro-runner/kiro_runner.py
 ```
 
 n8n should call:

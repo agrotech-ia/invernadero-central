@@ -25,6 +25,7 @@ n8n/docs/architecture.md
 n8n/kiro/KIRO-BRIDGE-001-spec.md
 n8n/kiro/runner/.env.example
 n8n/kiro/runner/README.md
+n8n/kiro/runner/kiro_runner.py
 n8n/kiro/runner/package.json
 n8n/kiro/runner/server.js
 n8n/kiro/requests/refine-en-agent-001.json
@@ -41,6 +42,7 @@ n8n/workflows/imports/README.md
 n8n/workflows/deployments/AGENT-ORCH-001-local.yaml
 n8n/workflows/deployments/AGENT-BKL-001-local.yaml
 n8n/workflows/deployments/CHAT-GATEWAY-001-local.yaml
+n8n/workflows/deployments/AGENT-REF-001-local.yaml
 n8n/workflows/inputs/EN-AGENT-001-soil-validation-request.json
 n8n/workflows/inputs/CHAT-GATEWAY-001-example.json
 n8n/workflows/inputs/AGENT-REF-001-example.json
