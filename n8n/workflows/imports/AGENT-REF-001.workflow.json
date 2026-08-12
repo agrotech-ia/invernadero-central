@@ -27,6 +27,7 @@
     },
     {
       "parameters": {
+        "authentication": "headerAuth",
         "requestMethod": "POST",
         "url": "http://agent-runner:8080/kiro/run",
         "jsonParameters": true,
@@ -37,7 +38,13 @@
       "name": "Call Kiro Runner",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [-200, 0]
+      "position": [-200, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
     }
   ],
   "connections": {

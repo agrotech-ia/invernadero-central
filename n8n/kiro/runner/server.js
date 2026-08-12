@@ -50,6 +50,28 @@ function getAuthApiKey(request) {
   return match ? match[1].trim() : '';
 }
 
+function normalizeApiKey(value) {
+  const apiKey = String(value || '').trim();
+  if (!apiKey || apiKey === 'TU_KIRO_API_KEY') {
+    return '';
+  }
+  return apiKey;
+}
+
+function getKiroApiKey(request) {
+  const headerKey = normalizeApiKey(getAuthApiKey(request));
+  if (headerKey) {
+    return { apiKey: headerKey, source: 'authorization_header' };
+  }
+
+  const envKey = normalizeApiKey(process.env.KIRO_API_KEY);
+  if (envKey) {
+    return { apiKey: envKey, source: 'environment' };
+  }
+
+  return { apiKey: '', source: 'missing' };
+}
+
 function getKiroStatus() {
   const result = spawnSync(KIRO_CLI_BIN, ['--version'], {
     encoding: 'utf8',
@@ -183,7 +205,7 @@ async function handleRun(request, response) {
     return;
   }
 
-  const apiKey = process.env.KIRO_API_KEY || getAuthApiKey(request);
+  const { apiKey, source: apiKeySource } = getKiroApiKey(request);
   if (!apiKey && !payload.dry_run) {
     sendJson(response, 401, {
       status: 'FAILED',
@@ -205,6 +227,10 @@ async function handleRun(request, response) {
       agent: validation.agent,
       workspace: validation.workspace,
       command,
+      auth: {
+        kiro_api_key_present: Boolean(apiKey),
+        source: apiKeySource,
+      },
       requires_human_review: payload.approval_required !== false,
     });
     return;
@@ -221,6 +247,10 @@ async function handleRun(request, response) {
     ...result,
     agent: validation.agent,
     workspace: validation.workspace,
+    auth: {
+      kiro_api_key_present: Boolean(apiKey),
+      source: apiKeySource,
+    },
     requires_human_review: payload.approval_required !== false,
   });
 }

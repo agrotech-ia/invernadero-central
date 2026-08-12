@@ -105,6 +105,25 @@ def auth_api_key(handler):
     return header[len(prefix):].strip() if header.startswith(prefix) else ""
 
 
+def normalize_api_key(value):
+    api_key = str(value or "").strip()
+    if not api_key or api_key == "TU_KIRO_API_KEY":
+        return ""
+    return api_key
+
+
+def get_kiro_api_key(handler):
+    header_key = normalize_api_key(auth_api_key(handler))
+    if header_key:
+        return header_key, "authorization_header"
+
+    env_key = normalize_api_key(os.environ.get("KIRO_API_KEY", ""))
+    if env_key:
+        return env_key, "environment"
+
+    return "", "missing"
+
+
 def run_kiro(agent, prompt, workspace, api_key):
     started = time.time()
     env = os.environ.copy()
@@ -178,7 +197,7 @@ class KiroRunnerHandler(BaseHTTPRequestHandler):
             send_json(self, 400, {"status": "FAILED", "errors": errors})
             return
 
-        api_key = os.environ.get("KIRO_API_KEY", "") or auth_api_key(self)
+        api_key, api_key_source = get_kiro_api_key(self)
         if not api_key and not payload.get("dry_run"):
             send_json(self, 401, {"status": "FAILED", "error": "kiro_api_key_required"})
             return
@@ -196,6 +215,10 @@ class KiroRunnerHandler(BaseHTTPRequestHandler):
                 "agent": agent,
                 "workspace": workspace,
                 "command": command,
+                "auth": {
+                    "kiro_api_key_present": bool(api_key),
+                    "source": api_key_source,
+                },
                 "requires_human_review": payload.get("approval_required") is not False,
             })
             return
@@ -205,6 +228,10 @@ class KiroRunnerHandler(BaseHTTPRequestHandler):
             **result,
             "agent": agent,
             "workspace": workspace,
+            "auth": {
+                "kiro_api_key_present": bool(api_key),
+                "source": api_key_source,
+            },
             "requires_human_review": payload.get("approval_required") is not False,
         })
 

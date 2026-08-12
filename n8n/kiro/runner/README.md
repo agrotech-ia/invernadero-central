@@ -74,6 +74,9 @@ Set `dry_run: true` in the payload to validate routing and command construction 
 ## Security
 
 - The API key must come from `KIRO_API_KEY` env or `Authorization: Bearer ...`.
+- `Authorization: Bearer ...` takes precedence over `KIRO_API_KEY` so n8n credentials
+  can override local placeholders safely.
+- The placeholder value `TU_KIRO_API_KEY` is treated as missing.
 - API keys are not stored in Git.
 - Agents and workspaces are whitelisted.
 - Kiro headless runs with `--trust-tools=read,grep` by default. Override with

@@ -37,6 +37,10 @@ Payload:
 http://agent-runner:8080/kiro/run
 ```
 
+El nodo HTTP Request V1 usa `authentication: headerAuth` con la credencial n8n
+`httpHeaderAuth` llamada `n8n` para enviar
+la API key de Kiro al runner como header `Authorization: Bearer <KIRO_API_KEY>`.
+
 ## Nota
 
 El workflow inicia con `dry_run: true` por defecto para validar conectividad sin consumir Kiro.

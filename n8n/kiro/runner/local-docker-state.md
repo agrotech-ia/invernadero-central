@@ -53,3 +53,17 @@ repos mounted: OK
 `KIRO_API_KEY` dentro de `agent-runner` sigue como placeholder. No ejecutar
 `dry_run: false` hasta configurar una key real en `/home/chuchosam/docker/n8n/.env`
 o enviar `Authorization: Bearer <KIRO_API_KEY>` desde n8n.
+
+El workflow `AGENT-REF-001` ya referencia la credencial n8n `n8n` de tipo
+`httpHeaderAuth`, pero la validacion del 2026-08-12 todavia retorno:
+
+```text
+auth.source: missing
+```
+
+Accion manual requerida en n8n: abrir la credencial `n8n` y confirmar:
+
+```text
+Name: Authorization
+Value: Bearer <KIRO_API_KEY>
+```
