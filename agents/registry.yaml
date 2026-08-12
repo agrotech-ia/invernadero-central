@@ -31,3 +31,15 @@ agents:
   name: Growth, Content & Education Agent
   path: agents/growth-content/agent.yaml
   version: 1.0.0
+- agent_id: AGENT-REV-001
+  name: Reviewer / Safety Agent
+  path: agents/reviewer/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-ENG-001
+  name: Engineering Execution Agent
+  path: agents/engineering/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-QA-001
+  name: QA / Evidence Agent
+  path: agents/qa/agent.yaml
+  version: 1.0.0

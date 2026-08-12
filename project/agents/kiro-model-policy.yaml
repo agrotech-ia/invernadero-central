@@ -1,0 +1,59 @@
+version: '1.0'
+status: DRAFT
+provider: Kiro
+source_docs:
+- https://kiro.dev/docs/custom-agents/
+- https://kiro.dev/docs/cli/
+- https://kiro.dev/docs/models/available-models/
+principle: n8n orquesta; Kiro ejecuta/refina/revisa usando agentes de workspace.
+model_defaults:
+  lightweight: gpt-5.6-luna
+  balanced: gpt-5.6-terra
+  critical: gpt-5.6-sol
+  stable_coding_fallback: claude-sonnet-5
+notes:
+- Kiro CLI soporta modo headless con KIRO_API_KEY y `kiro-cli chat --no-interactive`.
+- Los custom agents viven en `.kiro/agents/` y pueden incluir tools, recursos, permisos, prompt y modelo.
+- GPT-5.6 Luna es eficiente para tareas frecuentes; Terra balancea desarrollo rutinario; Sol se reserva para trabajo critico.
+agents:
+- agent_id: AGENT-BKL-001
+  kiro_agent: project-backlog
+  model: gpt-5.6-terra
+  reason: Priorizacion, WIP, dependencias y recomendacion requieren juicio balanceado.
+- agent_id: AGENT-REF-001
+  kiro_agent: project-refinement
+  model: gpt-5.6-terra
+  reason: Refinar HUs granulares con DoR, DoD, evidencia y riesgos necesita buen razonamiento estructurado.
+- agent_id: AGENT-REV-001
+  kiro_agent: project-reviewer-safety
+  model: gpt-5.6-sol
+  reason: Revisor independiente para autoridad, evidencia, baseline y seguridad.
+- agent_id: AGENT-ARCH-001
+  kiro_agent: project-architecture
+  model: gpt-5.6-sol
+  reason: Arquitectura, contratos y decisiones transversales son de alto impacto.
+- agent_id: AGENT-ENG-001
+  kiro_agent: project-engineering
+  model: gpt-5.6-terra
+  fallback_model: claude-sonnet-5
+  reason: Ejecucion de codigo acotada; subir a Sol o revisor para cambios complejos.
+- agent_id: AGENT-QA-001
+  kiro_agent: project-qa-evidence
+  model: gpt-5.6-terra
+  reason: Validacion, evidencia y V&V requieren estructura y rigor.
+escalation_rules:
+- from: gpt-5.6-luna
+  to: gpt-5.6-terra
+  when:
+  - ambiguity
+  - backlog_prioritization
+  - story_refinement
+  - evidence_review
+- from: gpt-5.6-terra
+  to: gpt-5.6-sol
+  when:
+  - architecture_decision
+  - hardware_power_safety
+  - final_done_review
+  - high_risk_code_change
+  - conflicting_baselines_or_decisions

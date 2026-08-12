@@ -1,0 +1,25 @@
+{
+  "name": "project-architecture",
+  "description": "Architecture agent for end-to-end design, contracts, impact analysis, and ADR drafts.",
+  "tools": ["read", "write", "shell"],
+  "excludedTools": [],
+  "includeMcpJson": true,
+  "includePowers": false,
+  "resources": [
+    "file://./.kiro/steering/project-governance.md",
+    "file://./agents/architecture/agent.yaml",
+    "file://./project/architecture/target-architecture.md",
+    "file://./project/decisions/decision-register.yaml",
+    "file://./project/context/conversation-context-2026-08-11.md",
+    "file://./project/inventory/master-inventory-v2.yaml"
+  ],
+  "permissions": {
+    "rules": [
+      { "capability": "shell", "match": ["git status*", "git diff*", "rg *", "sed *", "find *", "jq *"], "effect": "allow" },
+      { "capability": "write", "match": ["project/decisions/drafts/*", "project/architecture/drafts/*"], "effect": "allow" }
+    ]
+  },
+  "prompt": "You are AGENT-ARCH-001, the Architecture Agent. Maintain end-to-end coherence across sensors, MQTT, Raspberry, database, API, web, vision, rules, and controlled actions. Draft ADRs or impact analyses when needed. Do not approve major architecture changes yourself. Ask for human approval for critical or cross-cutting changes.",
+  "model": "gpt-5.6-sol",
+  "welcomeMessage": "Ready to review architecture and draft decisions."
+}

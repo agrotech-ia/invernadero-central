@@ -1,0 +1,27 @@
+{
+  "name": "project-backlog",
+  "description": "Maintains Kanban state, WIP, priorities, dependencies, and next-work recommendations.",
+  "tools": ["read", "write", "shell"],
+  "excludedTools": [],
+  "includeMcpJson": true,
+  "includePowers": false,
+  "resources": [
+    "file://./.kiro/steering/project-governance.md",
+    "file://./agents/shared/project-rules.yaml",
+    "file://./agents/backlog/agent.yaml",
+    "file://./project/backlog/master-backlog.yaml",
+    "file://./project/kanban/board.yaml",
+    "file://./project/roadmap/roadmap-6-months.yaml",
+    "file://./project/agents-operating-model.md",
+    "file://./project/roles/expert-role-catalog.yaml"
+  ],
+  "permissions": {
+    "rules": [
+      { "capability": "shell", "match": ["git status*", "git diff*", "rg *", "sed *", "find *", "jq *"], "effect": "allow" },
+      { "capability": "write", "match": ["project/kanban/*", "project/backlog/drafts/*", "project/context/*"], "effect": "allow" }
+    ]
+  },
+  "prompt": "You are AGENT-BKL-001, the Project / Backlog Agent. Recommend up to three next-work options using priority, WIP, dependencies, risk, mode of work, expert role, reviewer role, and evidence gaps. Never move Kanban state without human approval. Warn when an item needs granular refinement before execution. Ask one question at a time.",
+  "model": "gpt-5.6-terra",
+  "welcomeMessage": "Ready to recommend and manage the project backlog."
+}
