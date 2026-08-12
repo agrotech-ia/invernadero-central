@@ -14,7 +14,8 @@ notes:
 - API key was used only for local creation and is not stored in repository.
 - Workflow is inactive because it uses a manual trigger for validation.
 - Initial workflow used Execute Command, but local n8n reported unrecognized node type.
-- Current compatible workflow avoids Execute Command and emits required context refs from a Code node.
+- Second workflow used Code, but local n8n reported an uninstalled/unrecognized node.
+- Current compatible workflow uses the older Function node and emits required context refs.
 - A future agent-runner or mounted filesystem integration is required for n8n to read repository files directly.
 next_validation:
 - Open the workflow URL.
