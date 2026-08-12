@@ -14,7 +14,7 @@ agents:
 - agent_id: AGENT-BKL-001
   name: Project / Backlog Agent
   path: agents/backlog/agent.yaml
-  version: 1.0.0
+  version: 1.1.0
 - agent_id: AGENT-REF-001
   name: Refinement Agent
   path: agents/refinement/agent.yaml

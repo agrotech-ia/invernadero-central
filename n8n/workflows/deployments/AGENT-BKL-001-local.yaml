@@ -1,0 +1,22 @@
+workflow_name: AGENT-BKL-001 - Backlog Recommend
+agent_id: AGENT-BKL-001
+n8n_workflow_id: V3orePoN5iNN0Q8B
+n8n_url: http://localhost:5678/workflow/V3orePoN5iNN0Q8B
+status: CREATED_IN_N8N
+active: false
+created_via: n8n public API
+created_at_observed: '2026-08-12T01:52:15.498Z'
+source_import_file: n8n/workflows/imports/AGENT-BKL-001.workflow.json
+nodes:
+- Manual Trigger
+- Backlog Recommend
+notes:
+- API key was used only for local creation and is not stored in repository.
+- Workflow uses Function node for compatibility with the local n8n instance.
+- Current implementation uses a snapshot of project/kanban/board.yaml because direct filesystem access from n8n is not connected yet.
+- Future version should read board.yaml dynamically through agent-runner or a mounted filesystem/API bridge.
+next_validation:
+- Open the workflow URL.
+- Execute manually.
+- Confirm it returns max 3 recommended options.
+- Select one option and route it to a future Refinement Agent workflow.

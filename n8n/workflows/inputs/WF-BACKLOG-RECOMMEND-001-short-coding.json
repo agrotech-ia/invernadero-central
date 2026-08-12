@@ -1,0 +1,7 @@
+{
+  "task_id": "WF-BACKLOG-RECOMMEND-001",
+  "available_time": "short",
+  "preferred_mode": "coding",
+  "max_options": 3,
+  "respect_wip": true
+}
