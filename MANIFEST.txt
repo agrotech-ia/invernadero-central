@@ -17,6 +17,7 @@ n8n/workflows/EN-AGENT-001-workflow-spec.md
 n8n/workflows/WF-BACKLOG-RECOMMEND-001-spec.md
 n8n/workflows/imports/AGENT-ORCH-001.workflow.json
 n8n/workflows/imports/README.md
+n8n/workflows/deployments/AGENT-ORCH-001-local.yaml
 n8n/workflows/inputs/EN-AGENT-001-soil-validation-request.json
 n8n/workflows/inputs/WF-BACKLOG-RECOMMEND-001-request.json
 project/agents-operating-model.md

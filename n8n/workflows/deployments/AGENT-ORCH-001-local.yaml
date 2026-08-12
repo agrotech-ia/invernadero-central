@@ -1,0 +1,23 @@
+workflow_name: AGENT-ORCH-001 - Orchestrator
+agent_id: AGENT-ORCH-001
+n8n_workflow_id: YxKTp7gOFVD0RToL
+n8n_url: http://localhost:5678/workflow/YxKTp7gOFVD0RToL
+status: CREATED_IN_N8N
+active: false
+created_via: n8n public API
+created_at_observed: '2026-08-12T01:41:46.556Z'
+source_import_file: n8n/workflows/imports/AGENT-ORCH-001.workflow.json
+nodes:
+- Manual Trigger
+- Load Project Context
+- Orchestrator Route
+notes:
+- API key was used only for local creation and is not stored in repository.
+- Workflow is inactive because it uses a manual trigger for validation.
+- The Execute Command node requires n8n runtime access to /home/chuchosam/Documentos/github/invernadero-central.
+- If n8n runs in Docker without that host path mounted, mount the repo or adjust the command path inside the workflow.
+next_validation:
+- Open the workflow URL.
+- Execute manually.
+- Confirm Load Project Context can read the repository path from n8n runtime.
+- Confirm Orchestrator Route outputs the route to AGENT-BKL-001 for backlog recommendation.
