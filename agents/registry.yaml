@@ -2,7 +2,7 @@ agents:
 - agent_id: AGENT-ORCH-001
   name: Orchestrator
   path: agents/orchestrator/agent.yaml
-  version: 1.0.0
+  version: 1.1.0
 - agent_id: AGENT-KNOW-001
   name: Knowledge Agent
   path: agents/knowledge/agent.yaml

@@ -1,0 +1,202 @@
+version: '1.0'
+status: ACTIVE
+source_backlog: project/backlog/master-backlog.yaml
+workflow:
+- IDEA
+- BACKLOG
+- REFINEMENT
+- READY
+- IN_PROGRESS
+- VALIDATION
+- DONE
+wip_limits:
+  IN_PROGRESS: 2
+  VALIDATION: 3
+selection_modes:
+  quick_win:
+    description: Trabajo pequeno, de bajo riesgo, que deja avance visible.
+    preferred_effort:
+    - XS
+    - S
+  deep_work:
+    description: Trabajo de foco largo que desbloquea ruta critica o arquitectura.
+    preferred_effort:
+    - M
+    - L
+  physical_lab:
+    description: Trabajo con sensores, cableado, mediciones, actuadores o pruebas de campo.
+  coding:
+    description: Trabajo que puede avanzar con agente de ingenieria y pruebas locales.
+  docs_governance:
+    description: Refinamiento, backlog, decisiones, V&V, evidencia y arquitectura.
+  market_growth:
+    description: Mercado, contenido, claims, descubrimiento y crecimiento.
+lanes:
+  IDEA: []
+  BACKLOG:
+  - HU-WATER-002
+  - HU-WATER-004
+  - HU-WEB-001
+  - HU-ACT-001
+  - HU-ACT-002
+  - EN-HYD-001
+  - HU-AUTO-001
+  - HU-AUTO-002
+  - HU-OPS-001
+  - EXP-E2E-001
+  - EXP-MKT-001
+  - EXP-CONTENT-001
+  - EXP-VISION-001
+  REFINEMENT:
+  - HU-WATER-001
+  - HU-WATER-003
+  - HU-WATER-005
+  - EN-PWR-001
+  READY:
+  - EN-AGENT-001
+  - EN-QA-001
+  - HU-SOIL-001
+  - EN-EDGE-001
+  - EN-MKT-001
+  - EN-GROW-001
+  IN_PROGRESS: []
+  VALIDATION: []
+  DONE: []
+cards:
+  EN-AGENT-001:
+    title: Bootstrap plataforma multiagente local
+    type: ENABLER
+    priority: P0
+    expert_role: Solution / IoT Architect
+    reviewer_role: QA Engineer
+    status: READY
+    effort: M
+    mode_fit:
+    - docs_governance
+    - deep_work
+    granularity: needs_task_breakdown
+    next_action: Implementar workflow n8n para recomendacion/refinamiento/ejecucion del backlog completo.
+  EN-QA-001:
+    title: Implementar framework V&V y persistencia de evidencia
+    type: ENABLER
+    priority: P0
+    expert_role: QA Engineer
+    reviewer_role: Solution / IoT Architect
+    status: READY
+    effort: M
+    mode_fit:
+    - docs_governance
+    - deep_work
+    granularity: needs_task_breakdown
+    next_action: Definir estructura de evidencia, casos de prueba y reglas para mover a DONE.
+  HU-SOIL-001:
+    title: Validar y caracterizar sensor de suelo 7-en-1
+    type: STORY
+    priority: P0
+    expert_role: QA Engineer
+    reviewer_role: Solution / IoT Architect
+    status: READY
+    effort: M
+    mode_fit:
+    - physical_lab
+    - docs_governance
+    granularity: needs_task_breakdown
+    next_action: Refinar en tareas T-SOIL pequenas sin reimplementar firmware existente.
+  EN-EDGE-001:
+    title: Validar runtime Raspberry MQTT->DB
+    type: ENABLER
+    priority: P0
+    expert_role: DevOps / Platform Engineer
+    reviewer_role: QA Engineer
+    status: READY
+    effort: M
+    mode_fit:
+    - coding
+    - deep_work
+    granularity: needs_task_breakdown
+    next_action: Definir ingesta minima MQTT a PostgreSQL/TimescaleDB con contratos V1.
+  EN-MKT-001:
+    title: Bootstrap Market Intelligence & Demand
+    type: ENABLER
+    priority: P0
+    expert_role: Product Manager
+    reviewer_role: QA Engineer
+    status: READY
+    effort: M
+    mode_fit:
+    - market_growth
+    - docs_governance
+    granularity: needs_task_breakdown
+    next_action: Definir sistema de investigacion de mercado con politica de claims.
+  EN-GROW-001:
+    title: Bootstrap Growth, Content & Education
+    type: ENABLER
+    priority: P0
+    expert_role: Product Manager
+    reviewer_role: QA Engineer
+    status: READY
+    effort: M
+    mode_fit:
+    - market_growth
+    granularity: needs_task_breakdown
+    next_action: Crear calendario y reglas de contenido educativo basado en evidencia.
+  HU-WATER-001:
+    title: Implementar nodo de pH de agua
+    type: STORY
+    priority: P0
+    expert_role: Firmware Engineer
+    reviewer_role: QA Engineer
+    status: REFINEMENT
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    granularity: needs_refinement
+    next_action: Separar firmware, calibracion y validacion en HUs granulares.
+  HU-WATER-003:
+    title: Implementar nodo EC de agua
+    type: STORY
+    priority: P0
+    expert_role: Firmware Engineer
+    reviewer_role: QA Engineer
+    status: REFINEMENT
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    granularity: needs_refinement
+    next_action: Separar firmware, calibracion y validacion en HUs granulares.
+  HU-WATER-005:
+    title: Implementar y calibrar sensor de caudal
+    type: STORY
+    priority: P0
+    expert_role: Firmware Engineer
+    reviewer_role: QA Engineer
+    status: REFINEMENT
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    granularity: needs_refinement
+    next_action: Separar lectura de pulsos, calibracion volumetrica e integracion MQTT.
+  EN-PWR-001:
+    title: Diseñar arquitectura de potencia y protecciones
+    type: ENABLER
+    priority: P0
+    expert_role: Hardware Engineer
+    reviewer_role: QA Engineer
+    status: REFINEMENT
+    effort: M
+    mode_fit:
+    - physical_lab
+    - deep_work
+    granularity: needs_refinement
+    next_action: Dividir calculos, protecciones, gabinete, pruebas y procurement.
+board_rules:
+- El tablero puede referenciar historias grandes existentes, pero el trabajo ejecutable debe partirse en HUs o tareas pequenas.
+- Toda nueva HU debe usar `project/backlog/templates/hu-template.yaml`.
+- Toda HU debe tener exactamente un `expert_role` y un `reviewer_role`.
+- Si una HU requiere mas de 1 o 2 sesiones de trabajo, debe dividirse.
+- Si una HU mezcla firmware, hardware, web, QA y mercado, debe dividirse por rol experto.
+- Si una HU no tiene evidencia esperada clara, no puede pasar a READY.
+- Los agentes pueden generar borradores y avances reversibles, pero no aprobar cambios criticos.

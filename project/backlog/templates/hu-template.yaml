@@ -1,0 +1,73 @@
+id: HU-DOMAIN-000
+title: Titulo corto accionable
+type: STORY
+status: BACKLOG
+priority: P0/P1/P2
+target: FOUNDATION/MVP/POST_MVP
+expert_role: Role responsable experto
+reviewer_role: Role revisor independiente
+agent_owner: AGENT-ID opcional
+review_agent: AGENT-ID opcional
+source:
+  baseline: HU-XXX opcional
+  decision_refs:
+  - DEC-XXX
+  backlog_parent: ITEM-ID opcional
+  evidence_refs:
+  - path/to/evidence
+problem: Problema concreto que resuelve esta HU.
+outcome: Resultado observable y verificable esperado.
+scope:
+  in:
+  - Alcance incluido.
+  out:
+  - Alcance excluido para mantener granularidad.
+granularity:
+  size: XS/S/M
+  rule: Debe poder completarse y validarse en una o dos sesiones claras.
+  split_if:
+  - Mezcla mas de un dominio experto principal.
+  - No tiene evidencia esperada clara.
+  - Requiere decision humana bloqueante antes de empezar.
+dependencies:
+- id: ITEM-ID
+  reason: Motivo de dependencia.
+acceptance_criteria:
+- Dado/Cuando/Entonces o criterio verificable.
+definition_of_ready:
+- Contexto minimo identificado.
+- Criterios de aceptacion claros.
+- Riesgos conocidos.
+- Evidencia esperada definida.
+- Rol experto y revisor asignados.
+definition_of_done:
+- Criterios de aceptacion cumplidos.
+- Evidencia guardada en repositorio o referencia local.
+- Revision completada.
+- Estado actualizado con aprobacion cuando aplique.
+tasks:
+- id: T-DOMAIN-001
+  title: Tarea pequena y verificable
+  role: Role experto
+  agent: AGENT-ID opcional
+  can_agent_execute: true/false
+  evidence_expected:
+  - Tipo de evidencia
+validation:
+  vv_matrix_refs:
+  - Sistema o prueba relacionada.
+  test_cases:
+  - id: TC-DOMAIN-001
+    title: Caso de prueba
+    expected_evidence: Evidencia esperada
+risks:
+- risk: Riesgo
+  mitigation: Mitigacion
+human_approval_required_for:
+- compras
+- control fisico
+- cambios de arquitectura mayor
+- despliegues criticos
+open_questions:
+- Pregunta pendiente, una por una durante refinamiento.
+notes: Notas operativas.

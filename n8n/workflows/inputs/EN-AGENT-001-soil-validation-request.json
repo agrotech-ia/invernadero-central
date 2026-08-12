@@ -1,0 +1,37 @@
+{
+  "task_id": "EN-AGENT-001-AC-001",
+  "agent_id": "AGENT-REF-001",
+  "role": "Project Manager / BA / QA",
+  "objective": "Construir backlog de validacion del sensor de suelo 7-en-1",
+  "context_refs": [
+    "agents/shared/project-rules.yaml",
+    "agents/shared/contracts.yaml",
+    "agents/registry.yaml",
+    "agents/orchestrator/agent.yaml",
+    "agents/refinement/agent.yaml",
+    "project/backlog/EN-AGENT-001.yaml",
+    "project/backlog/master-backlog.yaml",
+    "project/inventory/master-inventory-v2.yaml",
+    "project/validation/master-vv-matrix.yaml",
+    "project/backlog/procurement-template.yaml",
+    "project/context/conversation-context-2026-08-11.md",
+    "n8n/docs/architecture.md",
+    "/home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/README.md",
+    "/home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp",
+    "/home/chuchosam/Documentos/github/invernadero/green-house/docs/data-contracts.md",
+    "/home/chuchosam/Documentos/github/invernadero/green-house/docs/device-inventory.md",
+    "/home/chuchosam/Documentos/github/invernadero/green-house/docs/system-flow.md"
+  ],
+  "constraints": [
+    "No modificar HU congeladas.",
+    "No marcar trabajo como DONE sin evidencia.",
+    "No reimplementar firmware, RS485, Modbus ni contrato MQTT del sensor de suelo si no hay evidencia de falla.",
+    "Reconocer que el sensor de suelo 7-en-1 esta OPERATIONAL pero VALIDATION PENDING.",
+    "Generar un borrador revisable, no un artefacto final aprobado.",
+    "Compras y procurement requieren aprobacion humana."
+  ],
+  "permissions": "A1",
+  "expected_output": "Borrador YAML con tareas T-SOIL-001..T-SOIL-009, criterios de aceptacion, pruebas V&V, materiales/procurement, riesgos, evidencia, preguntas abiertas y siguiente accion recomendada.",
+  "review_required": true,
+  "target_artifact": "project/backlog/drafts/HU-SOIL-001-validation-backlog-draft.yaml"
+}

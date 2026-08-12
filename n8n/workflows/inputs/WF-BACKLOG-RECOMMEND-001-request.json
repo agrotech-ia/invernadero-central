@@ -1,0 +1,9 @@
+{
+  "task_id": "WF-BACKLOG-RECOMMEND-001",
+  "request": "Recomendar siguiente trabajo del backlog",
+  "requested_by": "human",
+  "available_time": "unknown",
+  "preferred_mode": "any",
+  "max_options": 3,
+  "respect_wip": true
+}

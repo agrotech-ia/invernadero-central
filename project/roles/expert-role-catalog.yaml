@@ -1,0 +1,135 @@
+version: '1.0'
+status: DRAFT
+principle: Cada HU debe tener un rol experto responsable y un rol revisor independiente.
+roles:
+- role: Solution / IoT Architect
+  focus:
+  - arquitectura end-to-end
+  - contratos
+  - decisiones tecnicas transversales
+  - coherencia MVP
+  preferred_agent: AGENT-ARCH-001
+  reviewer_candidates:
+  - QA Engineer
+  - Product Manager
+- role: Project Manager
+  focus:
+  - backlog
+  - prioridades
+  - dependencias
+  - WIP
+  - seguimiento
+  preferred_agent: AGENT-BKL-001
+  reviewer_candidates:
+  - Product Manager
+  - QA Engineer
+- role: Product Manager
+  focus:
+  - vision de producto
+  - roadmap
+  - candidatos comerciales
+  - discovery
+  preferred_agent: AGENT-PROD-001
+  reviewer_candidates:
+  - QA Engineer
+  - Solution / IoT Architect
+- role: Business Analyst / Refinement
+  focus:
+  - criterios
+  - Gherkin
+  - DoR
+  - DoD
+  - desglose granular
+  preferred_agent: AGENT-REF-001
+  reviewer_candidates:
+  - Project Manager
+  - QA Engineer
+- role: QA Engineer
+  focus:
+  - V&V
+  - evidencia
+  - pruebas
+  - bloqueo de DONE sin evidencia
+  preferred_agent: AGENT-QA-001
+  reviewer_candidates:
+  - Solution / IoT Architect
+- role: Firmware Engineer
+  focus:
+  - ESP32/XIAO
+  - sensores
+  - MQTT desde nodos
+  - lectura RS485/I2C/pulsos
+  preferred_agent: AGENT-ENG-001
+  reviewer_candidates:
+  - QA Engineer
+  - Solution / IoT Architect
+- role: DevOps / Platform Engineer
+  focus:
+  - Raspberry Pi
+  - Mosquitto
+  - PostgreSQL/TimescaleDB
+  - servicios locales
+  - observabilidad
+  preferred_agent: AGENT-EDGE-001
+  reviewer_candidates:
+  - QA Engineer
+  - Solution / IoT Architect
+- role: Backend Engineer
+  focus:
+  - API
+  - ingesta
+  - reglas
+  - eventos
+  - trazabilidad
+  preferred_agent: AGENT-ENG-001
+  reviewer_candidates:
+  - QA Engineer
+  - Solution / IoT Architect
+- role: Frontend Engineer
+  focus:
+  - dashboard
+  - UX operativa
+  - datos reales
+  - estados de carga/error
+  preferred_agent: AGENT-WEB-001
+  reviewer_candidates:
+  - QA Engineer
+  - Product Manager
+- role: Hardware Engineer
+  focus:
+  - potencia
+  - protecciones
+  - bombas
+  - valvulas
+  - cableado
+  - gabinete
+  preferred_agent: AGENT-HW-001
+  reviewer_candidates:
+  - QA Engineer
+  - Solution / IoT Architect
+- role: Market Intelligence
+  focus:
+  - mercado
+  - keywords
+  - nichos
+  - evidencia externa
+  preferred_agent: AGENT-MKT-001
+  reviewer_candidates:
+  - Product Manager
+  - QA Engineer
+- role: Growth / Content
+  focus:
+  - contenido educativo
+  - build-in-public
+  - claims permitidos
+  - calendario editorial
+  preferred_agent: AGENT-GROW-001
+  reviewer_candidates:
+  - Product Manager
+  - QA Engineer
+rules:
+- Una HU debe tener exactamente un rol experto responsable.
+- El revisor no debe ser el mismo rol cuando hay riesgo medio o alto.
+- El rol experto define el lenguaje, criterios y evidencia de la HU.
+- Si una HU necesita dos roles expertos principales, se debe dividir o crear subtareas claramente separadas.
+- Los agentes asociados a roles no pueden exceder la autoridad definida en las reglas del proyecto.
