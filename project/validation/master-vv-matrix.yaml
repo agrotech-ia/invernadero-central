@@ -1,0 +1,117 @@
+allowed:
+- PASS
+- FAIL
+- PARTIAL
+- NA
+- NOT_RUN
+matrix:
+- system: SHT40 interior
+  functional: TESTED
+  communication: TESTED
+  calibration: NOT_RUN
+  accuracy: NOT_RUN
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: Radiación solar RS485
+  functional: PARTIAL
+  communication: PARTIAL
+  calibration: NA
+  accuracy: NOT_RUN
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: Suelo 7-en-1
+  functional: PASS
+  communication: PASS
+  calibration: NOT_RUN
+  accuracy: NOT_RUN
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: pH agua
+  functional: NOT_RUN
+  communication: NOT_RUN
+  calibration: NOT_RUN
+  accuracy: NOT_RUN
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: EC agua
+  functional: NOT_RUN
+  communication: NOT_RUN
+  calibration: NOT_RUN
+  accuracy: NOT_RUN
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: Caudal
+  functional: NOT_RUN
+  communication: NOT_RUN
+  calibration: NOT_RUN
+  accuracy: NOT_RUN
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: Válvulas
+  functional: NOT_RUN
+  communication: NA
+  calibration: NA
+  accuracy: NA
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: Peristálticas
+  functional: NOT_RUN
+  communication: NA
+  calibration: NOT_RUN
+  accuracy: NOT_RUN
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: Raspberry/Edge
+  functional: PARTIAL
+  communication: PASS
+  calibration: NA
+  accuracy: NA
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: Web real-data
+  functional: NOT_RUN
+  communication: NOT_RUN
+  calibration: NA
+  accuracy: NA
+  repeatability: NOT_RUN
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN
+- system: Vision/YOLO
+  functional: PASS
+  communication: NA
+  calibration: NA
+  accuracy: PARTIAL
+  repeatability: PARTIAL
+  stability: NOT_RUN
+  recovery: NOT_RUN
+  e2e: NOT_RUN
+  field: NOT_RUN

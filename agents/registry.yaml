@@ -1,0 +1,33 @@
+agents:
+- agent_id: AGENT-ORCH-001
+  name: Orchestrator
+  path: agents/orchestrator/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-KNOW-001
+  name: Knowledge Agent
+  path: agents/knowledge/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-PROD-001
+  name: Product Agent
+  path: agents/product/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-BKL-001
+  name: Project / Backlog Agent
+  path: agents/backlog/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-REF-001
+  name: Refinement Agent
+  path: agents/refinement/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-ARCH-001
+  name: Architecture Agent
+  path: agents/architecture/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-MKT-001
+  name: Market Intelligence & Demand Agent
+  path: agents/market-intelligence/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-GROW-001
+  name: Growth, Content & Education Agent
+  path: agents/growth-content/agent.yaml
+  version: 1.0.0

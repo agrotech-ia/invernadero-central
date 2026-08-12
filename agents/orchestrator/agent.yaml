@@ -1,0 +1,19 @@
+agent_id: AGENT-ORCH-001
+name: Orchestrator
+version: 1.0.0
+status: DESIGN_READY
+role: Orchestration
+authority: A1
+objective: Clasificar, construir contexto mínimo, enrutar, controlar secuencia y revisión.
+capabilities:
+- classify
+- route
+- context_plan
+- review_gate
+always_read:
+- agents/shared/project-rules.yaml
+context_strategy: least_context_necessary
+contract: agents/shared/contracts.yaml
+prohibited:
+- No ejecutar trabajo especializado si existe agente competente
+review_required: true

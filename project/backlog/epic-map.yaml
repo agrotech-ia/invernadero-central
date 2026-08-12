@@ -1,0 +1,27 @@
+epics:
+- id: EP-HW
+  title: Hardware & Power
+- id: EP-IOT
+  title: Firmware & IoT
+- id: EP-EDGE
+  title: Edge Platform
+- id: EP-DATA
+  title: Data Platform
+- id: EP-WATER
+  title: Water & Fertigation
+- id: EP-AUTO
+  title: Automation & Control
+- id: EP-WEB
+  title: Web Platform
+- id: EP-VISION
+  title: Vision & AI
+- id: EP-QA
+  title: Verification & Validation
+- id: EP-AGR
+  title: Agronomy
+- id: EP-OPS
+  title: Deployment & Operations
+- id: EP-AGT
+  title: Internal Agents
+- id: EP-BIZ
+  title: Market Discovery, Growth & Early Commercialization

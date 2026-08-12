@@ -1,0 +1,18 @@
+id: EN-AGENT-001
+title: Bootstrap de la plataforma multiagente local
+type: ENABLER
+priority: P0
+target: FOUNDATION
+status: READY
+owner_role: Solution / IoT Architect
+reviewer_role: QA Engineer
+objective: Implementar en n8n una orquestación local que consuma agentes versionados
+  desde Git.
+acceptance_criteria:
+- Agent Registry cargado desde repositorio
+- Knowledge Agent puede recuperar HU/DEC/inventario sin depender del chat
+- Orchestrator enruta por capacidad y no actúa como agente universal
+- Backlog Agent no propone reimplementar el sensor de suelo
+- Refinement Agent genera V&V y procurement para suelo
+- Market/Growth respetan política de claims
+- Toda persistencia final pasa por revisión humana cuando corresponde

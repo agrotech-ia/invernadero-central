@@ -1,0 +1,11 @@
+id: ''
+item: ''
+needed_for: []
+quantity: ''
+minimum_spec: ''
+preferred_spec: ''
+priority: P2
+blocks: []
+reason: ''
+status: IDENTIFIED
+human_approval_required: true

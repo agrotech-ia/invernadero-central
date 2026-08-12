@@ -1,0 +1,288 @@
+workflow:
+- IDEA
+- BACKLOG
+- REFINEMENT
+- READY
+- IN_PROGRESS
+- VALIDATION
+- DONE
+wip:
+  IN_PROGRESS: 2
+  VALIDATION: 3
+items:
+- id: EN-AGENT-001
+  title: Bootstrap plataforma multiagente local
+  type: ENABLER
+  priority: P0
+  target: FOUNDATION
+  owner_role: Solution Architect
+  status: READY
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EN-QA-001
+  title: Implementar framework V&V y persistencia de evidencia
+  type: ENABLER
+  priority: P0
+  target: FOUNDATION
+  owner_role: QA Engineer
+  status: READY
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-SOIL-001
+  title: Validar y caracterizar sensor de suelo 7-en-1
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: QA Engineer
+  status: READY
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-WATER-001
+  title: Implementar nodo de pH de agua
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: Firmware Engineer
+  status: REFINEMENT
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-WATER-002
+  title: Calibrar y validar pH de agua
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: QA Engineer
+  status: BACKLOG
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-WATER-003
+  title: Implementar nodo EC de agua
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: Firmware Engineer
+  status: REFINEMENT
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-WATER-004
+  title: Calibrar y validar EC de agua
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: QA Engineer
+  status: BACKLOG
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-WATER-005
+  title: Implementar y calibrar sensor de caudal
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: Firmware Engineer
+  status: REFINEMENT
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EN-EDGE-001
+  title: Validar runtime Raspberry MQTT→DB
+  type: ENABLER
+  priority: P0
+  target: MVP
+  owner_role: DevOps / Platform Engineer
+  status: READY
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-WEB-001
+  title: Integrar dashboard con telemetría real
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: Frontend Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EN-PWR-001
+  title: Diseñar arquitectura de potencia y protecciones
+  type: ENABLER
+  priority: P0
+  target: MVP
+  owner_role: Hardware Engineer
+  status: REFINEMENT
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-ACT-001
+  title: Validar control manual y logged de electroválvulas
+  type: STORY
+  priority: P1
+  target: MVP
+  owner_role: Hardware Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-ACT-002
+  title: Caracterizar bombas peristálticas
+  type: STORY
+  priority: P1
+  target: MVP
+  owner_role: QA Engineer
+  status: BACKLOG
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EN-HYD-001
+  title: Diseñar sistema hidráulico del MVP
+  type: ENABLER
+  priority: P1
+  target: MVP
+  owner_role: Hardware Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-AUTO-001
+  title: Implementar primera regla/alerta
+  type: STORY
+  priority: P1
+  target: MVP
+  owner_role: Backend Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-AUTO-002
+  title: Implementar primera acción controlada y trazable
+  type: STORY
+  priority: P1
+  target: MVP
+  owner_role: Backend Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: HU-OPS-001
+  title: Registrar actividad humana básica
+  type: STORY
+  priority: P1
+  target: MVP
+  owner_role: Backend Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EXP-E2E-001
+  title: Ejecutar prueba end-to-end del MVP
+  type: EXPERIMENT
+  priority: P0
+  target: MVP
+  owner_role: QA Engineer
+  status: BACKLOG
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EN-MKT-001
+  title: Bootstrap Market Intelligence & Demand
+  type: ENABLER
+  priority: P0
+  target: FOUNDATION
+  owner_role: Product Manager
+  status: READY
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EN-GROW-001
+  title: Bootstrap Growth, Content & Education
+  type: ENABLER
+  priority: P0
+  target: FOUNDATION
+  owner_role: Product Manager
+  status: READY
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EXP-MKT-001
+  title: Construir mapa inicial de keywords, nichos e intención
+  type: EXPERIMENT
+  priority: P1
+  target: MVP
+  owner_role: Product Manager
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EXP-CONTENT-001
+  title: Crear primer calendario educativo de 30 días
+  type: EXPERIMENT
+  priority: P1
+  target: MVP
+  owner_role: Product Manager
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009
+- id: EXP-VISION-001
+  title: Benchmark YOLO en Lenovo con 2 cámaras
+  type: EXPERIMENT
+  priority: P2
+  target: MVP
+  owner_role: AI / ML Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: HU-009

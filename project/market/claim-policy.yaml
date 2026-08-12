@@ -1,0 +1,11 @@
+levels:
+  A_PROVEN_BY_US: Resultado propio con evidencia reproducible
+  B_EXTERNAL_EVIDENCE: Resultado/caso externo citado y correctamente atribuido
+  C_TECHNICAL_FACT: Hecho técnico verificable
+  D_PRODUCT_TARGET: Capacidad que estamos construyendo
+  E_VISION: Resultado futuro deseado
+rules:
+- D/E nunca se presentan como A
+- B debe citar fuente
+- A debe enlazar evidencia interna
+- Claims de ahorro, rendimiento o ROI requieren evidencia

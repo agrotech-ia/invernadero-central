@@ -1,0 +1,43 @@
+horizon_months: 6
+principle: Kanban; meses representan foco y dependencias, no sprints.
+months:
+- month: 1
+  focus:
+  - baseline local
+  - agents bootstrap
+  - V&V framework
+  - soil validation
+  - market/growth bootstrap
+- month: 2
+  focus:
+  - water pH/EC/flow implementation
+  - edge runtime validation
+  - organic educational content
+  - market keyword map
+- month: 3
+  focus:
+  - water calibration
+  - real-data web integration
+  - power architecture
+  - hydraulic design
+- month: 4
+  focus:
+  - valves/peristaltic characterization
+  - measured irrigation
+  - rules/alerts
+  - field installation
+- month: 5
+  focus:
+  - assisted automation
+  - operational logging
+  - stability tests
+  - content from own evidence
+  - small paid experiments if justified
+- month: 6
+  focus:
+  - E2E MVP validation
+  - field evidence
+  - gap closure
+  - product candidates
+  - pilot/commercial discovery
+  - post-MVP roadmap

@@ -1,0 +1,26 @@
+source_of_truth: Git repository
+technical_reference_branch: green-house/qa
+frozen_baselines:
+- HU-001
+- HU-002
+- HU-003
+- HU-004
+- HU-005
+- HU-006
+- HU-007
+- HU-008
+- HU-009
+authority:
+  A0: read/analyze
+  A1: propose/generate
+  A2: authorized reversible execution
+  A3: human approval required
+rules:
+- Never silently modify frozen baselines
+- Never invent pinouts, voltages, protocols, registers, agronomic rules or implementation
+  status
+- Existing implementation with evidence is not recreated by default
+- Operational does not imply calibrated or validated
+- No agent may generate, approve and persist as final when independent review is required
+- Physical control, purchases, paid media spend and critical deployment require human
+  approval

@@ -1,0 +1,480 @@
+decisions:
+- id: DEC-001
+  title: El producto no se define únicamente como un sistema de automatización de
+    invernaderos.
+  decision: Se define como una plataforma inteligente de gestión agrícola que tendrá
+    como primera implementación un invernadero de tomate chonto y cuyo desarrollo
+    evolucionará progresivamente desde monitorización y automatización hasta gestión
+    productiva, costos, prevención y analítica avanzada.
+  source: HU-001.md
+  status: FROZEN
+- id: DEC-002
+  title: El proyecto adoptará automatización interna desde su nacimiento.
+  decision: Se diseñará progresivamente un conjunto de agentes y workflows que ayuden
+    a operar el proyecto como si existiera un equipo multidisciplinario, manteniendo
+    supervisión humana en decisiones relevantes.
+  source: HU-001.md
+  status: FROZEN
+- id: DEC-003
+  title: Plataforma extensible
+  decision: La solución será diseñada como una plataforma agrícola extensible cuya
+    primera implementación será un invernadero de tomate chonto.
+  source: HU-002.md
+  status: FROZEN
+- id: DEC-004
+  title: Separación entre plataforma y cultivo
+  decision: Las capacidades tecnológicas reutilizables deberán separarse conceptualmente
+    de las configuraciones y conocimientos específicos de cada cultivo.
+  source: HU-002.md
+  status: FROZEN
+- id: DEC-005
+  title: Modelo comercial híbrido
+  decision: El producto podrá evolucionar hacia diferentes combinaciones comerciales
+    incluyendo hardware, instalación, SaaS, automatización, analítica, datos y servicios.
+  source: HU-002.md
+  status: FROZEN
+- id: DEC-006
+  title: Product Discovery durante el prototipo
+  decision: Toda capacidad desarrollada durante el prototipo que pueda tener valor
+    comercial independiente deberá registrarse como candidato a producto o servicio
+    para posterior validación.
+  source: HU-002.md
+  status: FROZEN
+- id: DEC-007
+  title: Datos contextualizados
+  decision: Los datos obtenidos en un cultivo podrán contribuir al conocimiento de
+    la plataforma, pero las conclusiones y reglas no deberán extrapolarse automáticamente
+    a otros cultivos sin validación.
+  source: HU-002.md
+  status: FROZEN
+- id: DEC-008
+  title: Gobernanza previa a explotación comercial de datos
+  decision: La posibilidad futura de ofrecer productos basados en datos queda reconocida,
+    pero cualquier utilización de información de terceros deberá estar precedida por
+    políticas de propiedad, autorización, privacidad y uso.
+  source: HU-002.md
+  status: FROZEN
+- id: DEC-009
+  title: Empresa virtual basada en roles
+  decision: El proyecto se gestionará como una organización multidisciplinaria aunque
+    inicialmente una sola persona desempeñe los diferentes roles.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-010
+  title: Responsabilidad por rol
+  decision: Toda historia deberá indicar un rol responsable y, cuando aplique, rol
+    revisor.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-011
+  title: Roles separados de agentes
+  decision: Los roles representan responsabilidades organizacionales. Los agentes
+    son implementaciones automatizadas o asistidas de esas responsabilidades.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-012
+  title: Primera generación de agentes
+  decision: Se priorizarán Product Agent, Project/Backlog Agent, Refinement Agent,
+    Architecture Agent y Knowledge Agent.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-013
+  title: Human-in-the-loop por riesgo
+  decision: Las acciones de alto impacto físico, económico, arquitectónico, de seguridad
+    o de datos requerirán aprobación humana.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-014
+  title: Repositorio como fuente de verdad
+  decision: Las decisiones, arquitectura, documentación y artefactos persistentes
+    deberán terminar en el repositorio.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-015
+  title: Conversación no equivale a documentación
+  decision: Los chats podrán utilizarse para análisis, pero una decisión relevante
+    deberá persistirse formalmente.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-016
+  title: Kanban pull-based
+  decision: La ejecución utilizará un sistema Kanban basado en selección de trabajo
+    Ready, sin dependencia obligatoria de sprints.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-017
+  title: WIP inicial máximo de dos historias
+  decision: Se podrán mantener hasta dos historias simultáneamente en ejecución para
+    permitir compatibilidad con pruebas físicas o bloqueos temporales.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-018
+  title: Process first, automate second
+  decision: No se automatizará un proceso organizacional antes de definir claramente
+    entradas, salidas, responsabilidades y criterios de calidad.
+  source: HU-003.md
+  status: FROZEN
+- id: DEC-019
+  title: RACI como modelo de responsabilidad
+  decision: El proyecto utilizará RACI para representar participación en actividades
+    relevantes.
+  source: HU-004.md
+  status: FROZEN
+- id: DEC-020
+  title: Accountable único
+  decision: Toda actividad relevante deberá tener exactamente un responsable final.
+  source: HU-004.md
+  status: FROZEN
+- id: DEC-021
+  title: Autoridad proporcional al dominio
+  decision: Cada rol tendrá capacidad de decisión dentro de su especialidad y deberá
+    escalar decisiones fuera de ella.
+  source: HU-004.md
+  status: FROZEN
+- id: DEC-022
+  title: Niveles de decisión D1-D5
+  decision: Las decisiones se clasificarán por impacto para determinar su mecanismo
+    de aprobación.
+  source: HU-004.md
+  status: FROZEN
+- id: DEC-023
+  title: Agentes ligados a roles
+  decision: Todo agente especializado estará asociado a uno o más roles formalmente
+    definidos.
+  source: HU-004.md
+  status: FROZEN
+- id: DEC-024
+  title: Restricción de autoridad de agentes
+  decision: Un agente no podrá disponer de más autoridad que el rol que representa.
+  source: HU-004.md
+  status: FROZEN
+- id: DEC-025
+  title: Seguridad como responsabilidad transversal inicial
+  decision: La seguridad será una capacidad transversal bajo liderazgo inicial del
+    Solution Architect.
+  source: HU-004.md
+  status: FROZEN
+- id: DEC-026
+  title: Compras bajo aprobación humana
+  decision: Los agentes podrán investigar y recomendar adquisiciones, pero la compra
+    permanecerá bajo aprobación humana.
+  source: HU-004.md
+  status: FROZEN
+- id: DEC-027
+  title: Handoff obligatorio para cambios de responsabilidad
+  decision: El proyecto utilizará un contrato mínimo de handoff cuando una tarea pase
+    entre disciplinas.
+  source: HU-004.md
+  status: FROZEN
+- id: DEC-028
+  title: Arquitectura multiagente coordinada
+  decision: Los agentes formarán parte de una arquitectura coordinada por un Orchestrator
+    y no operarán como chats aislados.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-029
+  title: Contexto persistente compartido
+  decision: Los agentes utilizarán información proveniente de fuentes persistentes
+    y versionadas.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-030
+  title: Primera generación de cinco agentes
+  decision: Se mantienen como primera generación Product, Project/Backlog, Refinement,
+    Architecture y Knowledge.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-031
+  title: Contrato estándar de agente
+  decision: Todo agente deberá trabajar bajo contratos estructurados de entrada y
+    salida.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-032
+  title: Contexto jerárquico
+  decision: El contexto tendrá niveles de precedencia desde reglas del proyecto hasta
+    tarea actual.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-033
+  title: Memoria separada por propósito
+  decision: Working Memory, Project Memory y Operational Memory serán conceptos separados.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-034
+  title: Orchestrator no es agente universal
+  decision: El Orchestrator coordina y enruta, pero no sustituye agentes especializados.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-035
+  title: Least Context Necessary
+  decision: Cada agente recibirá solamente el contexto requerido para su trabajo.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-036
+  title: Minimum Privilege
+  decision: Cada agente tendrá únicamente las herramientas y permisos necesarios.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-037
+  title: Agent Versioning
+  decision: Los agentes serán artefactos versionados del proyecto.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-038
+  title: Uncertainty over invention
+  decision: Ante ausencia de evidencia, los agentes deberán declarar incertidumbre
+    en lugar de inventar información.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-039
+  title: Review before truth
+  decision: Una salida generada por agente no se convierte automáticamente en fuente
+    de verdad cuando la tarea requiera revisión.
+  source: HU-005.md
+  status: FROZEN
+- id: DEC-040
+  title: Kanban pull-based oficial
+  decision: El proyecto operará mediante Kanban continuo sin sprints obligatorios.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-041
+  title: Workflow estándar
+  decision: IDEA → BACKLOG → REFINEMENT → READY → IN PROGRESS → VALIDATION → DONE
+    será el flujo base.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-042
+  title: Blocked transversal
+  decision: Blocked representará una condición y deberá registrar causa, dependencia
+    y acción.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-043
+  title: Jerarquía formal
+  decision: Se utilizará Initiative → Epic → Feature/Capability → Work Item → Task
+    → Subtask.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-044
+  title: Tipos de trabajo especializados
+  decision: Story, Enabler, Spike, Experiment, Bug, Tech Debt, Doc y Ops coexistirán.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-045
+  title: Prioridad separada de horizonte
+  decision: Priority y Target serán propiedades independientes.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-046
+  title: WIP limitado
+  decision: Se mantienen límites iniciales de dos In Progress y tres Validation.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-047
+  title: Refinamiento progresivo
+  decision: El detalle requerido aumentará a medida que el trabajo se acerque a Ready.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-048
+  title: Backlog preparado para rotación de roles
+  decision: Se buscará mantener trabajo Ready en distintas disciplinas cuando las
+    dependencias lo permitan.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-049
+  title: Transiciones automatizadas con control
+  decision: Los agentes podrán proponer cambios de estado, pero las transiciones deberán
+    validar políticas del workflow.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-050
+  title: Evidencia proporcional al trabajo
+  decision: Definition of Done requerirá evidencia adecuada al tipo de elemento.
+  source: HU-006.md
+  status: FROZEN
+- id: DEC-051
+  title: MVP end-to-end
+  decision: El MVP no será únicamente un prototipo de sensores; deberá demostrar un
+    flujo completo desde el mundo físico hasta plataforma, decisión y acción.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-052
+  title: Tomate chonto como implementación MVP
+  decision: El primer MVP operará exclusivamente sobre un invernadero de tomate chonto.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-053
+  title: Más de una categoría de variables
+  decision: El MVP deberá incorporar mediciones reales de más de una categoría relevante
+    cuando el inventario y validación técnica lo permitan.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-054
+  title: Histórico obligatorio
+  decision: La persistencia histórica es parte del MVP.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-055
+  title: Dashboard mínimo obligatorio
+  decision: El MVP deberá disponer de visualización web de estado, valores e históricos.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-056
+  title: Regla y alerta obligatorias
+  decision: El MVP deberá demostrar al menos una condición evaluable y una alerta/evento
+    asociado.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-057
+  title: Acción controlada obligatoria
+  decision: El MVP deberá integrar al menos una acción física controlada y trazable.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-058
+  title: Agua como primer recurso prioritario
+  decision: La medición o registro del consumo de agua será una capacidad prioritaria
+    del MVP.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-059
+  title: Operación humana como dato
+  decision: El MVP deberá comenzar a registrar actividades humanas relevantes para
+    permitir trazabilidad y costos futuros.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-060
+  title: IA avanzada fuera del criterio de cierre MVP
+  decision: La inteligencia artificial avanzada no será requisito para declarar exitoso
+    el primer MVP.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-061
+  title: Evidencia end-to-end obligatoria
+  decision: No podrá declararse MVP terminado sin una prueba end-to-end documentada
+    utilizando datos y componentes reales.
+  source: HU-007.md
+  status: FROZEN
+- id: DEC-062
+  title: Recuperar antes de reconstruir
+  decision: Todo activo existente será evaluado antes de reemplazarse.
+  source: HU-008
+  status: FROZEN
+- id: DEC-063
+  title: QA como referencia técnica actual
+  decision: green-house/qa representa la rama con el estado técnico existente relevante
+    durante recuperación.
+  source: HU-008
+  status: FROZEN
+- id: DEC-064
+  title: Estados normalizados de hardware
+  decision: El inventario utiliza estados explícitos y verificables.
+  source: HU-008
+  status: FROZEN
+- id: DEC-065
+  title: Inventario documental no equivale a inventario físico
+  decision: Un dispositivo documentado requiere confirmación física.
+  source: HU-008
+  status: FROZEN
+- id: DEC-066
+  title: Arquitectura existente se preserva provisionalmente
+  decision: Raspberry + ESP32 + Vision PC es baseline técnica candidata sujeta a Architecture
+    Review.
+  source: HU-008
+  status: FROZEN
+- id: DEC-067
+  title: Reutilización del frontend
+  decision: agrotechia-web-ui es activo reutilizable.
+  source: HU-008
+  status: FROZEN
+- id: DEC-068
+  title: Contratos V1 como punto de partida
+  decision: MQTT/REST existentes se evolucionan, no se reemplazan sin justificación.
+  source: HU-008
+  status: FROZEN
+- id: DEC-069
+  title: Base de datos existente como punto de partida
+  decision: PostgreSQL/TimescaleDB existente se revisa antes de diseñar otro esquema.
+  source: HU-008
+  status: FROZEN
+- id: DEC-070
+  title: Código existente como evidencia de implementación
+  decision: No se recrea una capacidad demostrada por código y evidencia suficiente.
+  source: HU-008
+  status: FROZEN
+- id: DEC-071
+  title: Operacional no equivale a validado
+  decision: Los estados de implementación, operación, calibración y validación son
+    independientes.
+  source: HU-008
+  status: FROZEN
+- id: DEC-072
+  title: Sensor suelo 7-en-1
+  decision: Estado congelado OPERATIONAL / VALIDATION PENDING.
+  source: HU-008
+  status: FROZEN
+- id: DEC-073
+  title: Bombas hidráulicas principales
+  decision: No seleccionar/comprar antes del diseño hidráulico.
+  source: HU-008
+  status: FROZEN
+- id: DEC-074
+  title: Inventario V2 como baseline física
+  decision: master-inventory-v2.yaml es la referencia física inicial.
+  source: HU-008
+  status: FROZEN
+- id: DEC-075
+  title: V&V como frente formal
+  decision: Toda capacidad crítica tendrá pruebas y evidencia reproducibles.
+  source: HU-009
+  status: FROZEN
+- id: DEC-076
+  title: Pruebas y materiales son backlog
+  decision: Procedimientos, instrumentos, consumibles y compras forman parte del trabajo.
+  source: HU-009
+  status: FROZEN
+- id: DEC-077
+  title: Automatización física progresiva
+  decision: Bench → Manual → Logged → Assisted → Rule Control → Automatic.
+  source: HU-009
+  status: FROZEN
+- id: DEC-078
+  title: Frontend real antes que rediseño visual
+  decision: Datos reales tienen prioridad sobre estética no bloqueante.
+  source: HU-009
+  status: FROZEN
+- id: DEC-079
+  title: HU-009 como primer caso de uso multiagente
+  decision: Los agentes comienzan ahora y ayudan a ejecutar el MVP.
+  source: HU-009
+  status: FROZEN
+- id: DEC-080
+  title: Growth comienza antes del prototipo
+  decision: Audiencia, educación y aprendizaje comercial avanzan en paralelo.
+  source: HU-009
+  status: FROZEN
+- id: DEC-081
+  title: Market Intelligence separado de Content
+  decision: Demanda/intención y contenido son capacidades distintas.
+  source: HU-009
+  status: FROZEN
+- id: DEC-082
+  title: Publicidad como experimento
+  decision: Paid media será pequeña, medible y con aprobación humana.
+  source: HU-009
+  status: FROZEN
+- id: DEC-083
+  title: Claims trazables
+  decision: Claims públicos se clasifican por nivel de evidencia.
+  source: HU-009
+  status: FROZEN
+- id: DEC-084
+  title: Mercado alimenta producto
+  decision: Señales verificables pueden generar PRODUCT_CANDIDATE.
+  source: HU-009
+  status: FROZEN
+- id: DEC-085
+  title: n8n como orquestación, repositorio como verdad
+  decision: n8n coordina; Git conserva definiciones y decisiones.
+  source: HU-009
+  status: FROZEN

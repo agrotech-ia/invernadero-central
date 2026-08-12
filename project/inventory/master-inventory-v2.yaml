@@ -1,0 +1,156 @@
+version: '2.0'
+status: PHYSICAL_RECONCILIATION_COMPLETED
+logical_inventory_v1:
+  greenhouses: 1
+  zones: 5
+  devices: 11
+  sensors: 14
+  actuators: 8
+  cameras: 2
+  note: Inventario lógico recuperado; no equivale uno-a-uno al inventario físico V2.
+physical_inventory:
+- id: CMP-EDGE-001
+  category: compute
+  component: Raspberry Pi 5
+  qty: 1
+  spec: 8 GB RAM, 64 GB storage
+  state: AVAILABLE
+  role: 'Edge gateway: MQTT, ingestion, PostgreSQL/TimescaleDB, API, rules'
+- id: CMP-VISION-001
+  category: compute
+  component: Lenovo vision server
+  qty: 1
+  spec: AMD A12, 1 TB storage; RAM/GPU por documentar
+  state: TESTED
+  role: YOLO / image recognition
+  evidence: YOLO y reconocimiento de imágenes probados previamente
+- id: CTL-ESP32-001
+  category: controller
+  component: ESP32 DevKit
+  qty: 3
+  state: AVAILABLE
+  notes: 1 ya usado para clima exterior con SHT40 + radiación
+- id: CTL-XIAO-001
+  category: controller
+  component: Seeed XIAO ESP32-C3
+  qty: 9
+  state: AVAILABLE
+  notes: 8 asociados a SHT40 interiores; 1 asociado al nodo de suelo
+- id: SNS-SHT40-001
+  category: sensor
+  component: SHT40
+  qty: 10
+  state: AVAILABLE
+  notes: 8 interiores, 1 exterior, 1 adicional/reserva según inventario físico
+- id: SNS-SOLAR-001
+  category: sensor
+  component: Sensor de radiación solar RS485
+  qty: 1
+  state: AVAILABLE
+  notes: Implementación existente; validación de campo pendiente
+- id: SNS-SOIL7-001
+  category: sensor
+  component: Sensor de suelo 7-en-1 RS485
+  qty: 1
+  state: OPERATIONAL
+  notes: Código/conexión existente y operativo; calibración, caracterización y validación
+    pendientes
+- id: SNS-PH-001
+  category: sensor
+  component: Sensor pH para agua
+  qty: 1
+  state: AVAILABLE
+  notes: Automatización/firmware, calibración, validación, MQTT e integración pendientes
+- id: SNS-EC-001
+  category: sensor
+  component: Sensor EC para agua
+  qty: 1
+  state: AVAILABLE
+  notes: Automatización/firmware, calibración, validación, MQTT e integración pendientes
+- id: SNS-FLOW-001
+  category: sensor
+  component: Sensor de flujo ZJ-L20
+  qty: 1
+  state: AVAILABLE
+  notes: Lectura de pulsos, calibración volumétrica e integración pendientes
+- id: COM-RS485-001
+  category: communication
+  component: Módulo MAX485
+  qty: 4
+  state: AVAILABLE
+- id: ACT-PERI-001
+  category: actuator
+  component: Bomba peristáltica
+  qty: 4
+  state: AVAILABLE
+  spec: 12 VDC
+  notes: Caracterización volumen/tiempo y control pendientes
+- id: ACT-VALVE-001
+  category: actuator
+  component: Electroválvula
+  qty: 4
+  state: AVAILABLE
+  spec: 24 VDC
+  notes: Prueba eléctrica/hidráulica y control pendientes
+- id: ACT-RELAY6-001
+  category: actuator_control
+  component: Módulo de 6 relés
+  qty: 1
+  state: AVAILABLE
+  notes: Relés 12 V observados; validación de interfaz/carga pendiente
+- id: ACT-RELAY2-001
+  category: actuator_control
+  component: Módulo de 2 relés
+  qty: 1
+  state: AVAILABLE
+  notes: Validación de interfaz/carga pendiente
+- id: PWR-5V-001
+  category: power
+  component: Fuente DC 5 V
+  qty: 1
+  state: AVAILABLE
+  notes: Corriente/potencia exacta por documentar
+- id: PWR-12V-001
+  category: power
+  component: Fuente DC 12 V
+  qty: 1
+  state: AVAILABLE
+  notes: Corriente/potencia exacta por documentar
+- id: PWR-24V-001
+  category: power
+  component: Fuente DC 24 V
+  qty: 1
+  state: AVAILABLE
+  notes: Corriente/potencia exacta por documentar
+- id: CAM-UGREEN-001
+  category: vision
+  component: Cámara UGREEN
+  qty: 2
+  state: AVAILABLE
+  notes: Uso previsto con servidor Lenovo/YOLO
+- id: CAM-EXT-001
+  category: vision
+  component: Extensor USB sobre RJ45
+  qty: 2
+  state: AVAILABLE
+- id: HYD-PUMP-001
+  category: hydraulic
+  component: Bomba principal de riego
+  qty: 1
+  state: MISSING_TO_DESIGN
+  notes: No comprar antes del dimensionamiento hidráulico
+- id: HYD-MIX-001
+  category: hydraulic
+  component: Bomba mezcla/recirculación
+  qty: 1
+  state: MISSING_TO_DESIGN
+  notes: No comprar antes del dimensionamiento hidráulico
+missing_or_to_verify_materials:
+- cable RS485 y terminaciones definitivas
+- conectores y borneras finales
+- gabinetes/cajas con protección adecuada
+- fusibles/protecciones por rama
+- protección contra transitorios según instalación
+- tubería, filtros, goteros, accesorios y válvulas antirretorno según diseño hidráulico
+- instrumentos y soluciones patrón para V&V
+- soportes definitivos para cámaras y sensores

@@ -1,0 +1,31 @@
+input:
+  task_id: string
+  agent_id: string
+  role: string
+  objective: string
+  context_refs:
+  - string
+  constraints:
+  - string
+  permissions:
+  - A0/A1/A2/A3
+  expected_output: string
+  review_required: bool
+output:
+  task_id: string
+  agent_id: string
+  status: SUCCESS|PARTIAL|BLOCKED|FAILED
+  summary: string
+  artifacts:
+  - string
+  decisions:
+  - string
+  assumptions:
+  - string
+  risks:
+  - string
+  evidence:
+  - string
+  open_questions:
+  - string
+  recommended_next_action: string
