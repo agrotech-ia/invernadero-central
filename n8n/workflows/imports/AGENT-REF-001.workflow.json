@@ -1,0 +1,55 @@
+{
+  "name": "AGENT-REF-001 - Kiro Refinement",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-refinement",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "refinement-webhook",
+      "name": "Refinement Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [-720, 0],
+      "webhookId": "project-refinement"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst backlogId = String(body.backlog_id || body.selected_backlog_id || 'EN-AGENT-001').toUpperCase();\nconst depth = String(body.depth || body.refinement_depth || 'detallado').toLowerCase();\nconst dryRun = body.dry_run !== false;\n\nconst prompt = [\n  `Refina ${backlogId} como DRAFT.`,\n  `Nivel de detalle: ${depth}.`,\n  'Usa project/backlog/templates/hu-template.yaml, project/kanban/board.yaml, project/agents-operating-model.md y .kiro/steering/project-governance.md.',\n  'Produce HUs/tareas pequeñas y verificables con rol experto, rol revisor, criterios de aceptacion, DoR, DoD, evidencia esperada, riesgos, dependencias y si el trabajo es humano, agente o mixto.',\n  'No modifiques HU congeladas. No marques nada como DONE. No apruebes compras, control fisico ni despliegues criticos.',\n  'Si falta informacion, haz una sola pregunta.'\n].join(' ');\n\nreturn [{\n  json: {\n    agent: 'project-refinement',\n    workspace: 'central',\n    prompt,\n    mode: 'draft',\n    approval_required: true,\n    dry_run: dryRun,\n    metadata: {\n      task_id: 'WF-REFINE-STORY-001',\n      agent_id: 'AGENT-REF-001',\n      backlog_id: backlogId,\n      depth,\n      requested_by: body.requested_by || 'chat-gateway'\n    }\n  }\n}];"
+      },
+      "id": "build-kiro-refinement-request",
+      "name": "Build Kiro Refinement Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [-460, 0]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "call-kiro-runner",
+      "name": "Call Kiro Runner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [-200, 0]
+    }
+  ],
+  "connections": {
+    "Refinement Webhook": {
+      "main": [[{"node": "Build Kiro Refinement Request", "type": "main", "index": 0}]]
+    },
+    "Build Kiro Refinement Request": {
+      "main": [[{"node": "Call Kiro Runner", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

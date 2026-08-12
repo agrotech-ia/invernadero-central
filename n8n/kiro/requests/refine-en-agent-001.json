@@ -1,0 +1,8 @@
+{
+  "agent": "project-refinement",
+  "workspace": "central",
+  "prompt": "Refina EN-AGENT-001 como DRAFT. Usa project/backlog/templates/hu-template.yaml, project/kanban/board.yaml, project/agents-operating-model.md y .kiro/steering/project-governance.md. Produce HUs/tareas pequeñas para completar el ciclo multiagente: recomendacion, seleccion, refinamiento, ejecucion, evidencia, revision y actualizacion Kanban. No modifiques HU congeladas. No marques nada como DONE. Pregunta una sola cosa si falta informacion.",
+  "mode": "draft",
+  "approval_required": true,
+  "dry_run": true
+}

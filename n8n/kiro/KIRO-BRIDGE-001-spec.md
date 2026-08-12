@@ -47,6 +47,12 @@ KIRO_AGENT=project-refinement
 POST /kiro/run
 ```
 
+Implementacion local versionada:
+
+```text
+n8n/kiro/runner/server.js
+```
+
 Payload:
 
 ```json
@@ -85,4 +91,10 @@ Con objetivo:
 
 ```text
 Refinar EN-AGENT-001 en HUs/tareas granulares para completar el ciclo multiagente.
+```
+
+Payload de prueba:
+
+```text
+n8n/kiro/requests/refine-en-agent-001.json
 ```
