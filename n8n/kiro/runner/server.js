@@ -4,6 +4,7 @@ import { spawn, spawnSync } from 'node:child_process';
 const HOST = process.env.KIRO_RUNNER_HOST || '127.0.0.1';
 const PORT = Number(process.env.KIRO_RUNNER_PORT || 8080);
 const KIRO_CLI_BIN = process.env.KIRO_CLI_BIN || 'kiro-cli';
+const KIRO_TRUST_TOOLS = process.env.KIRO_TRUST_TOOLS || 'read,grep';
 const MAX_PROMPT_LENGTH = 20000;
 
 const WORKSPACES = new Map([
@@ -115,7 +116,7 @@ function validatePayload(payload) {
 function runKiro({ agent, prompt, workspace, apiKey }) {
   return new Promise((resolve) => {
     const startedAt = Date.now();
-    const child = spawn(KIRO_CLI_BIN, ['chat', '--agent', agent, '--no-interactive', prompt], {
+    const child = spawn(KIRO_CLI_BIN, ['chat', '--agent', agent, '--no-interactive', `--trust-tools=${KIRO_TRUST_TOOLS}`, prompt], {
       cwd: workspace,
       env: {
         ...process.env,
@@ -193,7 +194,7 @@ async function handleRun(request, response) {
 
   const command = {
     bin: KIRO_CLI_BIN,
-    args: ['chat', '--agent', validation.agent, '--no-interactive', validation.prompt],
+    args: ['chat', '--agent', validation.agent, '--no-interactive', `--trust-tools=${KIRO_TRUST_TOOLS}`, validation.prompt],
     cwd: validation.workspace,
   };
 

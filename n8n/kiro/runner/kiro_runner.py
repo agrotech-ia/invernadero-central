@@ -10,6 +10,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 HOST = os.environ.get("KIRO_RUNNER_HOST", "0.0.0.0")
 PORT = int(os.environ.get("KIRO_RUNNER_PORT", "8080"))
 KIRO_CLI_BIN = os.environ.get("KIRO_CLI_BIN", "kiro-cli")
+KIRO_TRUST_TOOLS = os.environ.get("KIRO_TRUST_TOOLS", "read,grep")
 MAX_PROMPT_LENGTH = 20000
 
 WORKSPACES = {
@@ -111,7 +112,7 @@ def run_kiro(agent, prompt, workspace, api_key):
 
     try:
         result = subprocess.run(
-            [KIRO_CLI_BIN, "chat", "--agent", agent, "--no-interactive", prompt],
+            [KIRO_CLI_BIN, "chat", "--agent", agent, "--no-interactive", f"--trust-tools={KIRO_TRUST_TOOLS}", prompt],
             cwd=workspace,
             env=env,
             capture_output=True,
@@ -184,7 +185,7 @@ class KiroRunnerHandler(BaseHTTPRequestHandler):
 
         command = {
             "bin": KIRO_CLI_BIN,
-            "args": ["chat", "--agent", agent, "--no-interactive", prompt],
+            "args": ["chat", "--agent", agent, "--no-interactive", f"--trust-tools={KIRO_TRUST_TOOLS}", prompt],
             "cwd": workspace,
         }
 

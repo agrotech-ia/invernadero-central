@@ -40,6 +40,18 @@ http://agent-runner:8080/kiro/run
 For live execution, the Kiro key can be provided either as `KIRO_API_KEY` in the
 runner environment or as an `Authorization: Bearer <KIRO_API_KEY>` header from n8n.
 
+The local Docker image promotes the installed `kiro-cli*` binaries to `/usr/local/bin`
+because the Compose volume `agent_home:/home/agent` hides files installed under
+`/home/agent` during image build.
+
+The local Compose service mounts the three project repositories at their host paths:
+
+```text
+/home/chuchosam/Documentos/github/invernadero-central
+/home/chuchosam/Documentos/github/invernadero/green-house
+/home/chuchosam/Documentos/github/agrotechia-web-ui
+```
+
 For a safe connectivity check without a key or Kiro CLI execution:
 
 ```bash
@@ -64,5 +76,7 @@ Set `dry_run: true` in the payload to validate routing and command construction 
 - The API key must come from `KIRO_API_KEY` env or `Authorization: Bearer ...`.
 - API keys are not stored in Git.
 - Agents and workspaces are whitelisted.
+- Kiro headless runs with `--trust-tools=read,grep` by default. Override with
+  `KIRO_TRUST_TOOLS` only after explicit human approval.
 - The runner uses `spawn` with argument arrays, not shell interpolation.
 - Physical control, purchases, critical deployments, and final approvals remain human-gated.

@@ -19,12 +19,15 @@ runner:
   url_from_n8n: http://agent-runner:8080/kiro/run
   runtime_validated: python
   dry_run_validated: true
-  kiro_cli_available: false
+  kiro_cli_available: true
+  kiro_cli_version: kiro-cli 2.18.0
+  default_trust_tools: read,grep
 notes:
 - API key was used only for local creation and is not stored in repository.
 - Workflow uses Webhook + Function + HTTP Request for broad n8n compatibility.
 - The runner is available inside the agent-runner container via Python runtime.
-- Live Kiro execution still requires installing or exposing kiro-cli inside agent-runner.
+- Kiro CLI is installed in agent-runner and exposed through /usr/local/bin.
+- Live Kiro execution still requires a valid KIRO_API_KEY in agent-runner or an Authorization header.
 - The default workflow payload keeps dry_run true unless explicitly set to false.
 last_validation:
   date: '2026-08-12'
