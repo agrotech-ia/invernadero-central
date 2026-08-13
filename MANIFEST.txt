@@ -66,6 +66,7 @@ project/backlog/procurement-template.yaml
 project/backlog/templates/hu-template.yaml
 project/context/conversation-context-2026-08-11.md
 project/planning/current-state-baseline.yaml
+project/planning/drafts/project-plan-draft-2026-08-13.md
 project/kanban/README.md
 project/kanban/board.yaml
 project/roles/expert-role-catalog.yaml
