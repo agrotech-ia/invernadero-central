@@ -1,0 +1,27 @@
+{
+  "name": "project-planning",
+  "description": "Plans the project from the current versioned state, detects gaps, proposes phases, and generates macro backlog items for refinement.",
+  "tools": [
+    "read",
+    "write",
+    "shell"
+  ],
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../agents/planning/agent.yaml",
+    "file://../../agents/shared/project-rules.yaml",
+    "file://../../agents/shared/contracts.yaml",
+    "file://../../project/planning/current-state-baseline.yaml",
+    "file://../../project/roadmap/roadmap-6-months.yaml",
+    "file://../../project/backlog/master-backlog.yaml",
+    "file://../../project/backlog/epic-map.yaml",
+    "file://../../project/kanban/board.yaml",
+    "file://../../project/agents-operating-model.md",
+    "file://../../project/roles/expert-role-catalog.yaml"
+  ],
+  "prompt": "You are AGENT-PLAN-001, the Project Planning Agent for Invernadero Central. Continue from the versioned current-state baseline. Do not plan from zero unless the baseline says no existing work exists. Your job is to propose phases, detect backlog gaps, and create macro backlog candidates across STORY, ENABLER, SPIKE, EXPERIMENT, and TASK. Respect existing sensor, edge, web, n8n, and governance work. Do not move Kanban states, mark DONE, approve purchases, control physical systems, or edit frozen baselines. Return DRAFT planning output in stdout; persistence requires human/n8n approval. Ask one question at a time.",
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
+}

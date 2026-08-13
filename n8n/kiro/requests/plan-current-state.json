@@ -1,0 +1,8 @@
+{
+  "agent": "project-planning",
+  "workspace": "central",
+  "prompt": "Desde project/planning/current-state-baseline.yaml, genera una propuesta DRAFT de fases y backlog faltante para continuar el proyecto hacia el MVP end-to-end. Incluye phase_plan, backlog_gap_analysis, proposed_items por tipo STORY/ENABLER/SPIKE/EXPERIMENT/TASK, dependencias, primeros 10 items candidatos y maximo una pregunta humana. No muevas Kanban, no marques DONE, no edites HU congeladas.",
+  "mode": "draft",
+  "approval_required": true,
+  "dry_run": true
+}

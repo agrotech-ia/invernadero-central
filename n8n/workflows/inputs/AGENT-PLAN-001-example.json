@@ -1,0 +1,7 @@
+{
+  "planning_request": "planificar desde estado actual",
+  "depth": "macro",
+  "max_items": 10,
+  "dry_run": true,
+  "requested_by": "chat-gateway"
+}

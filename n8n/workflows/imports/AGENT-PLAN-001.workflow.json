@@ -1,0 +1,62 @@
+{
+  "name": "AGENT-PLAN-001 - Kiro Project Planning",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-planning",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "planning-webhook",
+      "name": "Planning Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [-720, 0],
+      "webhookId": "project-planning"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst depth = String(body.depth || 'macro').toLowerCase();\nconst maxItems = Number(body.max_items || body.maxItems || 10);\nconst dryRun = body.dry_run !== false;\n\nconst prompt = [\n  'Desde project/planning/current-state-baseline.yaml, planifica el proyecto desde el estado actual, no desde cero.',\n  `Nivel de detalle: ${depth}.`,\n  `Maximo de items candidatos: ${maxItems}.`,\n  'Usa project/roadmap/roadmap-6-months.yaml, project/backlog/master-backlog.yaml, project/backlog/epic-map.yaml, project/kanban/board.yaml, project/agents-operating-model.md y project/roles/expert-role-catalog.yaml.',\n  'Produce una salida DRAFT con phase_plan, backlog_gap_analysis, proposed_items agrupados por STORY, ENABLER, SPIKE, EXPERIMENT y TASK, dependencias, riesgos y primeros items recomendados.',\n  'Respeta avances existentes de sensores, edge, web y n8n. No propongas reimplementar trabajo existente sin justificar reemplazo.',\n  'No muevas estados Kanban, no marques DONE, no edites HU congeladas, no apruebes compras ni control fisico.',\n  'Si falta informacion, haz una sola pregunta.'\n].join(' ');\n\nreturn [{\n  json: {\n    agent: 'project-planning',\n    workspace: 'central',\n    prompt,\n    mode: 'draft',\n    approval_required: true,\n    dry_run: dryRun,\n    metadata: {\n      task_id: 'WF-PLAN-PROJECT-001',\n      agent_id: 'AGENT-PLAN-001',\n      depth,\n      max_items: maxItems,\n      requested_by: body.requested_by || 'chat-gateway'\n    }\n  }\n}];"
+      },
+      "id": "build-kiro-planning-request",
+      "name": "Build Kiro Planning Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [-460, 0]
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "call-kiro-runner",
+      "name": "Call Kiro Runner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [-200, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Planning Webhook": {
+      "main": [[{"node": "Build Kiro Planning Request", "type": "main", "index": 0}]]
+    },
+    "Build Kiro Planning Request": {
+      "main": [[{"node": "Call Kiro Runner", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

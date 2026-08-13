@@ -1,0 +1,120 @@
+baseline_id: PROJECT-START-2026-08-13
+status: ACTIVE_STARTING_POINT
+purpose: >
+  Punto de partida versionado para que agentes de planificacion, backlog y refinamiento
+  continuen desde el estado real del proyecto, no desde cero.
+
+source_of_truth:
+  central_repo: /home/chuchosam/Documentos/github/invernadero-central
+  sensors_edge_data_repo: /home/chuchosam/Documentos/github/invernadero/green-house
+  web_repo: /home/chuchosam/Documentos/github/agrotechia-web-ui
+  governance:
+    - agents/shared/project-rules.yaml
+    - agents/shared/contracts.yaml
+    - project/agents-operating-model.md
+    - project/kanban/board.yaml
+    - project/backlog/master-backlog.yaml
+    - project/roadmap/roadmap-6-months.yaml
+    - project/validation/master-vv-matrix.yaml
+
+project_intent:
+  mvp_chain: REAL_SENSOR -> TELEMETRY -> STORAGE -> WEB -> RULE_OR_ALERT -> CONTROLLED_ACTION -> TRACE
+  operating_model: kanban_pull_based
+  planning_principle: Continuar desde avances existentes, detectar huecos y crear backlog por fases.
+  frozen_baselines_policy: No editar HU congeladas; crear enmiendas, decisiones o nuevas historias.
+
+current_assets:
+  sensors_edge_data:
+    status: EXISTING_WORK_ADVANCED
+    important_existing_work:
+      - Firmware SHT40 en esp32-sht40/
+      - Firmware nodo exterior en esp32d-outside/
+      - Firmware suelo 7-en-1 RS485/Modbus en xiao-esp32c3-soil/
+      - Raspberry/Mosquitto scripts en raspberry-pi/
+      - mqtt_logger.py para captura JSONL
+      - db/schema_v1.sql y db/seed_v1.sql
+      - docs/data-contracts.md
+      - docs/device-inventory.md
+      - docs/system-flow.md
+      - vision/pc/
+    known_rule: No reimplementar sensor de suelo; validar, caracterizar y evidenciar.
+  web:
+    status: EXISTING_UI_DEMO_WITH_AGENT_CHAT
+    important_existing_work:
+      - React + Vite + Tailwind
+      - Dashboard demo con mock data
+      - Chat flotante integrado contra n8n
+    known_gap: Integrar telemetria real y reemplazar mocks progresivamente.
+  central:
+    status: GOVERNANCE_AND_AGENT_CONTROL_REPO
+    important_existing_work:
+      - Baselines HU-001..HU-009
+      - Decision register
+      - Master backlog semilla
+      - Kanban board
+      - Roadmap 6 meses
+      - V&V matrix
+      - Agentes YAML y Kiro workspace agents
+      - n8n workflows AGENT-ORCH, AGENT-BKL, AGENT-REF, CHAT-GATEWAY
+
+current_n8n_agent_state:
+  n8n_status: RUNNING_LOCAL
+  runner_status: RUNNING_LOCAL_DOCKER
+  kiro_cli_version: kiro-cli 2.18.0
+  credential_source: n8n httpHeaderAuth credential named n8n
+  active_workflows:
+    - id: CHAT-GATEWAY-001
+      role: Chat gateway from web UI
+    - id: AGENT-REF-001
+      role: Kiro refinement agent bridge
+    - id: AGENT-BKL-001
+      role: Snapshot backlog recommendation
+    - id: AGENT-ORCH-001
+      role: Basic routing
+  validated:
+    - AGENT-REF-001 dry_run SUCCESS
+    - AGENT-REF-001 live execution SUCCESS with project-refinement workspace agent
+    - Kiro workspace agents are discovered in agent-runner
+  known_limitations:
+    - AGENT-REF-001 returns DRAFT output; persistence must pass human/n8n gate.
+    - CHAT-GATEWAY currently routes conversationally but does not yet invoke all workflows end-to-end.
+    - Backlog recommendation still uses a snapshot instead of dynamic board read.
+
+planning_scope:
+  should_create:
+    - phases
+    - epics
+    - enablers
+    - stories
+    - spikes
+    - experiments
+    - tasks
+    - evidence_work
+    - agent_workflows
+    - review_gates
+  should_detect:
+    - missing work for MVP chain
+    - duplicate/reimplementation risk
+    - blocked work
+    - work that needs physical lab
+    - work that can be done autonomously by agents
+    - work that requires human approval
+  should_not_do:
+    - move Kanban states without human approval
+    - mark DONE
+    - approve purchases
+    - execute control fisico
+    - change frozen baselines
+
+initial_planning_question:
+  text: >
+    Desde este baseline, genera una propuesta de fases y backlog faltante para llegar al MVP
+    end-to-end, respetando el trabajo existente y creando items pequeños que luego puedan pasar
+    por AGENT-REF-001.
+  expected_output:
+    - phase_plan
+    - backlog_gap_analysis
+    - proposed_items_by_type
+    - first_10_candidate_items
+    - dependencies
+    - human_questions_max_1

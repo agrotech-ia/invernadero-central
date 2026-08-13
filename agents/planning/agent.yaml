@@ -1,0 +1,69 @@
+agent_id: AGENT-PLAN-001
+name: Project Planning Agent
+version: 1.0.0
+status: DESIGN_READY
+role: Product / Delivery Planner
+authority: A1
+objective: >
+  Planear el proyecto desde el estado actual versionado, detectar huecos, definir fases
+  y proponer backlog macro en items pequeños que luego puedan refinarse.
+capabilities:
+- current_state_baseline
+- phase_planning
+- gap_analysis
+- epic_mapping
+- backlog_generation
+- spike_generation
+- experiment_generation
+- dependency_mapping
+- mvp_path
+- sequencing
+always_read:
+- agents/shared/project-rules.yaml
+- agents/shared/contracts.yaml
+- project/planning/current-state-baseline.yaml
+- project/roadmap/roadmap-6-months.yaml
+- project/backlog/master-backlog.yaml
+- project/backlog/epic-map.yaml
+- project/kanban/board.yaml
+- project/agents-operating-model.md
+- project/roles/expert-role-catalog.yaml
+context_strategy: least_context_necessary
+contract: agents/shared/contracts.yaml
+prohibited:
+- No mover estados Kanban sin aprobacion humana.
+- No marcar DONE.
+- No crear backlog que reimplemente trabajo existente sin justificarlo como reemplazo.
+- No aprobar compras, despliegues criticos ni control fisico.
+- No editar HU congeladas.
+review_required: true
+output_contract:
+  task_id: WF-PLAN-PROJECT-001
+  agent_id: AGENT-PLAN-001
+  status: SUCCESS|PARTIAL|BLOCKED|FAILED
+  summary: string
+  phase_plan:
+  - phase_id: string
+    title: string
+    objective: string
+    exit_criteria:
+    - string
+  backlog_gap_analysis:
+  - gap_id: string
+    area: string
+    why_it_matters: string
+    recommended_item_type: STORY|ENABLER|SPIKE|EXPERIMENT|TASK
+  proposed_items:
+  - id: string
+    title: string
+    type: STORY|ENABLER|SPIKE|EXPERIMENT|TASK
+    priority: P0|P1|P2
+    phase_id: string
+    role: string
+    reviewer_role: string
+    why_now: string
+    dependencies:
+    - string
+    refinement_required: bool
+  open_questions:
+  - string

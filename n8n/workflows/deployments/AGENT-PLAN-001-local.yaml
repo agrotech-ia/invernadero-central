@@ -1,0 +1,40 @@
+workflow_name: AGENT-PLAN-001 - Kiro Project Planning
+agent_id: AGENT-PLAN-001
+n8n_workflow_id: YjCer8aDGO9QOrGJ
+n8n_url: http://localhost:5678/workflow/YjCer8aDGO9QOrGJ
+status: CREATED_IN_N8N
+active: true
+created_via: n8n public API
+created_at_observed: '2026-08-13T00:31:18.378Z'
+source_import_file: n8n/workflows/imports/AGENT-PLAN-001.workflow.json
+nodes:
+- Planning Webhook
+- Build Kiro Planning Request
+- Call Kiro Runner
+credentials:
+- node: Call Kiro Runner
+  type: httpHeaderAuth
+  name: n8n
+  id: b39VeJvBxPMGkMXz
+webhook:
+  path: project-planning
+  method: POST
+  production_url: http://localhost:5678/webhook/project-planning
+runner:
+  url_from_n8n: http://agent-runner:8080/kiro/run
+  runtime_validated: python
+  dry_run_validated: true
+  kiro_cli_available: true
+  kiro_agent: project-planning
+  default_trust_tools: fs_read,grep
+notes:
+- API key is provided by n8n credential `n8n`; no secrets are stored in Git.
+- Workflow output is DRAFT planning only.
+- Persisting phase plans or backlog items requires human approval.
+- This agent plans from project/planning/current-state-baseline.yaml, not from a blank project.
+last_validation:
+  date: '2026-08-13'
+  command: POST http://localhost:5678/webhook/project-planning
+  input_file: n8n/workflows/inputs/AGENT-PLAN-001-example.json
+  result: SUCCESS
+  auth_result: authorization_header
