@@ -2,14 +2,16 @@
 
 Estado: DRAFT
 
-Objetivo: crear una entrada conversacional simple para interactuar con los agentes del proyecto.
+Objetivo: crear una entrada conversacional acotada al proyecto para interactuar con
+los agentes desde el contexto versionado del repo central.
 
 ## Flujo
 
 ```text
 Webhook
--> Chat Router
--> JSON response
+-> Build Project PMO Chat Request
+-> Call Kiro PMO Runner
+-> Format Chat Response
 ```
 
 ## Endpoint esperado
@@ -28,24 +30,27 @@ Payload minimo:
 
 ## Responsabilidad
 
-El chat gateway no ejecuta trabajo especializado. Solo:
+El chat gateway no es un asistente general. Solo responde o trabaja con contexto de:
+
+- sensores, edge, datos y web del invernadero;
+- n8n, Kiro y sistema multiagente;
+- backlog, Kanban, roadmap, HUs, evidencia, arquitectura y decisiones versionadas.
+
+Responsabilidades:
 
 - recibe mensaje del humano;
-- clasifica intencion;
-- enruta al agente/workflow sugerido;
+- llama a `AGENT-PMO-001` como gateway contextual;
+- permite que PMO clasifique intencion y recomiende agente;
 - responde con una sola pregunta siguiente;
 - mantiene restricciones de gobernanza.
 
 ## Limitacion actual
 
-Esta primera version no conserva memoria conversacional persistente.
-
-La memoria debe guardarse despues en Git o en una tabla local cuando se implemente `agent-runner`
-o un backend de chat.
+Esta version recibe `conversation_state` desde el cliente si existe, pero todavia no
+persiste memoria conversacional automatica en Git o base de datos.
 
 ## Siguiente evolucion
 
-- Conectar con `AGENT-BKL-001`.
-- Conectar con `AGENT-REF-001`.
+- Permitir que el PMO dispare sub-workflows aprobados, no solo recomendar rutas.
 - Guardar conversaciones relevantes en `project/context/`.
-- Crear una interfaz web local sencilla para enviar mensajes al webhook.
+- Persistir decisiones del chat como eventos auditables.

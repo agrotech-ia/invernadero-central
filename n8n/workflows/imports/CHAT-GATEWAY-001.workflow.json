@@ -1,5 +1,7 @@
 {
+  "id": "4B01zAwrBFqiJR0V",
   "name": "CHAT-GATEWAY-001 - Project Agent Chat",
+  "active": true,
   "nodes": [
     {
       "parameters": {
@@ -12,23 +14,60 @@
       "name": "Chat Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [-640, 0],
+      "position": [-900, 0],
       "webhookId": "project-agent-chat"
     },
     {
       "parameters": {
-        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst state = body.conversation_state || {};\nconst message = String(body.message || body.text || body.request || '').trim();\nconst lower = message.toLowerCase();\nconst yesWords = ['si', 'sí', 'sii', 'claro', 'ok', 'dale', 'listo'];\nconst timeWords = ['corto', 'medio', 'largo'];\n\nconst options = [\n  '1. EN-AGENT-001 - Bootstrap plataforma multiagente local. Base para conectar recomendacion, refinamiento, ejecucion, evidencia y revision.',\n  '2. EN-EDGE-001 - Validar runtime Raspberry MQTT->DB. Desbloquea SENSOR -> TELEMETRY -> STORAGE.',\n  '3. EN-QA-001 - Framework V&V y evidencia. Evita avanzar sin pruebas trazables.'\n];\n\nlet primaryAgent = 'AGENT-BKL-001';\nlet workflow = 'WF-BACKLOG-RECOMMEND-001';\nlet reply = 'Puedo ayudarte a elegir, refinar o enrutar trabajo del proyecto.';\nlet nextQuestion = 'Quieres que te recomiende 3 opciones del backlog ahora?';\nlet nextState = { pending_intent: 'confirm_backlog_recommendation' };\n\nif (yesWords.includes(lower) && state.pending_intent === 'confirm_backlog_recommendation') {\n  reply = `Estas son las 3 opciones recomendadas:\\n\\n${options.join('\\n\\n')}`;\n  nextQuestion = 'Cual opcion quieres tomar ahora: 1, 2 o 3?';\n  nextState = { pending_intent: 'select_backlog_option' };\n} else if (timeWords.includes(lower) && state.pending_intent === 'ask_available_time') {\n  reply = `Perfecto, tomo tiempo ${lower}. Estas son las 3 opciones recomendadas:\\n\\n${options.join('\\n\\n')}`;\n  nextQuestion = 'Cual opcion quieres tomar ahora: 1, 2 o 3?';\n  nextState = { pending_intent: 'select_backlog_option', available_time: lower };\n} else if (['1', '2', '3'].includes(lower) && state.pending_intent === 'select_backlog_option') {\n  const selected = lower === '1' ? 'EN-AGENT-001' : lower === '2' ? 'EN-EDGE-001' : 'EN-QA-001';\n  primaryAgent = 'AGENT-REF-001';\n  workflow = 'WF-REFINE-STORY-001';\n  reply = `Seleccionaste ${selected}. Antes de ejecutar, debe pasar por refinamiento granular.`;\n  nextQuestion = `Confirmas que refinamos ${selected}?`;\n  nextState = { pending_intent: 'confirm_refine_story', selected_backlog_id: selected };\n} else if (yesWords.includes(lower) && state.pending_intent === 'confirm_refine_story') {\n  primaryAgent = 'AGENT-REF-001';\n  workflow = 'WF-REFINE-STORY-001';\n  reply = `Listo. Enruto ${state.selected_backlog_id || 'la HU seleccionada'} al Refinement Agent.`;\n  nextQuestion = 'Quieres que el refinamiento sea corto o detallado?';\n  nextState = { pending_intent: 'ask_refinement_depth', selected_backlog_id: state.selected_backlog_id };\n} else if ((lower === 'hu' || lower === 'historia' || lower === 'enabler') && state.pending_intent === 'ask_refine_target') {\n  primaryAgent = 'AGENT-REF-001';\n  workflow = 'WF-REFINE-STORY-001';\n  reply = 'Perfecto, vamos a refinar una HU o enabler.';\n  nextQuestion = 'Dime el ID exacto, por ejemplo EN-AGENT-001, EN-EDGE-001 o HU-SOIL-001.';\n  nextState = { pending_intent: 'ask_refine_target_id' };\n} else if (/^(hu|en|exp)-[a-z0-9]+-\\d+/i.test(lower) || /^en-agent-001$/i.test(lower)) {\n  primaryAgent = 'AGENT-REF-001';\n  workflow = 'WF-REFINE-STORY-001';\n  const selected = message.toUpperCase();\n  reply = `Entendido. Vamos a refinar ${selected}.`;\n  nextQuestion = 'Quieres un refinamiento corto o detallado?';\n  nextState = { pending_intent: 'ask_refinement_depth', selected_backlog_id: selected };\n} else if (lower.includes('refinar') || lower.includes('refinamiento')) {\n  primaryAgent = 'AGENT-REF-001';\n  workflow = 'WF-REFINE-STORY-001';\n  reply = 'Entendido. Voy a tratar esto como una solicitud de refinamiento de HU o enabler.';\n  nextQuestion = 'Que HU o enabler quieres refinar? Puedes decir EN-AGENT-001, EN-EDGE-001 o HU-SOIL-001.';\n  nextState = { pending_intent: 'ask_refine_target' };\n} else if (lower.includes('siguiente') || lower.includes('backlog') || lower.includes('trabajar') || lower.includes('recomienda')) {\n  reply = 'Entendido. La ruta correcta es pedir recomendacion al Backlog Agent usando prioridad, WIP y modo de trabajo.';\n  nextQuestion = 'Cuanto tiempo tienes ahora: corto, medio o largo?';\n  nextState = { pending_intent: 'ask_available_time' };\n} else if (lower.includes('arquitectura') || lower.includes('decision') || lower.includes('decisión')) {\n  primaryAgent = 'AGENT-ARCH-001';\n  workflow = 'WF-ARCH-REVIEW-001';\n  reply = 'Entendido. Esto debe ir a revision arquitectonica o decision tecnica.';\n  nextQuestion = 'Cual es la decision o cambio arquitectonico que quieres evaluar?';\n  nextState = { pending_intent: 'ask_architecture_topic' };\n} else if (lower.includes('mercado') || lower.includes('contenido') || lower.includes('growth')) {\n  primaryAgent = lower.includes('contenido') || lower.includes('growth') ? 'AGENT-GROW-001' : 'AGENT-MKT-001';\n  workflow = 'WF-MARKET-GROWTH-001';\n  reply = 'Entendido. Esto debe pasar por mercado/growth respetando la politica de claims.';\n  nextQuestion = 'Quieres trabajar mercado, contenido educativo o validacion de claims?';\n  nextState = { pending_intent: 'ask_market_growth_topic' };\n}\n\nreturn [{\n  json: {\n    chat_id: body.chat_id || 'local-project-chat',\n    received_message: message,\n    status: 'SUCCESS',\n    reply,\n    route: { workflow, primary_agent: primaryAgent, authority: 'A1', review_required: true },\n    constraints: [\n      'No modificar HU congeladas.',\n      'No mover estados sin aprobacion humana.',\n      'No marcar DONE sin evidencia.',\n      'Hacer una sola pregunta al humano por turno.'\n    ],\n    next_question: nextQuestion,\n    conversation_state: nextState,\n    suggested_payloads: {\n      backlog_recommendation: { message: 'recomienda siguiente trabajo', available_time: 'unknown', preferred_mode: 'any' },\n      refine_story: { message: 'refinar EN-AGENT-001', backlog_id: 'EN-AGENT-001' }\n    }\n  }\n}];"
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst message = String(body.message || body.text || body.request || '').trim();\nconst chatId = body.chat_id || 'local-project-chat';\nconst state = body.conversation_state || {};\nconst availableTime = String(body.available_time || body.availableTime || state.available_time || 'unknown');\nconst preferredMode = String(body.preferred_mode || body.preferredMode || state.preferred_mode || 'any');\nconst maxOptions = Math.min(Number(body.max_options || body.maxOptions || 3), 3);\nconst dryRun = body.dry_run === true;\n\nconst prompt = [\n  'Actua como gateway conversacional del proyecto Invernadero Central usando AGENT-PMO-001.',\n  'Tu alcance esta estrictamente limitado al proyecto: sensores, edge, datos, web, n8n, agentes, backlog, Kanban, roadmap, evidencia, arquitectura, mercado/growth documentado y decisiones versionadas.',\n  'Si el humano pregunta algo fuera del proyecto, responde brevemente que solo puedes ayudar con el proyecto y ofrece una forma de reformularlo dentro del contexto del proyecto.',\n  `Mensaje humano: ${message || '(vacio)'}.`,\n  `chat_id: ${chatId}.`,\n  `conversation_state: ${JSON.stringify(state)}.`,\n  `Tiempo disponible humano: ${availableTime}.`,\n  `Modo preferido: ${preferredMode}.`,\n  `Maximo de opciones: ${maxOptions}.`,\n  'Usa el contexto versionado del repo central y el baseline actual. Debes poder responder preguntas sobre estado del proyecto, backlog, roadmap, agentes, HUs, riesgos y siguiente mejor accion.',\n  'Clasifica la intencion y decide el agente recomendado: project-pmo, project-planning, project-backlog, project-refinement, project-architecture, project-engineering, project-qa-evidence o project-reviewer-safety.',\n  'Si se pide planificar desde estado actual, recomienda project-planning. Si se pide siguiente accion, backlog, prioridad, WIP o desbloqueo, responde como PMO. Si se pide refinar HU/enabler/spike/experiment/task, recomienda project-refinement. Si se pide codigo o implementacion, verifica si hay HU refinada y aprobacion; si no, pide el paso faltante. Si se pide DONE/evidencia, recomienda project-qa-evidence.',\n  'No muevas estados Kanban, no marques DONE, no edites HU congeladas, no apruebes compras, no ejecutes despliegues criticos ni controles fisicos.',\n  'Responde en espanol, sin emojis, con maximo 3 opciones cuando recomiendes trabajo, y haz una sola pregunta final si necesitas decision humana.',\n  'Devuelve una respuesta util para mostrar directamente en el chat. Incluye route con recommended_agent y next_question si aplica.'\n].join(' ');\n\nreturn [{\n  json: {\n    agent: 'project-pmo',\n    workspace: 'central',\n    prompt,\n    mode: 'chat-gateway',\n    approval_required: true,\n    dry_run: dryRun,\n    metadata: {\n      task_id: 'CHAT-GATEWAY-001',\n      gateway_agent: 'AGENT-PMO-001',\n      chat_id: chatId,\n      available_time: availableTime,\n      preferred_mode: preferredMode,\n      max_options: maxOptions,\n      scope: 'project_only'\n    }\n  }\n}];"
       },
-      "id": "chat-router",
-      "name": "Chat Router",
+      "id": "build-project-pmo-chat-request",
+      "name": "Build Project PMO Chat Request",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [-360, 0]
+      "position": [-620, 0]
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "call-kiro-pmo-runner",
+      "name": "Call Kiro PMO Runner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [-340, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const runner = items && items[0] && items[0].json ? items[0].json : {};\nconst stripAnsi = (value) => String(value || '').replace(/\\u001b\\[[0-9;?]*[ -/]*[@-~]/g, '').trim();\nconst stripToolLogs = (value) => {\n  let text = stripAnsi(value);\n  const markers = ['## AGENT-PMO-001', '## AGENT-PMO', '## Diagnostico', '## Diagnóstico', '### Estado actual', 'route:'];\n  const positions = markers.map((marker) => text.indexOf(marker)).filter((index) => index >= 0);\n  if (positions.length > 0) {\n    text = text.slice(Math.min(...positions)).trim();\n  }\n  return text\n    .split('\\n')\n    .filter((line) => !/^Batch fs_read operation/.test(line))\n    .filter((line) => !/^↱ Operation/.test(line))\n    .filter((line) => !/^ ✓ Successfully read/.test(line))\n    .filter((line) => !/^ ⋮ /.test(line))\n    .filter((line) => !/^- Summary:/.test(line))\n    .filter((line) => !/^ - Completed/.test(line))\n    .filter((line) => !/^Reading file:/.test(line))\n    .filter((line) => !/^> /.test(line))\n    .join('\\n')\n    .trim();\n};\nconst stdout = stripToolLogs(runner.stdout);\nconst stderr = stripAnsi(runner.stderr);\nconst reply = stdout || (runner.dry_run ? 'Gateway PMO validado en dry_run. El chat esta conectado al agente project-pmo.' : 'No recibi salida del agente PMO.');\n\nreturn [{\n  json: {\n    status: runner.status || 'UNKNOWN',\n    chat_scope: 'project_only',\n    reply,\n    route: {\n      workflow: 'CHAT-GATEWAY-001',\n      gateway_agent: 'AGENT-PMO-001',\n      primary_agent: runner.agent || 'project-pmo',\n      authority: 'A1',\n      review_required: runner.requires_human_review !== false\n    },\n    constraints: [\n      'Solo responder o trabajar con contexto del proyecto Invernadero Central.',\n      'No modificar HU congeladas.',\n      'No mover estados sin aprobacion humana.',\n      'No marcar DONE sin evidencia.',\n      'No aprobar compras, despliegues criticos ni control fisico.',\n      'Hacer una sola pregunta al humano por turno.'\n    ],\n    runner: {\n      dry_run: !!runner.dry_run,\n      exit_code: runner.exit_code,\n      duration_ms: runner.duration_ms,\n      auth_source: runner.auth && runner.auth.source,\n      error: runner.error || null,\n      stderr\n    }\n  }\n}];"
+      },
+      "id": "format-chat-response",
+      "name": "Format Chat Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [-80, 0]
     }
   ],
   "connections": {
     "Chat Webhook": {
-      "main": [[{"node": "Chat Router", "type": "main", "index": 0}]]
+      "main": [[{"node": "Build Project PMO Chat Request", "type": "main", "index": 0}]]
+    },
+    "Build Project PMO Chat Request": {
+      "main": [[{"node": "Call Kiro PMO Runner", "type": "main", "index": 0}]]
+    },
+    "Call Kiro PMO Runner": {
+      "main": [[{"node": "Format Chat Response", "type": "main", "index": 0}]]
     }
   },
   "pinData": {},

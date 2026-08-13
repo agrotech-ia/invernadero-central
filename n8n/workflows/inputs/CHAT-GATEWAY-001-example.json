@@ -2,5 +2,8 @@
   "message": "recomienda siguiente trabajo",
   "chat_id": "local-project-chat",
   "available_time": "unknown",
-  "preferred_mode": "any"
+  "preferred_mode": "any",
+  "max_options": 3,
+  "dry_run": true,
+  "conversation_state": {}
 }
