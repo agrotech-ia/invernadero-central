@@ -21,6 +21,7 @@ WORKSPACES = {
 
 AGENTS = {
     "project-backlog",
+    "project-pmo",
     "project-planning",
     "project-refinement",
     "project-reviewer-safety",

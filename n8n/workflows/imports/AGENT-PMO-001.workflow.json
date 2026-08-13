@@ -1,0 +1,64 @@
+{
+  "id": "PMOAgent001Local",
+  "name": "AGENT-PMO-001 - Kiro PMO Flow Control",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-pmo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "pmo-webhook",
+      "name": "PMO Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [-720, 0],
+      "webhookId": "project-pmo"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst availableTime = String(body.available_time || body.availableTime || 'unknown');\nconst preferredMode = String(body.preferred_mode || body.preferredMode || 'any');\nconst maxOptions = Math.min(Number(body.max_options || body.maxOptions || 3), 3);\nconst dryRun = body.dry_run !== false;\n\nconst prompt = [\n  'Revisa el flujo operativo completo del proyecto Invernadero Central desde el estado versionado actual.',\n  `Solicitud PMO: ${body.pmo_request || body.message || 'revisar flujo y recomendar siguiente accion'}.`,\n  `Tiempo disponible humano: ${availableTime}.`,\n  `Modo preferido: ${preferredMode}.`,\n  `Maximo de opciones: ${maxOptions}.`,\n  'Lee roadmap, backlog, epic-map, board Kanban, modelo operativo, roles expertos, baseline actual y draft de planificacion.',\n  'Evalua WIP, bloqueos, dependencias, items que requieren refinamiento, evidencia pendiente, prioridades y fase del roadmap.',\n  'Devuelve board_health, priority_assessment y recommended_next_actions con el agente recomendado para cada accion.',\n  'Recomienda maximo 3 opciones. Si una opcion necesita desglose, enruta a project-refinement. Si necesita implementacion aprobada, enruta a project-engineering. Si necesita evidencia, enruta a project-qa-evidence.',\n  'No muevas estados Kanban, no marques DONE, no edites HU congeladas, no apruebes compras ni control fisico.',\n  'Si falta informacion, haz una sola pregunta.'\n].join(' ');\n\nreturn [{\n  json: {\n    agent: 'project-pmo',\n    workspace: 'central',\n    prompt,\n    mode: 'draft',\n    approval_required: true,\n    dry_run: dryRun,\n    metadata: {\n      task_id: 'WF-PMO-CONTROL-001',\n      agent_id: 'AGENT-PMO-001',\n      available_time: availableTime,\n      preferred_mode: preferredMode,\n      max_options: maxOptions,\n      requested_by: body.requested_by || 'chat-gateway'\n    }\n  }\n}];"
+      },
+      "id": "build-kiro-pmo-request",
+      "name": "Build Kiro PMO Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [-460, 0]
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "call-kiro-runner",
+      "name": "Call Kiro Runner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [-200, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "PMO Webhook": {
+      "main": [[{"node": "Build Kiro PMO Request", "type": "main", "index": 0}]]
+    },
+    "Build Kiro PMO Request": {
+      "main": [[{"node": "Call Kiro Runner", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

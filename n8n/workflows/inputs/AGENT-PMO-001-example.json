@@ -1,0 +1,8 @@
+{
+  "pmo_request": "revisar flujo y recomendar siguiente accion",
+  "available_time": "unknown",
+  "preferred_mode": "any",
+  "max_options": 3,
+  "dry_run": true,
+  "requested_by": "chat-gateway"
+}

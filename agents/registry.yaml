@@ -15,6 +15,10 @@ agents:
   name: Project Planning Agent
   path: agents/planning/agent.yaml
   version: 1.0.0
+- agent_id: AGENT-PMO-001
+  name: PMO / Flow Control Agent
+  path: agents/pmo/agent.yaml
+  version: 1.0.0
 - agent_id: AGENT-BKL-001
   name: Project / Backlog Agent
   path: agents/backlog/agent.yaml
