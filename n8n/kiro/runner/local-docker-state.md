@@ -54,16 +54,22 @@ repos mounted: OK
 `dry_run: false` hasta configurar una key real en `/home/chuchosam/docker/n8n/.env`
 o enviar `Authorization: Bearer <KIRO_API_KEY>` desde n8n.
 
-El workflow `AGENT-REF-001` ya referencia la credencial n8n `n8n` de tipo
-`httpHeaderAuth`, pero la validacion del 2026-08-12 todavia retorno:
-
-```text
-auth.source: missing
-```
-
-Accion manual requerida en n8n: abrir la credencial `n8n` y confirmar:
+El workflow `AGENT-REF-001` referencia la credencial n8n `n8n` de tipo
+`httpHeaderAuth`.
 
 ```text
 Name: Authorization
 Value: Bearer <KIRO_API_KEY>
 ```
+
+Validacion posterior:
+
+```text
+auth.source: authorization_header
+kiro-cli: project-refinement workspace agent discovered
+live execution: SUCCESS
+```
+
+Nota: en modo no interactivo, la persistencia directa por `fs_write` fue rechazada.
+Esto es deseable para AGENT-REF-001: el agente devuelve el DRAFT y la escritura final
+debe pasar por aprobación humana/n8n.

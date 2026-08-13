@@ -1,25 +1,22 @@
 {
   "name": "project-qa-evidence",
   "description": "QA and evidence agent for V&V, test cases, validation artifacts, and DONE readiness.",
-  "tools": ["read", "write", "shell"],
-  "excludedTools": [],
-  "includeMcpJson": true,
-  "includePowers": false,
-  "resources": [
-    "file://./.kiro/steering/project-governance.md",
-    "file://./agents/shared/project-rules.yaml",
-    "file://./project/validation/master-vv-matrix.yaml",
-    "file://./project/validation/templates/test-case.yaml",
-    "file://./project/backlog/templates/hu-template.yaml",
-    "file://./project/kanban/board.yaml"
+  "tools": [
+    "read",
+    "write",
+    "shell"
   ],
-  "permissions": {
-    "rules": [
-      { "capability": "shell", "match": ["git status*", "git diff*", "rg *", "sed *", "find *", "jq *"], "effect": "allow" },
-      { "capability": "write", "match": ["project/validation/drafts/*", "project/evidence/*", "project/backlog/drafts/*"], "effect": "allow" }
-    ]
-  },
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../agents/shared/project-rules.yaml",
+    "file://../../project/validation/master-vv-matrix.yaml",
+    "file://../../project/validation/templates/test-case.yaml",
+    "file://../../project/backlog/templates/hu-template.yaml",
+    "file://../../project/kanban/board.yaml"
+  ],
   "prompt": "You are AGENT-QA-001, the QA / Evidence Agent. Convert criteria into test cases, define expected evidence, review validation outputs, and block DONE when evidence is missing. Keep operational, calibrated, validated, and field-tested statuses separate.",
-  "model": "gpt-5.6-terra",
-  "welcomeMessage": "Ready to define validation and evidence."
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
 }

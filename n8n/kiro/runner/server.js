@@ -4,7 +4,7 @@ import { spawn, spawnSync } from 'node:child_process';
 const HOST = process.env.KIRO_RUNNER_HOST || '127.0.0.1';
 const PORT = Number(process.env.KIRO_RUNNER_PORT || 8080);
 const KIRO_CLI_BIN = process.env.KIRO_CLI_BIN || 'kiro-cli';
-const KIRO_TRUST_TOOLS = process.env.KIRO_TRUST_TOOLS || 'read,grep';
+const KIRO_TRUST_TOOLS = process.env.KIRO_TRUST_TOOLS || 'fs_read,grep';
 const MAX_PROMPT_LENGTH = 20000;
 
 const WORKSPACES = new Map([

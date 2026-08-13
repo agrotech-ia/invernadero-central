@@ -79,7 +79,7 @@ Set `dry_run: true` in the payload to validate routing and command construction 
 - The placeholder value `TU_KIRO_API_KEY` is treated as missing.
 - API keys are not stored in Git.
 - Agents and workspaces are whitelisted.
-- Kiro headless runs with `--trust-tools=read,grep` by default. Override with
+- Kiro headless runs with `--trust-tools=fs_read,grep` by default. Override with
   `KIRO_TRUST_TOOLS` only after explicit human approval.
 - The runner uses `spawn` with argument arrays, not shell interpolation.
 - Physical control, purchases, critical deployments, and final approvals remain human-gated.

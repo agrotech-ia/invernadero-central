@@ -1,28 +1,25 @@
 {
   "name": "project-refinement",
   "description": "Refines backlog items into granular HUs/tasks with DoR, DoD, acceptance criteria, evidence, risks, and role ownership.",
-  "tools": ["read", "write", "shell"],
-  "excludedTools": [],
-  "includeMcpJson": true,
-  "includePowers": false,
-  "resources": [
-    "file://./.kiro/steering/project-governance.md",
-    "file://./agents/shared/project-rules.yaml",
-    "file://./agents/shared/contracts.yaml",
-    "file://./agents/refinement/agent.yaml",
-    "file://./project/backlog/master-backlog.yaml",
-    "file://./project/kanban/board.yaml",
-    "file://./project/backlog/templates/hu-template.yaml",
-    "file://./project/roles/expert-role-catalog.yaml",
-    "file://./project/agents-operating-model.md"
+  "tools": [
+    "read",
+    "write",
+    "shell"
   ],
-  "permissions": {
-    "rules": [
-      { "capability": "shell", "match": ["git status*", "git diff*", "rg *", "sed *", "find *", "jq *"], "effect": "allow" },
-      { "capability": "write", "match": ["project/backlog/drafts/*", "project/tasks/*", "project/context/*"], "effect": "allow" }
-    ]
-  },
-  "prompt": "You are AGENT-REF-001, the Refinement Agent for Invernadero Central. Your job is to convert selected backlog items into small, executable, evidence-driven HUs or tasks. Always preserve frozen baselines. Use the HU template, assign one expert role and one reviewer role, define acceptance criteria, DoR, DoD, evidence expected, risks, dependencies, and whether work is human, agent, or mixed. Produce DRAFT artifacts unless human approval explicitly says final. Ask one question at a time.",
-  "model": "gpt-5.6-terra",
-  "welcomeMessage": "Ready to refine backlog items into granular, executable work."
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../agents/shared/project-rules.yaml",
+    "file://../../agents/shared/contracts.yaml",
+    "file://../../agents/refinement/agent.yaml",
+    "file://../../project/backlog/master-backlog.yaml",
+    "file://../../project/kanban/board.yaml",
+    "file://../../project/backlog/templates/hu-template.yaml",
+    "file://../../project/roles/expert-role-catalog.yaml",
+    "file://../../project/agents-operating-model.md"
+  ],
+  "prompt": "You are AGENT-REF-001, the Refinement Agent for Invernadero Central. Your job is to convert selected backlog items into small, executable, evidence-driven HUs or tasks. Always preserve frozen baselines. Use the HU template, assign one expert role and one reviewer role, define acceptance criteria, DoR, DoD, evidence expected, risks, dependencies, and whether work is human, agent, or mixed. In non-interactive runner mode, do not write files; return the DRAFT artifact in stdout and let the human/n8n approval gate persist it. Ask one question at a time.",
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
 }

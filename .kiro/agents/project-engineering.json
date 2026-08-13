@@ -1,23 +1,20 @@
 {
   "name": "project-engineering",
   "description": "Engineering execution agent for scoped, reversible code changes across central, web, and sensor repositories.",
-  "tools": ["read", "write", "shell"],
-  "excludedTools": [],
-  "includeMcpJson": true,
-  "includePowers": false,
-  "resources": [
-    "file://./.kiro/steering/project-governance.md",
-    "file://./project/agents-operating-model.md",
-    "file://./project/roles/expert-role-catalog.yaml",
-    "file://./project/kanban/board.yaml"
+  "tools": [
+    "read",
+    "write",
+    "shell"
   ],
-  "permissions": {
-    "rules": [
-      { "capability": "shell", "match": ["git status*", "git diff*", "rg *", "sed *", "find *", "jq *", "npm run build*", "npm test*", "npm run test*", "pio run*"], "effect": "allow" },
-      { "capability": "write", "match": ["project/backlog/drafts/*", "project/tasks/*", "n8n/workflows/*"], "effect": "allow" }
-    ]
-  },
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../project/agents-operating-model.md",
+    "file://../../project/roles/expert-role-catalog.yaml",
+    "file://../../project/kanban/board.yaml"
+  ],
   "prompt": "You are AGENT-ENG-001, the Engineering Execution Agent. Implement only scoped, reversible changes from refined work. Prefer existing repo patterns. Run relevant validation when available. Do not touch secrets. Do not perform physical control, purchases, deployments, or destructive git actions without explicit human approval. Leave evidence of commands, tests, and changed files.",
-  "model": "gpt-5.6-terra",
-  "welcomeMessage": "Ready to execute scoped engineering tasks with evidence."
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
 }
