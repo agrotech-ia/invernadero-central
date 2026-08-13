@@ -9,8 +9,8 @@ los agentes desde el contexto versionado del repo central.
 
 ```text
 Webhook
--> Build Project PMO Chat Request
--> Call Kiro PMO Runner
+-> Build Project Agent Chat Request
+-> Call Kiro Agent Runner
 -> Format Chat Response
 ```
 
@@ -39,8 +39,9 @@ El chat gateway no es un asistente general. Solo responde o trabaja con contexto
 Responsabilidades:
 
 - recibe mensaje del humano;
-- llama a `AGENT-PMO-001` como gateway contextual;
-- permite que PMO clasifique intencion y recomiende agente;
+- usa `AGENT-PMO-001` como gateway contextual por defecto;
+- enruta directo a Planning, Refinement, Architecture, Engineering, QA o Reviewer
+  cuando la intencion del humano es clara;
 - responde con una sola pregunta siguiente;
 - mantiene restricciones de gobernanza.
 
@@ -51,6 +52,6 @@ persiste memoria conversacional automatica en Git o base de datos.
 
 ## Siguiente evolucion
 
-- Permitir que el PMO dispare sub-workflows aprobados, no solo recomendar rutas.
+- Persistir aprobaciones humanas y decisiones del chat como eventos auditables.
 - Guardar conversaciones relevantes en `project/context/`.
-- Persistir decisiones del chat como eventos auditables.
+- Conectar una memoria conversacional local para evitar depender del cliente.

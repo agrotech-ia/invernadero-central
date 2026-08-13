@@ -66,6 +66,7 @@ project/agents-operating-model.md
 project/agents/kiro-model-policy.yaml
 project/architecture/target-architecture.md
 project/backlog/EN-AGENT-001.yaml
+project/backlog/drafts/EN-AGENT-001-refinement-draft-2026-08-13.md
 project/backlog/epic-map.yaml
 project/backlog/master-backlog.yaml
 project/backlog/procurement-template.yaml
