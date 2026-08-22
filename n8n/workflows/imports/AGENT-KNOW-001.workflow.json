@@ -1,0 +1,64 @@
+{
+  "id": "KNOWAgent001Local",
+  "name": "AGENT-KNOW-001 - Kiro Knowledge Query",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-knowledge",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "knowledge-webhook",
+      "name": "Knowledge Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [-720, 0],
+      "webhookId": "project-knowledge"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst query = String(body.knowledge_query || body.query || body.message || 'que sabemos del estado actual del proyecto?');\nconst scope = String(body.scope || 'project');\nconst includeSources = body.include_sources !== false;\nconst dryRun = body.dry_run !== false;\n\nconst prompt = [\n  'Responde como Knowledge Agent del proyecto Invernadero Central.',\n  `Consulta: ${query}.`,\n  `Alcance solicitado: ${scope}.`,\n  `Incluir fuentes: ${includeSources}.`,\n  'Usa solo contexto versionado del repo central y referencias declaradas de sensores/web cuando sean relevantes.',\n  'Prioriza: baseline actual, backlog, Kanban, roadmap, decisiones, V&V, roles, agentes, drafts y contexto conversacional versionado.',\n  'Devuelve respuesta breve pero trazable: answer, source_refs, contradictions, missing_context y recommended_next_agent si aplica.',\n  'Si hay contradicciones entre documentos, reportalas sin corregirlas.',\n  'No muevas estados Kanban, no marques DONE, no edites HU congeladas, no inventes evidencia ni decisiones.',\n  'Haz una sola pregunta si falta informacion critica.'\n].join(' ');\n\nreturn [{\n  json: {\n    agent: 'project-knowledge',\n    workspace: 'central',\n    prompt,\n    mode: 'knowledge-query',\n    approval_required: true,\n    dry_run: dryRun,\n    metadata: {\n      task_id: 'WF-KNOWLEDGE-QUERY-001',\n      agent_id: 'AGENT-KNOW-001',\n      query,\n      scope,\n      include_sources: includeSources,\n      requested_by: body.requested_by || 'chat-gateway'\n    }\n  }\n}];"
+      },
+      "id": "build-kiro-knowledge-request",
+      "name": "Build Kiro Knowledge Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [-460, 0]
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "call-kiro-runner",
+      "name": "Call Kiro Runner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [-200, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Knowledge Webhook": {
+      "main": [[{"node": "Build Kiro Knowledge Request", "type": "main", "index": 0}]]
+    },
+    "Build Kiro Knowledge Request": {
+      "main": [[{"node": "Call Kiro Runner", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

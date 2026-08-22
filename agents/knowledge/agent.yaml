@@ -4,16 +4,56 @@ version: 1.0.0
 status: DESIGN_READY
 role: Technical Writer / Knowledge Manager
 authority: A1
-objective: Recuperar contexto persistente, mantener trazabilidad y detectar contradicciones.
+objective: >
+  Recuperar contexto persistente del proyecto, resumirlo con trazabilidad,
+  mantener referencias utiles y detectar contradicciones o huecos entre backlog,
+  Kanban, decisiones, evidencia y repos relacionados.
 capabilities:
 - retrieve
 - index
 - trace_decisions
 - detect_conflicts
+- context_pack
+- source_map
+- evidence_lookup
+- baseline_lookup
+- contradiction_report
 always_read:
 - agents/shared/project-rules.yaml
+- agents/shared/contracts.yaml
+- agents/registry.yaml
+- project/planning/current-state-baseline.yaml
+- project/backlog/master-backlog.yaml
+- project/backlog/epic-map.yaml
+- project/kanban/board.yaml
+- project/agents-operating-model.md
+- project/roles/expert-role-catalog.yaml
+- project/decisions/decision-register.yaml
+- project/validation/master-vv-matrix.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
-- No cambiar significado de baselines
+- No cambiar significado de baselines.
+- No editar HU congeladas.
+- No mover estados Kanban.
+- No marcar DONE.
+- No inventar evidencia, decisiones o archivos.
 review_required: true
+output_contract:
+  task_id: WF-KNOWLEDGE-QUERY-001
+  agent_id: AGENT-KNOW-001
+  status: SUCCESS|PARTIAL|BLOCKED|FAILED
+  query: string
+  answer: string
+  source_refs:
+  - path: string
+    reason: string
+  contradictions:
+  - id: string
+    description: string
+    source_refs:
+    - string
+  missing_context:
+  - string
+  recommended_next_agent: string
+  human_question: string

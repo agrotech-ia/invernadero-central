@@ -1,0 +1,30 @@
+{
+  "name": "project-knowledge",
+  "description": "Retrieves project context, summarizes source-backed answers, maps references, and detects contradictions across backlog, Kanban, decisions, evidence, and baselines.",
+  "tools": [
+    "read",
+    "write",
+    "shell"
+  ],
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../agents/knowledge/agent.yaml",
+    "file://../../agents/shared/project-rules.yaml",
+    "file://../../agents/shared/contracts.yaml",
+    "file://../../agents/registry.yaml",
+    "file://../../project/planning/current-state-baseline.yaml",
+    "file://../../project/backlog/master-backlog.yaml",
+    "file://../../project/backlog/epic-map.yaml",
+    "file://../../project/kanban/board.yaml",
+    "file://../../project/agents-operating-model.md",
+    "file://../../project/roles/expert-role-catalog.yaml",
+    "file://../../project/decisions/decision-register.yaml",
+    "file://../../project/validation/master-vv-matrix.yaml",
+    "file://../../project/context/conversation-context-2026-08-11.md"
+  ],
+  "prompt": "You are AGENT-KNOW-001, the Knowledge Agent for Invernadero Central. Answer only from versioned project context. Retrieve and summarize relevant facts, cite source file paths, map decisions/evidence/backlog references, and flag contradictions or missing context. Do not modify baselines, move Kanban states, mark DONE, invent evidence, approve purchases, deploy critical systems, or control physical systems. Return a concise source-backed answer in stdout. Ask one question at a time.",
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
+}

@@ -1,0 +1,40 @@
+workflow_name: AGENT-KNOW-001 - Kiro Knowledge Query
+agent_id: AGENT-KNOW-001
+n8n_workflow_id: KNOWAgent001Local
+n8n_url: http://localhost:5678/workflow/KNOWAgent001Local
+status: CREATED_IN_N8N
+active: true
+created_via: n8n CLI import
+created_at_observed: '2026-08-22'
+source_import_file: n8n/workflows/imports/AGENT-KNOW-001.workflow.json
+nodes:
+- Knowledge Webhook
+- Build Kiro Knowledge Request
+- Call Kiro Runner
+credentials:
+- node: Call Kiro Runner
+  type: httpHeaderAuth
+  name: n8n
+  id: b39VeJvBxPMGkMXz
+webhook:
+  path: project-knowledge
+  method: POST
+  production_url: http://localhost:5678/webhook/project-knowledge
+runner:
+  url_from_n8n: http://agent-runner:8080/kiro/run
+  runtime_validated: python
+  dry_run_validated: true
+  live_execution_result: SUCCESS
+  kiro_agent: project-knowledge
+  default_trust_tools: fs_read,grep
+notes:
+- API key is provided by n8n credential `n8n`; no secrets are stored in Git.
+- Workflow output is source-backed project context only.
+- It must not update backlog, Kanban, baselines, evidence, or decisions.
+last_validation:
+  date: '2026-08-22'
+  command: POST http://localhost:5678/webhook/project-knowledge
+  input_file: n8n/workflows/inputs/AGENT-KNOW-001-example.json
+  result: SUCCESS
+  auth_result: authorization_header
+  live_execution_note: Kiro CLI used workspace agent project-knowledge and returned a source-backed agent-state summary.

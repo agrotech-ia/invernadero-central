@@ -1,0 +1,7 @@
+{
+  "knowledge_query": "que sabemos del estado actual del proyecto?",
+  "scope": "project",
+  "include_sources": true,
+  "dry_run": true,
+  "requested_by": "chat-gateway"
+}

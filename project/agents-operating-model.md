@@ -111,68 +111,39 @@ Agentes ya definidos:
 - `AGENT-ORCH-001`: Orchestrator.
 - `AGENT-KNOW-001`: Knowledge Agent.
 - `AGENT-PROD-001`: Product Agent.
+- `AGENT-PLAN-001`: Project Planning Agent.
+- `AGENT-PMO-001`: PMO / Flow Control Agent.
 - `AGENT-BKL-001`: Project / Backlog Agent.
 - `AGENT-REF-001`: Refinement Agent.
 - `AGENT-ARCH-001`: Architecture Agent.
 - `AGENT-MKT-001`: Market Intelligence & Demand Agent.
 - `AGENT-GROW-001`: Growth, Content & Education Agent.
+- `AGENT-REV-001`: Reviewer / Safety Agent.
+- `AGENT-ENG-001`: Engineering Execution Agent.
+- `AGENT-QA-001`: QA / Evidence Agent.
+
+## Matriz de madurez de agentes
+
+| Agente | Definicion | Kiro | n8n dedicado | Chat routing | Estado |
+|---|---|---|---|---|---|
+| `AGENT-KNOW-001` | si | `project-knowledge` | `AGENT-KNOW-001` | si | operativo DRAFT |
+| `AGENT-PMO-001` | si | `project-pmo` | `AGENT-PMO-001` | si | operativo DRAFT |
+| `AGENT-PLAN-001` | si | `project-planning` | `AGENT-PLAN-001` | si | operativo DRAFT |
+| `AGENT-REF-001` | si | `project-refinement` | `AGENT-REF-001` | si | operativo DRAFT |
+| `AGENT-BKL-001` | si | `project-backlog` | snapshot/manual | parcial | requiere version dinamica |
+| `AGENT-ARCH-001` | si | `project-architecture` | no | si | falta workflow dedicado |
+| `AGENT-ENG-001` | si | `project-engineering` | no | si | falta `WF-EXECUTE-TASK-001` |
+| `AGENT-QA-001` | si | `project-qa-evidence` | no | si | falta `WF-QA-EVIDENCE-001` |
+| `AGENT-REV-001` | si | `project-reviewer-safety` | no | si | falta workflow gate/review |
+| `AGENT-ORCH-001` | si | no | snapshot/manual | reemplazado parcialmente por chat gateway + PMO | revisar necesidad |
+| `AGENT-PROD-001` | si | no | no | no | falta operacionalizar |
+| `AGENT-MKT-001` | si | no | no | no | falta operacionalizar |
+| `AGENT-GROW-001` | si | no | no | no | falta operacionalizar |
 
 ## Agentes faltantes recomendados
 
-Para cerrar un ciclo de desarrollo completo, se recomiendan estos agentes adicionales.
-
-### Engineering Execution Agent
-
-ID sugerido:
-
-```text
-AGENT-ENG-001
-```
-
-Rol:
-
-- Software / Firmware / Integration Engineer.
-
-Responsabilidad:
-
-- implementar cambios de codigo acotados;
-- ejecutar pruebas locales;
-- dejar resumen tecnico;
-- no hacer despliegues criticos sin aprobacion.
-
-Dominios:
-
-- firmware ESP32/XIAO;
-- scripts Raspberry;
-- ingesta MQTT;
-- API backend;
-- frontend web;
-- automatizaciones locales.
-
-Autoridad sugerida:
-
-```text
-A2 para ejecucion reversible local; A3 para despliegues/control fisico/credenciales/compras.
-```
-
-### QA / Evidence Agent
-
-ID sugerido:
-
-```text
-AGENT-QA-001
-```
-
-Rol:
-
-- QA Engineer / Evidence Manager.
-
-Responsabilidad:
-
-- convertir criterios en casos de prueba;
-- revisar evidencia;
-- actualizar matriz V&V;
-- bloquear `DONE` si falta evidencia.
+Para cerrar un ciclo de desarrollo completo, faltan tres especializaciones por crear
+como agentes propios.
 
 ### DevOps / Edge Agent
 
@@ -241,26 +212,6 @@ Responsabilidad:
 Restriccion:
 
 - no ejecutar compras ni control fisico critico sin aprobacion humana.
-
-### Reviewer / Safety Agent
-
-ID sugerido:
-
-```text
-AGENT-REV-001
-```
-
-Rol:
-
-- Independent Reviewer / Safety.
-
-Responsabilidad:
-
-- revisar outputs de otros agentes;
-- verificar autoridad;
-- detectar cambios de baseline;
-- verificar que no haya claims, compras o control fisico sin aprobacion;
-- revisar riesgos.
 
 ## Ciclo por HU
 

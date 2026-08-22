@@ -1,0 +1,13 @@
+{
+  "agent": "project-knowledge",
+  "workspace": "central",
+  "prompt": "Resume el estado actual de agentes y cita fuentes. Reporta contradicciones o contexto faltante sin modificar archivos.",
+  "mode": "knowledge-query",
+  "approval_required": true,
+  "dry_run": true,
+  "metadata": {
+    "task_id": "WF-KNOWLEDGE-QUERY-001",
+    "agent_id": "AGENT-KNOW-001",
+    "query": "resume el estado actual de agentes y cita fuentes"
+  }
+}
