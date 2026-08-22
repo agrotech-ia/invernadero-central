@@ -1,0 +1,5 @@
+{
+  "review_request": "revisar salida de agente antes de persistir",
+  "dry_run": true,
+  "requested_by": "chat-gateway"
+}

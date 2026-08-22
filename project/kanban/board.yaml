@@ -87,7 +87,12 @@ cards:
       status: DONE
       evidence:
       - project/evidence/agents/AGENT-BKL-001-dynamic-2026-08-22.md
-    next_action: Crear WF-QA-EVIDENCE-001 para validar evidencia y DONE readiness.
+    - task_id: T-AGT-SUITE-001
+      title: Operacionalizar suite completa de agentes locales
+      status: DONE
+      evidence:
+      - project/evidence/agents/AGENT-SUITE-OPERATIONAL-2026-08-22.md
+    next_action: Ejecutar prueba live corta desde el chat y luego enviar EN-AGENT-001 a QA/VALIDATION.
   EN-QA-001:
     title: Implementar framework V&V y persistencia de evidencia
     type: ENABLER

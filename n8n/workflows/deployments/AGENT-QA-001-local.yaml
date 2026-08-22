@@ -1,14 +1,14 @@
-workflow_name: AGENT-ORCH-001 - Kiro Orchestrator
-agent_id: AGENT-ORCH-001
-n8n_workflow_id: YxKTp7gOFVD0RToL
-n8n_url: http://localhost:5678/workflow/YxKTp7gOFVD0RToL
+workflow_name: AGENT-QA-001 - Kiro QA Evidence
+agent_id: AGENT-QA-001
+n8n_workflow_id: QAAgent001Local
+n8n_url: http://localhost:5678/workflow/QAAgent001Local
 status: CREATED_IN_N8N
 active: true
 created_via: n8n CLI import
-source_import_file: n8n/workflows/imports/AGENT-ORCH-001.workflow.json
+source_import_file: n8n/workflows/imports/AGENT-QA-001.workflow.json
 nodes:
-- ORCH Webhook
-- Build Kiro ORCH Request
+- QA Webhook
+- Build Kiro QA Request
 - Call Kiro Runner
 credentials:
 - node: Call Kiro Runner
@@ -16,14 +16,14 @@ credentials:
   name: n8n
   id: b39VeJvBxPMGkMXz
 webhook:
-  path: project-orchestrator
+  path: project-qa-evidence
   method: POST
-  production_url: http://localhost:5678/webhook/project-orchestrator
+  production_url: http://localhost:5678/webhook/project-qa-evidence
 runner:
   url_from_n8n: http://agent-runner:8080/kiro/run
   runtime_validated: python
   dry_run_validated: true
-  kiro_agent: project-orchestrator
+  kiro_agent: project-qa-evidence
   default_trust_tools: fs_read,grep
 notes:
 - API key is provided by n8n credential n8n; no secrets are stored in Git.

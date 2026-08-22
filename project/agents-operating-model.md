@@ -130,20 +130,22 @@ Agentes ya definidos:
 | `AGENT-PMO-001` | si | `project-pmo` | `AGENT-PMO-001` | si | operativo DRAFT |
 | `AGENT-PLAN-001` | si | `project-planning` | `AGENT-PLAN-001` | si | operativo DRAFT |
 | `AGENT-REF-001` | si | `project-refinement` | `AGENT-REF-001` | si | operativo DRAFT |
-| `AGENT-BKL-001` | si | `project-backlog` | snapshot/manual | parcial | requiere version dinamica |
-| `AGENT-ARCH-001` | si | `project-architecture` | no | si | falta workflow dedicado |
-| `AGENT-ENG-001` | si | `project-engineering` | no | si | falta `WF-EXECUTE-TASK-001` |
-| `AGENT-QA-001` | si | `project-qa-evidence` | no | si | falta `WF-QA-EVIDENCE-001` |
-| `AGENT-REV-001` | si | `project-reviewer-safety` | no | si | falta workflow gate/review |
-| `AGENT-ORCH-001` | si | no | snapshot/manual | reemplazado parcialmente por chat gateway + PMO | revisar necesidad |
-| `AGENT-PROD-001` | si | no | no | no | falta operacionalizar |
-| `AGENT-MKT-001` | si | no | no | no | falta operacionalizar |
-| `AGENT-GROW-001` | si | no | no | no | falta operacionalizar |
+| `AGENT-BKL-001` | si | `project-backlog` | `AGENT-BKL-001` | si | operativo DRAFT |
+| `AGENT-ARCH-001` | si | `project-architecture` | `AGENT-ARCH-001` | si | operativo DRAFT |
+| `AGENT-ENG-001` | si | `project-engineering` | `AGENT-ENG-001` | si | operativo DRAFT |
+| `AGENT-QA-001` | si | `project-qa-evidence` | `AGENT-QA-001` | si | operativo DRAFT |
+| `AGENT-REV-001` | si | `project-reviewer-safety` | `AGENT-REV-001` | si | operativo DRAFT |
+| `AGENT-ORCH-001` | si | `project-orchestrator` | `AGENT-ORCH-001` | si | operativo DRAFT |
+| `AGENT-PROD-001` | si | `project-product` | `AGENT-PROD-001` | si | operativo DRAFT |
+| `AGENT-MKT-001` | si | `project-market-intelligence` | `AGENT-MKT-001` | si | operativo DRAFT |
+| `AGENT-GROW-001` | si | `project-growth-content` | `AGENT-GROW-001` | si | operativo DRAFT |
+| `AGENT-EDGE-001` | si | `project-edge` | `AGENT-EDGE-001` | si | operativo DRAFT |
+| `AGENT-WEB-001` | si | `project-web` | `AGENT-WEB-001` | si | operativo DRAFT |
+| `AGENT-HW-001` | si | `project-hardware` | `AGENT-HW-001` | si | operativo DRAFT |
 
-## Agentes faltantes recomendados
+## Agentes especializados agregados
 
-Para cerrar un ciclo de desarrollo completo, faltan tres especializaciones por crear
-como agentes propios.
+Las especializaciones edge, web y hardware quedan registradas como agentes propios.
 
 ### DevOps / Edge Agent
 

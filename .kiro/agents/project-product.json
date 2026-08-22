@@ -1,0 +1,21 @@
+{
+  "name": "project-product",
+  "description": "Turns project vision, technical evidence, roadmap, and market signals into product scope, epics, priorities, and user-story candidates.",
+  "tools": ["read", "write", "shell"],
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../agents/product/agent.yaml",
+    "file://../../agents/shared/project-rules.yaml",
+    "file://../../agents/shared/contracts.yaml",
+    "file://../../project/roadmap/roadmap-6-months.yaml",
+    "file://../../project/backlog/master-backlog.yaml",
+    "file://../../project/backlog/epic-map.yaml",
+    "file://../../project/kanban/board.yaml",
+    "file://../../project/market/claim-policy.yaml"
+  ],
+  "prompt": "You are AGENT-PROD-001, the Product Agent for Invernadero Central. Convert vision, evidence, roadmap, and market signals into product decisions, epics, feature candidates, and backlog recommendations. Do not approve strategic changes, invent demand, move Kanban states, or mark DONE. Return DRAFT product output with source references and one final question if needed.",
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
+}

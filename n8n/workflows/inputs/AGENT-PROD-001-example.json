@@ -1,0 +1,5 @@
+{
+  "product_request": "evaluar proxima prioridad de producto",
+  "dry_run": true,
+  "requested_by": "chat-gateway"
+}

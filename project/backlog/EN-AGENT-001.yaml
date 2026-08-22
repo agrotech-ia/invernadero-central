@@ -3,7 +3,7 @@ title: Bootstrap de la plataforma multiagente local
 type: ENABLER
 priority: P0
 target: FOUNDATION
-status: READY
+status: IN_PROGRESS
 owner_role: Solution / IoT Architect
 reviewer_role: QA Engineer
 objective: Implementar en n8n una orquestación local que consuma agentes versionados
@@ -40,7 +40,18 @@ implementation_progress:
   - El workflow llama a project-backlog via agent-runner.
   - La ejecucion live leyo master-backlog.yaml y board.yaml en vivo.
   - CHAT-GATEWAY-001 enruta solicitudes de siguiente trabajo a project-backlog.
+- task_id: T-AGT-SUITE-001
+  title: Operacionalizar suite completa de agentes locales
+  status: DONE
+  completed_at: '2026-08-22'
+  evidence:
+  - project/evidence/agents/AGENT-SUITE-OPERATIONAL-2026-08-22.md
+  notes:
+  - Se agregaron perfiles Kiro, definiciones de agente, workflows n8n y rutas de chat para la suite completa.
+  - agent-runner reconoce 16 agentes y los tres workspaces locales.
+  - Los 16 endpoints dedicados respondieron SUCCESS en dry_run.
+  - CHAT-GATEWAY-001 enruta conversaciones del proyecto hacia agentes especializados.
 remaining_work:
-- Crear WF-QA-EVIDENCE-001 para validar evidencia y DONE readiness.
-- Crear WF-EXECUTE-TASK-001 con guardas fuertes para ejecucion acotada.
-- Completar workflows dedicados para arquitectura/reviewer si se mantienen como gates separados.
+- Ejecutar una prueba live corta desde el chat con Kiro para PMO/Backlog/Refinement.
+- Definir el contrato final de persistencia aprobada para cambios de backlog/Kanban.
+- Pasar EN-AGENT-001 a VALIDATION cuando QA revise la evidencia de suite.

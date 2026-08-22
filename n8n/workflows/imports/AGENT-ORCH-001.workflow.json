@@ -1,37 +1,80 @@
 {
-  "name": "AGENT-ORCH-001 - Orchestrator",
+  "id": "YxKTp7gOFVD0RToL",
+  "name": "AGENT-ORCH-001 - Kiro Orchestrator",
+  "active": true,
   "nodes": [
     {
-      "parameters": {},
-      "id": "manual-trigger",
-      "name": "Manual Trigger",
-      "type": "n8n-nodes-base.manualTrigger",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-orchestrator",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "orch-webhook",
+      "name": "ORCH Webhook",
+      "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -640,
+        -720,
+        0
+      ],
+      "webhookId": "project-orchestrator"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst requestText = String(body.orchestrator_request || body.request || body.message || 'clasificar y enrutar esta solicitud');\nconst dryRun = body.dry_run !== false;\nconst prompt = [\n  'Actua como AGENT-ORCH-001 para el proyecto Invernadero Central.',\n  'Solicitud: ' + requestText + '.',\n  'Clasifica la solicitud, aplica reglas de autoridad y recomienda el agente/workflow competente. No hagas trabajo especializado.',\n  'Usa contexto versionado del repo central y cita fuentes cuando aplique.',\n  'Trabaja en modo DRAFT; no persistas, no muevas Kanban, no marques DONE, no edites HU congeladas, no compres, no despliegues criticamente ni controles sistemas fisicos sin aprobacion humana.',\n  'Devuelve salida util para humano/n8n con summary, recommended_actions, evidence_expected, risks, source_refs y one_question si aplica.'\n].join(' ');\nreturn [{ json: { agent: 'project-orchestrator', workspace: 'central', prompt, mode: 'wf-orchestrate-001', approval_required: true, dry_run: dryRun, metadata: { task_id: 'WF-ORCHESTRATE-001', agent_id: 'AGENT-ORCH-001', requested_by: body.requested_by || 'chat-gateway' } } }];"
+      },
+      "id": "build-kiro-orch-request",
+      "name": "Build Kiro ORCH Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -460,
         0
       ]
     },
     {
       "parameters": {
-        "functionCode": "const defaultRequest = {\n  task_id: 'WF-BACKLOG-RECOMMEND-001',\n  request: 'Recomendar siguiente trabajo del backlog',\n  requested_by: 'human',\n  available_time: 'unknown',\n  preferred_mode: 'any',\n  max_options: 3,\n  respect_wip: true,\n};\n\nconst incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst request = Object.keys(incoming).length ? { ...defaultRequest, ...incoming } : defaultRequest;\nconst text = `${request.request || ''} ${request.objective || ''}`.toLowerCase();\n\nlet primaryAgent = 'AGENT-BKL-001';\nlet reason = 'La solicitud requiere revisar tablero, prioridad, WIP y recomendar siguiente trabajo.';\nlet workflow = 'WF-BACKLOG-RECOMMEND-001';\n\nif (text.includes('refinar') || text.includes('validacion') || text.includes('validación') || text.includes('criterios')) {\n  primaryAgent = 'AGENT-REF-001';\n  reason = 'La solicitud requiere refinamiento, criterios, tareas, V&V y evidencia esperada.';\n  workflow = 'WF-REFINE-STORY-001';\n}\n\nif (text.includes('arquitectura') || text.includes('adr') || text.includes('decision') || text.includes('decisión')) {\n  primaryAgent = 'AGENT-ARCH-001';\n  reason = 'La solicitud requiere revision arquitectonica o decision tecnica transversal.';\n  workflow = 'WF-ARCH-REVIEW-001';\n}\n\nif (text.includes('mercado') || text.includes('keyword') || text.includes('demanda')) {\n  primaryAgent = 'AGENT-MKT-001';\n  reason = 'La solicitud requiere inteligencia de mercado y control de claims.';\n  workflow = 'WF-MARKET-INTEL-001';\n}\n\nconst centralRepo = '/home/chuchosam/Documentos/github/invernadero-central';\nconst sensorRepo = '/home/chuchosam/Documentos/github/invernadero/green-house';\nconst webRepo = '/home/chuchosam/Documentos/github/agrotechia-web-ui';\n\nreturn [{\n  json: {\n    task_id: request.task_id || workflow,\n    agent_id: 'AGENT-ORCH-001',\n    status: 'SUCCESS',\n    summary: 'Solicitud clasificada y enrutada por Orchestrator. Esta version usa Function node para compatibilidad amplia con n8n.',\n    route: {\n      workflow,\n      primary_agent: primaryAgent,\n      supporting_agents: ['AGENT-KNOW-001', 'AGENT-REV-001'],\n      authority: 'A1',\n      review_required: true,\n      reason,\n    },\n    repositories: {\n      central: centralRepo,\n      sensors_edge_data: sensorRepo,\n      web: webRepo,\n    },\n    required_context_refs: [\n      `${centralRepo}/agents/shared/project-rules.yaml`,\n      `${centralRepo}/agents/shared/contracts.yaml`,\n      `${centralRepo}/agents/registry.yaml`,\n      `${centralRepo}/agents/orchestrator/agent.yaml`,\n      `${centralRepo}/project/kanban/board.yaml`,\n      `${centralRepo}/project/agents-operating-model.md`,\n      `${centralRepo}/project/roles/expert-role-catalog.yaml`,\n      `${centralRepo}/project/backlog/master-backlog.yaml`,\n    ],\n    constraints: [\n      'No modificar HU congeladas.',\n      'No mover estados sin aprobacion humana.',\n      'No marcar DONE sin evidencia.',\n      'No ejecutar compras, control fisico ni despliegues criticos sin aprobacion humana.',\n      'Hacer una sola pregunta al humano por turno.'\n    ],\n    next_action: primaryAgent === 'AGENT-BKL-001'\n      ? 'Crear/conectar el Backlog Agent para leer project/kanban/board.yaml y devolver maximo 3 opciones al humano.'\n      : 'Construir contexto minimo para el agente especializado y producir borrador revisable.',\n    human_question: primaryAgent === 'AGENT-BKL-001'\n      ? 'Cual opcion quieres tomar ahora?'\n      : 'Confirmas que quieres refinar esta solicitud con el agente especializado?',\n  }\n}];"
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
       },
-      "id": "orchestrator-route",
-      "name": "Orchestrator Route",
-      "type": "n8n-nodes-base.function",
+      "id": "call-kiro-runner",
+      "name": "Call Kiro Runner",
+      "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        -120,
+        -200,
         0
-      ]
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
     }
   ],
   "connections": {
-    "Manual Trigger": {
+    "ORCH Webhook": {
       "main": [
         [
           {
-            "node": "Orchestrator Route",
+            "node": "Build Kiro ORCH Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Kiro ORCH Request": {
+      "main": [
+        [
+          {
+            "node": "Call Kiro Runner",
             "type": "main",
             "index": 0
           }
@@ -42,10 +85,5 @@
   "pinData": {},
   "settings": {
     "executionOrder": "v1"
-  },
-  "staticData": null,
-  "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2026-08-12T00:00:00.000Z",
-  "versionId": "AGENT-ORCH-001-local-draft"
+  }
 }

@@ -1,0 +1,19 @@
+{
+  "name": "project-web",
+  "description": "Handles scoped frontend/dashboard work, UX, telemetry visualization, API integration, and web validation.",
+  "tools": ["read", "write", "shell"],
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../agents/web/agent.yaml",
+    "file://../../agents/shared/project-rules.yaml",
+    "file://../../agents/shared/contracts.yaml",
+    "file://../../project/backlog/master-backlog.yaml",
+    "file://../../project/kanban/board.yaml",
+    "file://../../project/agents-operating-model.md"
+  ],
+  "prompt": "You are AGENT-WEB-001, the Web / Frontend Agent. Work on scoped web/dashboard UX, telemetry visualization, API integration, loading/error states, and validation. Prefer existing web repo patterns. Do not touch secrets, deploy production, or change claims without approval. Return DRAFT web output with files/tests/evidence expected.",
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
+}

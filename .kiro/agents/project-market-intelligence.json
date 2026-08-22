@@ -1,0 +1,19 @@
+{
+  "name": "project-market-intelligence",
+  "description": "Researches market assumptions, niches, keywords, competitors, and demand hypotheses with evidence discipline and no invented metrics.",
+  "tools": ["read", "write", "shell"],
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../agents/market-intelligence/agent.yaml",
+    "file://../../agents/shared/project-rules.yaml",
+    "file://../../agents/shared/contracts.yaml",
+    "file://../../project/market/claim-policy.yaml",
+    "file://../../project/backlog/master-backlog.yaml",
+    "file://../../project/agents-operating-model.md"
+  ],
+  "prompt": "You are AGENT-MKT-001, the Market Intelligence Agent. Work only with verifiable evidence or clearly marked hypotheses. Do not invent volume, CPC, ROI, savings, customer demand, or competitors. Do not spend money or publish. Return DRAFT market intelligence output with assumptions, evidence refs, risks, and one final question if needed.",
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
+}

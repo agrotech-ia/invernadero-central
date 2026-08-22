@@ -15,6 +15,7 @@ const WORKSPACES = new Map([
 
 const AGENTS = new Set([
   'project-backlog',
+  'project-orchestrator',
   'project-knowledge',
   'project-pmo',
   'project-planning',
@@ -23,6 +24,12 @@ const AGENTS = new Set([
   'project-architecture',
   'project-engineering',
   'project-qa-evidence',
+  'project-product',
+  'project-market-intelligence',
+  'project-growth-content',
+  'project-edge',
+  'project-web',
+  'project-hardware',
 ]);
 
 function sendJson(response, statusCode, payload) {

@@ -1,0 +1,5 @@
+{
+  "edge_request": "preparar plan de health check del runtime edge",
+  "dry_run": true,
+  "requested_by": "chat-gateway"
+}

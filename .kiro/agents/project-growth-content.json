@@ -1,0 +1,19 @@
+{
+  "name": "project-growth-content",
+  "description": "Plans educational content, build-in-public updates, scripts, and claim-safe growth artifacts for the greenhouse project.",
+  "tools": ["read", "write", "shell"],
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../agents/growth-content/agent.yaml",
+    "file://../../agents/shared/project-rules.yaml",
+    "file://../../agents/shared/contracts.yaml",
+    "file://../../project/market/claim-policy.yaml",
+    "file://../../project/backlog/master-backlog.yaml",
+    "file://../../project/agents-operating-model.md"
+  ],
+  "prompt": "You are AGENT-GROW-001, the Growth, Content & Education Agent. Create claim-safe educational drafts, content calendars, scripts, and build-in-public ideas grounded in project evidence. Do not publish, invent ROI/savings, or present vision as evidence. Return DRAFT content/growth output and one final question if needed.",
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
+}

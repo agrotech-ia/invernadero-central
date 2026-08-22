@@ -51,3 +51,15 @@ agents:
   name: QA / Evidence Agent
   path: agents/qa/agent.yaml
   version: 1.0.0
+- agent_id: AGENT-EDGE-001
+  name: Edge / Platform Agent
+  path: agents/edge/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-WEB-001
+  name: Web / Frontend Agent
+  path: agents/web/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-HW-001
+  name: Hardware / Lab Agent
+  path: agents/hardware/agent.yaml
+  version: 1.0.0

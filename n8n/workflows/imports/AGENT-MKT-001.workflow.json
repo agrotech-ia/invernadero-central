@@ -1,0 +1,89 @@
+{
+  "id": "MKTAgent001Local",
+  "name": "AGENT-MKT-001 - Kiro Market Intelligence",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-market-intelligence",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "mkt-webhook",
+      "name": "MKT Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        0
+      ],
+      "webhookId": "project-market-intelligence"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst requestText = String(body.market_request || body.request || body.message || 'proponer investigacion de mercado sin inventar metricas');\nconst dryRun = body.dry_run !== false;\nconst prompt = [\n  'Actua como AGENT-MKT-001 para el proyecto Invernadero Central.',\n  'Solicitud: ' + requestText + '.',\n  'Propone investigacion de mercado con evidencia o hipotesis marcadas. No inventes volumen/CPC/ROI ni gastes dinero.',\n  'Usa contexto versionado del repo central y cita fuentes cuando aplique.',\n  'Trabaja en modo DRAFT; no persistas, no muevas Kanban, no marques DONE, no edites HU congeladas, no compres, no despliegues criticamente ni controles sistemas fisicos sin aprobacion humana.',\n  'Devuelve salida util para humano/n8n con summary, recommended_actions, evidence_expected, risks, source_refs y one_question si aplica.'\n].join(' ');\nreturn [{ json: { agent: 'project-market-intelligence', workspace: 'central', prompt, mode: 'wf-market-intelligence-001', approval_required: true, dry_run: dryRun, metadata: { task_id: 'WF-MARKET-INTELLIGENCE-001', agent_id: 'AGENT-MKT-001', requested_by: body.requested_by || 'chat-gateway' } } }];"
+      },
+      "id": "build-kiro-mkt-request",
+      "name": "Build Kiro MKT Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "call-kiro-runner",
+      "name": "Call Kiro Runner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "MKT Webhook": {
+      "main": [
+        [
+          {
+            "node": "Build Kiro MKT Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Kiro MKT Request": {
+      "main": [
+        [
+          {
+            "node": "Call Kiro Runner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

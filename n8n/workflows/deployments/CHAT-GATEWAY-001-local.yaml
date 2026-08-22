@@ -28,7 +28,9 @@ notes:
 - Production webhook calls the selected project Kiro agent through the local runner.
 - Test webhook usually requires opening the workflow and clicking test/execute in n8n.
 - The gateway is scoped to project-only questions and actions.
-- PMO is the default route; clear knowledge/planning/refinement/architecture/engineering/QA intents go to specialized agents.
+- PMO is the default route; clear specialized intents go to Knowledge, Backlog,
+  Orchestrator, Product, Market, Growth, Planning, Refinement, Architecture,
+  Engineering, QA, Edge, Web, Hardware or Reviewer.
 last_validation:
   date: '2026-08-22'
   command: POST http://localhost:5678/webhook/project-agent-chat

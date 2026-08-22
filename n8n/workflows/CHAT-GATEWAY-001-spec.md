@@ -40,7 +40,8 @@ Responsabilidades:
 
 - recibe mensaje del humano;
 - usa `AGENT-PMO-001` como gateway contextual por defecto;
-- enruta directo a Knowledge, Planning, Refinement, Architecture, Engineering, QA o Reviewer
+- enruta directo a Knowledge, Backlog, Orchestrator, Product, Market, Growth,
+  Planning, Refinement, Architecture, Engineering, QA, Edge, Web, Hardware o Reviewer
   cuando la intencion del humano es clara;
 - responde con una sola pregunta siguiente;
 - mantiene restricciones de gobernanza.

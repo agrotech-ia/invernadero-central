@@ -1,0 +1,5 @@
+{
+  "orchestrator_request": "clasificar y enrutar esta solicitud",
+  "dry_run": true,
+  "requested_by": "chat-gateway"
+}

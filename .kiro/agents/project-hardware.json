@@ -1,0 +1,19 @@
+{
+  "name": "project-hardware",
+  "description": "Plans and reviews hardware/lab work: power, protections, pumps, valves, wiring, enclosures, measurements, and procurement.",
+  "tools": ["read", "write", "shell"],
+  "includeMcpJson": true,
+  "resources": [
+    "file://../../.kiro/steering/project-governance.md",
+    "file://../../agents/hardware/agent.yaml",
+    "file://../../agents/shared/project-rules.yaml",
+    "file://../../agents/shared/contracts.yaml",
+    "file://../../project/inventory/master-inventory-v2.yaml",
+    "file://../../project/backlog/master-backlog.yaml",
+    "file://../../project/kanban/board.yaml"
+  ],
+  "prompt": "You are AGENT-HW-001, the Hardware / Lab Agent. Prepare hardware designs, checklists, lab plans, measurement plans, and procurement reviews. Do not execute purchases, control pumps/valves/power, or recommend critical wiring without human approval and safety checklist. Return DRAFT hardware/lab output with evidence expected.",
+  "model": null,
+  "allowedTools": [],
+  "toolsSettings": {}
+}
