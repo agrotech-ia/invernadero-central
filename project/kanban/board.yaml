@@ -53,13 +53,13 @@ lanes:
   - HU-WATER-005
   - EN-PWR-001
   READY:
-  - EN-AGENT-001
   - EN-QA-001
   - HU-SOIL-001
   - EN-EDGE-001
   - EN-MKT-001
   - EN-GROW-001
-  IN_PROGRESS: []
+  IN_PROGRESS:
+  - EN-AGENT-001
   VALIDATION: []
   DONE: []
 cards:
@@ -69,13 +69,20 @@ cards:
     priority: P0
     expert_role: Solution / IoT Architect
     reviewer_role: QA Engineer
-    status: READY
+    status: IN_PROGRESS
     effort: M
     mode_fit:
     - docs_governance
     - deep_work
-    granularity: needs_task_breakdown
-    next_action: Implementar workflow n8n para recomendacion/refinamiento/ejecucion del backlog completo.
+    granularity: partially_broken_down
+    next_action: Convertir AGENT-BKL-001 a version dinamica con Kiro/runner.
+    progress:
+    - task_id: T-AGT-KNOW-001
+      title: Operacionalizar Knowledge Agent
+      status: DONE
+      evidence:
+      - project/evidence/agents/AGENT-KNOW-001-2026-08-22.md
+      - commit:394333c
   EN-QA-001:
     title: Implementar framework V&V y persistencia de evidencia
     type: ENABLER

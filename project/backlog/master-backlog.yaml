@@ -16,12 +16,20 @@ items:
   priority: P0
   target: FOUNDATION
   owner_role: Solution Architect
-  status: READY
+  status: IN_PROGRESS
   reviewer_role: QA Engineer
   effort: M
   risk: MEDIUM
   dependencies: []
   source: HU-009
+  progress:
+  - task_id: T-AGT-KNOW-001
+    title: Operacionalizar Knowledge Agent
+    status: DONE
+    evidence:
+    - project/evidence/agents/AGENT-KNOW-001-2026-08-22.md
+    - commit:394333c
+  next_action: Convertir AGENT-BKL-001 a version dinamica con Kiro/runner.
 - id: EN-QA-001
   title: Implementar framework V&V y persistencia de evidencia
   type: ENABLER

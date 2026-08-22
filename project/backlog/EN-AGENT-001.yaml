@@ -16,3 +16,21 @@ acceptance_criteria:
 - Refinement Agent genera V&V y procurement para suelo
 - Market/Growth respetan política de claims
 - Toda persistencia final pasa por revisión humana cuando corresponde
+implementation_progress:
+- task_id: T-AGT-KNOW-001
+  title: Operacionalizar Knowledge Agent en Kiro, n8n y chat gateway
+  status: DONE
+  completed_at: '2026-08-22'
+  evidence:
+  - project/evidence/agents/AGENT-KNOW-001-2026-08-22.md
+  - commit:394333c
+  notes:
+  - project-knowledge esta registrado en Kiro.
+  - AGENT-KNOW-001 tiene webhook n8n /webhook/project-knowledge.
+  - CHAT-GATEWAY-001 enruta preguntas de contexto a project-knowledge.
+  - La ejecucion live devolvio respuesta con fuentes y contradicciones.
+remaining_work:
+- Convertir AGENT-BKL-001 a version dinamica con Kiro/runner.
+- Crear WF-QA-EVIDENCE-001 para validar evidencia y DONE readiness.
+- Crear WF-EXECUTE-TASK-001 con guardas fuertes para ejecucion acotada.
+- Completar workflows dedicados para arquitectura/reviewer si se mantienen como gates separados.
