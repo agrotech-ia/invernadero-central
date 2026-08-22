@@ -37,6 +37,11 @@ last_validation:
   result: SUCCESS
   auth_result: authorization_header
   notes: Dry run validated for Knowledge, Backlog, PMO, Planning and Refinement routing; live Refinement call returned EN-AGENT-001 draft.
+memory_validation:
+  date: '2026-08-22'
+  command: POST http://localhost:5678/webhook/project-agent-chat with messages history
+  result: SUCCESS
+  notes: Gateway used recent chat history to interpret short follow-up "entonces c y luego a" in soil sensor planning context.
 next_validation:
 - Open the workflow URL.
 - Test the webhook with payload from n8n/workflows/inputs/CHAT-GATEWAY-001-example.json.
