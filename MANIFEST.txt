@@ -157,6 +157,7 @@ project/evidence/agents/AGENT-SUITE-OPERATIONAL-2026-08-22.md
 project/evidence/agents/AGENT-DISC-CONTRACT-001-2026-08-22.md
 project/evidence/agents/AGENT-DOC-001-2026-08-22.md
 project/evidence/discovery/EN-EDGE-001-discovery-2026-08-22.md
+project/evidence/README.md
 project/planning/current-state-baseline.yaml
 project/planning/drafts/project-plan-draft-2026-08-13.md
 project/kanban/README.md
@@ -177,5 +178,6 @@ project/inventory/master-inventory-v2.yaml
 project/market/claim-policy.yaml
 project/roadmap/roadmap-6-months.yaml
 project/validation/master-vv-matrix.yaml
+project/validation/evidence-taxonomy.yaml
 project/validation/templates/test-case.yaml
 MANIFEST.txt

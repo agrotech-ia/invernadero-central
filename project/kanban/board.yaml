@@ -122,7 +122,13 @@ cards:
       evidence:
       - project/backlog/drafts/EN-QA-001-refinement-draft-2026-08-22.yaml
       - project/agent-work/EN-EDGE-001/discovery.yaml
-    next_action: Ejecutar T-QA-001 para definir taxonomia y estructura de evidencia.
+    - task_id: T-QA-001
+      title: Definir taxonomia y estructura de evidencia por tipo de trabajo
+      status: DONE
+      evidence:
+      - project/validation/evidence-taxonomy.yaml
+      - project/evidence/README.md
+    next_action: Ejecutar T-QA-002 para crear plantilla de evidence index por HU/enabler.
   HU-SOIL-001:
     title: Validar y caracterizar sensor de suelo 7-en-1
     type: STORY

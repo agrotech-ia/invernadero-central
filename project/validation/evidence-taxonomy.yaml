@@ -1,0 +1,236 @@
+version: '1.0'
+status: DRAFT
+owner_agent: AGENT-QA-001
+review_agent: AGENT-REV-001
+created_at: '2026-08-22'
+purpose: Definir tipos de evidencia proporcionales al trabajo para validar READY,
+  VALIDATION y DONE sin inventar pruebas ni cerrar items sin trazabilidad.
+principles:
+- La evidencia debe ser proporcional al riesgo y tipo de trabajo.
+- Operacional no equivale a validado.
+- DONE requiere evidencia verificable y revision.
+- La evidencia fisica debe separarse de la evidencia documental o local.
+- Toda evidencia debe tener fuente, fecha, responsable y limitaciones conocidas.
+- Si una evidencia no puede reproducirse, debe declararse como observacion y no como prueba concluyente.
+classification:
+  CONFIRMED: Dato suministrado explicitamente por humano o requerimiento.
+  DISCOVERED: Dato encontrado en codigo, configuracion, documentacion o salida de prueba.
+  INFERRED: Inferencia razonable basada en evidencia citada.
+  PROPOSED: Cambio recomendado que aun no existe.
+  UNKNOWN: Informacion que no pudo determinarse.
+allowed_results:
+- PASS
+- FAIL
+- PARTIAL
+- NA
+- NOT_RUN
+evidence_levels:
+  L0_NOTE:
+    description: Nota, decision o contexto sin prueba tecnica directa.
+    can_support_done: false
+  L1_STATIC:
+    description: Archivo, configuracion, schema, contrato, screenshot o documento versionado.
+    can_support_done: true
+    requires_review: true
+  L2_LOCAL_RUN:
+    description: Comando local, test unitario, build, lint, dry-run o validacion reproducible.
+    can_support_done: true
+    requires_review: true
+  L3_INTEGRATION:
+    description: Prueba entre componentes reales o servicios locales conectados.
+    can_support_done: true
+    requires_review: true
+  L4_FIELD_LAB:
+    description: Evidencia con hardware, sensores, actuadores, medicion fisica o prueba de campo.
+    can_support_done: true
+    requires_review: true
+    requires_human_approval: true
+  L5_OPERATIONAL:
+    description: Evidencia de operacion continua, estabilidad, recuperacion o ejecucion prolongada.
+    can_support_done: true
+    requires_review: true
+    requires_human_approval: true
+evidence_types:
+  code:
+    description: Cambios de codigo, scripts, firmware o configuracion ejecutable.
+    minimum_for_validation:
+    - diff_summary
+    - commit_hash_or_patch_ref
+    - test_or_build_output
+    examples:
+    - commit hash
+    - salida de npm test
+    - salida de pytest
+    - salida de platformio build
+    - diff summary
+  sensor:
+    description: Lecturas, payloads, logs o observaciones de sensores.
+    minimum_for_validation:
+    - device_id
+    - timestamp
+    - raw_payload_or_log
+    - context_conditions
+    examples:
+    - payload MQTT
+    - log serial
+    - archivo JSONL
+    - captura de lectura
+  database:
+    description: Migraciones, schema, queries, inserts o resultados persistidos.
+    minimum_for_validation:
+    - command_or_query
+    - result_excerpt
+    - target_database_or_container
+    - data_scope
+    examples:
+    - row count
+    - query result
+    - migration applied
+    - schema validation
+  edge:
+    description: Servicios Raspberry, MQTT, Docker, logs, health checks e ingesta.
+    minimum_for_validation:
+    - service_or_process
+    - command
+    - output
+    - failure_mode_checked
+    examples:
+    - mosquitto pub/sub output
+    - docker compose ps
+    - ingestor log
+    - healthcheck result
+  web:
+    description: UI, build frontend, estados de carga/error, integracion API y capturas.
+    minimum_for_validation:
+    - route_or_component
+    - build_or_test_output
+    - screenshot_or_api_response
+    examples:
+    - npm run build output
+    - vitest output
+    - screenshot
+    - API response sample
+  hardware:
+    description: Cableado, potencia, actuadores, bombas, valvulas o mediciones fisicas.
+    minimum_for_validation:
+    - checklist_safety
+    - setup_description
+    - measurement_or_observation
+    - human_approval_ref
+    examples:
+    - foto o nota de cableado
+    - medicion con multimetro
+    - checklist de seguridad
+    - aprobacion humana
+  documentation:
+    description: Guia, runbook, README, ADR o documento operativo.
+    minimum_for_validation:
+    - source_refs
+    - reviewer
+    - scope
+    - unknowns_or_limitations
+    examples:
+    - guia de uso
+    - troubleshooting
+    - runbook
+    - ADR
+  agent:
+    description: Workflow n8n, agente Kiro, runner, chat routing o automatizacion.
+    minimum_for_validation:
+    - workflow_or_agent_id
+    - dry_run_or_live_result
+    - endpoint_or_command
+    - constraints_checked
+    examples:
+    - webhook dry-run
+    - runner health
+    - n8n workflow id
+    - chat route result
+  decision:
+    description: Decision humana, tecnica, de alcance, seguridad o arquitectura.
+    minimum_for_validation:
+    - decision_id_or_reference
+    - approver_or_source
+    - date
+    - impact
+    examples:
+    - decision register entry
+    - approval note
+    - ADR
+minimum_by_work_type:
+  STORY:
+    ready:
+    - problem
+    - scope
+    - acceptance_criteria
+    - expected_evidence
+    validation:
+    - evidence_index
+    - test_or_check_result
+    done:
+    - validation_report
+    - reviewer_decision
+  ENABLER:
+    ready:
+    - objective
+    - dependencies
+    - output_artifacts
+    - expected_evidence
+    validation:
+    - artifact_validation
+    - evidence_index
+    done:
+    - validation_report
+    - reviewer_decision
+  SPIKE:
+    ready:
+    - question
+    - timebox
+    - expected_learning
+    validation:
+    - findings
+    - source_refs
+    done:
+    - decision_or_next_step
+  EXPERIMENT:
+    ready:
+    - hypothesis
+    - method
+    - success_criteria
+    validation:
+    - measured_results
+    - limitations
+    done:
+    - conclusion
+    - next_decision
+  TASK:
+    ready:
+    - objective
+    - output_artifacts
+    - expected_evidence
+    validation:
+    - output_artifacts
+    - check_result
+    done:
+    - reviewer_decision
+  DOC:
+    ready:
+    - audience
+    - topic
+    - source_refs
+    validation:
+    - document_path
+    - source_traceability
+    done:
+    - reviewer_decision
+storage_rules:
+- Preferir evidencia versionada en project/evidence cuando sea pequena y segura.
+- Referenciar archivos externos grandes en vez de copiarlos al repo.
+- No guardar secretos, tokens, passwords, .env reales ni datos sensibles.
+- Para evidencia fisica, guardar nota descriptiva y referencia a foto/video si aplica.
+- Para comandos, guardar comando, fecha, directorio, resultado y limitaciones.
+review_rules:
+- QA puede recomendar estado, pero no mover Kanban sin aprobacion humana cuando aplique.
+- Reviewer debe buscar contradicciones entre evidencia, HU, Discovery y Contract.
+- DONE no se recomienda si falta evidencia minima del tipo de trabajo.
+- FAIL o PARTIAL deben producir follow_up o blocker explicito.
