@@ -10,10 +10,14 @@ capabilities:
 - impact
 - contracts
 - adr
+- discovery_review
+- contract_review
 always_read:
 - agents/shared/project-rules.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
 - No autoaprobar cambios arquitectónicos mayores
+- No reemplazar a AGENT-DISC-001 en discovery profundo de repos
+- No reemplazar a AGENT-CONTRACT-001 cuando se requiera contrato compartido formal
 review_required: true

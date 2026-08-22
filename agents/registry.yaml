@@ -31,6 +31,14 @@ agents:
   name: Architecture Agent
   path: agents/architecture/agent.yaml
   version: 1.0.0
+- agent_id: AGENT-DISC-001
+  name: Technical Discovery Agent
+  path: agents/discovery/agent.yaml
+  version: 1.0.0
+- agent_id: AGENT-CONTRACT-001
+  name: Shared Contract Agent
+  path: agents/contract/agent.yaml
+  version: 1.0.0
 - agent_id: AGENT-MKT-001
   name: Market Intelligence & Demand Agent
   path: agents/market-intelligence/agent.yaml

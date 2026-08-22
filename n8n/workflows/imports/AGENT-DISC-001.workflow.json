@@ -1,0 +1,89 @@
+{
+  "id": "DISCAgent001Local",
+  "name": "AGENT-DISC-001 - Kiro Technical Discovery",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-discovery",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "disc-webhook",
+      "name": "DISC Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        0
+      ],
+      "webhookId": "project-discovery"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst requestText = String(body.discovery_request || body.request || body.message || 'descubrir alcance tecnico para la siguiente HU');\nconst backlogId = String(body.backlog_id || body.backlogId || 'UNKNOWN').toUpperCase();\nconst repositories = body.repositories || ['central', 'sensors', 'web'];\nconst dryRun = body.dry_run !== false;\nconst prompt = [\n  'Actua como AGENT-DISC-001 para el proyecto Invernadero Central.',\n  'Solicitud: ' + requestText + '.',\n  'backlog_id: ' + backlogId + '.',\n  'Repositorios a considerar: ' + JSON.stringify(repositories) + '.',\n  'Investiga primero y escribe despues. Identifica estructura real, entry points, dependencias directas, dependencias inversas, infraestructura, pruebas, documentacion, riesgos y unknowns.',\n  'Clasifica cada afirmacion tecnica como CONFIRMED, DISCOVERED, INFERRED, PROPOSED o UNKNOWN. Nunca conviertas INFERRED o PROPOSED en DISCOVERED.',\n  'Finaliza con sharedContract.recommended true|false y razones. No generes el contrato dentro de esta respuesta.',\n  'Salida esperada: resumen_actual, arquitectura_involucrada, impact_map, change_inventory, dependencies, reverse_dependencies, infra_surface, test_surface, docs_surface, risks, unknowns, sharedContract.',\n  'Trabaja en modo DRAFT/read-only; no persistas, no muevas Kanban, no marques DONE, no edites HU congeladas, no compres, no despliegues criticamente ni controles sistemas fisicos sin aprobacion humana.',\n  'Si falta informacion critica, haz una sola pregunta.'\n].join(' ');\nreturn [{ json: { agent: 'project-discovery', workspace: 'central', prompt, mode: 'wf-technical-discovery-001', approval_required: true, dry_run: dryRun, metadata: { task_id: 'WF-TECH-DISCOVERY-001', agent_id: 'AGENT-DISC-001', backlog_id: backlogId, requested_by: body.requested_by || 'chat-gateway' } } }];"
+      },
+      "id": "build-kiro-disc-request",
+      "name": "Build Kiro DISC Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "call-kiro-runner",
+      "name": "Call Kiro Runner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "DISC Webhook": {
+      "main": [
+        [
+          {
+            "node": "Build Kiro DISC Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Kiro DISC Request": {
+      "main": [
+        [
+          {
+            "node": "Call Kiro Runner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

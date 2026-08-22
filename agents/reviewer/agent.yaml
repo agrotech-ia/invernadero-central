@@ -12,6 +12,8 @@ capabilities:
 - authority_check
 - evidence_check
 - baseline_guard
+- traceability_check
+- contract_consistency_check
 always_read:
 - agents/shared/project-rules.yaml
 - agents/shared/contracts.yaml
@@ -23,5 +25,6 @@ prohibited:
 - No editar artefactos revisados
 - No aprobar cambios criticos sin humano
 - No marcar DONE
+- No reescribir la HU completa durante review
 review_required: false
 kiro_agent: project-reviewer-safety

@@ -15,6 +15,8 @@ const WORKSPACES = new Map([
 
 const AGENTS = new Set([
   'project-backlog',
+  'project-contract',
+  'project-discovery',
   'project-orchestrator',
   'project-knowledge',
   'project-pmo',

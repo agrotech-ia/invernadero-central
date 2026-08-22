@@ -51,7 +51,19 @@ implementation_progress:
   - agent-runner reconoce 16 agentes y los tres workspaces locales.
   - Los 16 endpoints dedicados respondieron SUCCESS en dry_run.
   - CHAT-GATEWAY-001 enruta conversaciones del proyecto hacia agentes especializados.
+- task_id: T-AGT-DISC-CONTRACT-001
+  title: Integrar Discovery y Shared Contract al ciclo de HU
+  status: DONE
+  completed_at: '2026-08-22'
+  evidence:
+  - project/evidence/agents/AGENT-DISC-CONTRACT-001-2026-08-22.md
+  notes:
+  - Se agregaron AGENT-DISC-001 y AGENT-CONTRACT-001.
+  - Orchestrator enruta trabajo tecnico a Discovery antes de Refinement.
+  - Contract se ejecuta cuando Discovery recomienda contrato compartido.
+  - Chat gateway enruta solicitudes de discovery e interfaces compartidas a los agentes correctos.
 remaining_work:
 - Ejecutar una prueba live corta desde el chat con Kiro para PMO/Backlog/Refinement.
+- Ejecutar el primer Discovery real para EN-EDGE-001 y persistir `project/agent-work/EN-EDGE-001/discovery.yaml` tras aprobacion humana.
 - Definir el contrato final de persistencia aprobada para cambios de backlog/Kanban.
 - Pasar EN-AGENT-001 a VALIDATION cuando QA revise la evidencia de suite.

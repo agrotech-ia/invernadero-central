@@ -39,7 +39,12 @@ items:
     status: DONE
     evidence:
     - project/evidence/agents/AGENT-SUITE-OPERATIONAL-2026-08-22.md
-  next_action: Ejecutar prueba live corta desde el chat y luego enviar EN-AGENT-001 a QA/VALIDATION.
+  - task_id: T-AGT-DISC-CONTRACT-001
+    title: Integrar Discovery y Shared Contract al ciclo de HU
+    status: DONE
+    evidence:
+    - project/evidence/agents/AGENT-DISC-CONTRACT-001-2026-08-22.md
+  next_action: Ejecutar primer Discovery real para EN-EDGE-001 y persistir artefacto tras aprobacion humana.
 - id: EN-QA-001
   title: Implementar framework V&V y persistencia de evidencia
   type: ENABLER

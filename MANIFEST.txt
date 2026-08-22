@@ -2,6 +2,8 @@ PROJECT-STATUS.md
 README.md
 agents/architecture/agent.yaml
 agents/backlog/agent.yaml
+agents/contract/agent.yaml
+agents/discovery/agent.yaml
 agents/edge/agent.yaml
 agents/growth-content/agent.yaml
 agents/hardware/agent.yaml
@@ -22,6 +24,8 @@ agents/web/agent.yaml
 .kiro/steering/project-governance.md
 .kiro/agents/project-architecture.json
 .kiro/agents/project-backlog.json
+.kiro/agents/project-contract.json
+.kiro/agents/project-discovery.json
 .kiro/agents/project-edge.json
 .kiro/agents/project-engineering.json
 .kiro/agents/project-growth-content.json
@@ -51,6 +55,8 @@ n8n/scripts/agent_orchestrator_context.js
 n8n/workflows/EN-AGENT-001-workflow-spec.md
 n8n/workflows/CHAT-GATEWAY-001-spec.md
 n8n/workflows/AGENT-ARCH-001-spec.md
+n8n/workflows/AGENT-CONTRACT-001-spec.md
+n8n/workflows/AGENT-DISC-001-spec.md
 n8n/workflows/AGENT-EDGE-001-spec.md
 n8n/workflows/AGENT-ENG-001-spec.md
 n8n/workflows/AGENT-GROW-001-spec.md
@@ -68,6 +74,8 @@ n8n/workflows/AGENT-WEB-001-spec.md
 n8n/workflows/WF-BACKLOG-RECOMMEND-001-spec.md
 n8n/workflows/imports/CHAT-GATEWAY-001.workflow.json
 n8n/workflows/imports/AGENT-ARCH-001.workflow.json
+n8n/workflows/imports/AGENT-CONTRACT-001.workflow.json
+n8n/workflows/imports/AGENT-DISC-001.workflow.json
 n8n/workflows/imports/AGENT-ORCH-001.workflow.json
 n8n/workflows/imports/AGENT-BKL-001.workflow.json
 n8n/workflows/imports/AGENT-EDGE-001.workflow.json
@@ -87,6 +95,8 @@ n8n/workflows/imports/README.md
 n8n/workflows/deployments/AGENT-ORCH-001-local.yaml
 n8n/workflows/deployments/AGENT-ARCH-001-local.yaml
 n8n/workflows/deployments/AGENT-BKL-001-local.yaml
+n8n/workflows/deployments/AGENT-CONTRACT-001-local.yaml
+n8n/workflows/deployments/AGENT-DISC-001-local.yaml
 n8n/workflows/deployments/AGENT-EDGE-001-local.yaml
 n8n/workflows/deployments/AGENT-ENG-001-local.yaml
 n8n/workflows/deployments/AGENT-GROW-001-local.yaml
@@ -103,7 +113,9 @@ n8n/workflows/deployments/AGENT-REV-001-local.yaml
 n8n/workflows/deployments/AGENT-WEB-001-local.yaml
 n8n/workflows/inputs/EN-AGENT-001-soil-validation-request.json
 n8n/workflows/inputs/AGENT-ARCH-001-example.json
+n8n/workflows/inputs/AGENT-CONTRACT-001-example.json
 n8n/workflows/inputs/CHAT-GATEWAY-001-example.json
+n8n/workflows/inputs/AGENT-DISC-001-example.json
 n8n/workflows/inputs/AGENT-EDGE-001-example.json
 n8n/workflows/inputs/AGENT-ENG-001-example.json
 n8n/workflows/inputs/AGENT-GROW-001-example.json
@@ -130,9 +142,11 @@ project/backlog/master-backlog.yaml
 project/backlog/procurement-template.yaml
 project/backlog/templates/hu-template.yaml
 project/context/conversation-context-2026-08-11.md
+project/agent-work/README.md
 project/evidence/agents/AGENT-KNOW-001-2026-08-22.md
 project/evidence/agents/AGENT-BKL-001-dynamic-2026-08-22.md
 project/evidence/agents/AGENT-SUITE-OPERATIONAL-2026-08-22.md
+project/evidence/agents/AGENT-DISC-CONTRACT-001-2026-08-22.md
 project/planning/current-state-baseline.yaml
 project/planning/drafts/project-plan-draft-2026-08-13.md
 project/kanban/README.md

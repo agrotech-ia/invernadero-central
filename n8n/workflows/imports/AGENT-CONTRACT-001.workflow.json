@@ -1,0 +1,89 @@
+{
+  "id": "CONTRACTAgent001Local",
+  "name": "AGENT-CONTRACT-001 - Kiro Shared Contract",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-contract",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "contract-webhook",
+      "name": "CONTRACT Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        0
+      ],
+      "webhookId": "project-contract"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst requestText = String(body.contract_request || body.request || body.message || 'definir contrato compartido para la HU');\nconst backlogId = String(body.backlog_id || body.backlogId || 'UNKNOWN').toUpperCase();\nconst discoveryRef = String(body.discovery_ref || body.discoveryRef || ('project/agent-work/' + backlogId + '/discovery.yaml'));\nconst dryRun = body.dry_run !== false;\nconst prompt = [\n  'Actua como AGENT-CONTRACT-001 para el proyecto Invernadero Central.',\n  'Solicitud: ' + requestText + '.',\n  'backlog_id: ' + backlogId + '.',\n  'Discovery esperado o referencia: ' + discoveryRef + '.',\n  'Define un unico Shared Contract solo si Discovery indica API, MQTT, evento, schema, persistencia o frontera compartida frontend/backend/edge.',\n  'Empieza por contratos existentes y convenciones actuales. Define delta exacto, compatibilidad, breaking changes, migraciones, error contract y cross-layer integrity.',\n  'Incluye secciones solo cuando apliquen: domain_models_schema_delta, file_delta, http_api_contract, mqtt_event_contract, persistence_contract, compatibility_assessment, error_contract, non_functional_contract, unresolved_contract_decisions.',\n  'No inventes endpoints, campos, eventos, tablas, DTOs, SLA ni comandos. Usa TBD si requiere decision humana.',\n  'Trabaja en modo DRAFT/read-only; no persistas, no muevas Kanban, no marques DONE, no edites HU congeladas, no compres, no despliegues criticamente ni controles sistemas fisicos sin aprobacion humana.',\n  'Si falta Discovery o una decision de contrato indispensable, haz una sola pregunta.'\n].join(' ');\nreturn [{ json: { agent: 'project-contract', workspace: 'central', prompt, mode: 'wf-shared-contract-001', approval_required: true, dry_run: dryRun, metadata: { task_id: 'WF-SHARED-CONTRACT-001', agent_id: 'AGENT-CONTRACT-001', backlog_id: backlogId, discovery_ref: discoveryRef, requested_by: body.requested_by || 'chat-gateway' } } }];"
+      },
+      "id": "build-kiro-contract-request",
+      "name": "Build Kiro CONTRACT Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "call-kiro-runner",
+      "name": "Call Kiro Runner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "CONTRACT Webhook": {
+      "main": [
+        [
+          {
+            "node": "Build Kiro CONTRACT Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Kiro CONTRACT Request": {
+      "main": [
+        [
+          {
+            "node": "Call Kiro Runner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

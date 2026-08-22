@@ -21,6 +21,8 @@ WORKSPACES = {
 
 AGENTS = {
     "project-backlog",
+    "project-contract",
+    "project-discovery",
     "project-orchestrator",
     "project-knowledge",
     "project-pmo",

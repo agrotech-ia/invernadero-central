@@ -1,0 +1,6 @@
+{
+  "message": "descubre el alcance tecnico para EN-EDGE-001",
+  "backlog_id": "EN-EDGE-001",
+  "repositories": ["central", "sensors", "web"],
+  "dry_run": true
+}

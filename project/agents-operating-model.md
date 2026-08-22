@@ -41,6 +41,8 @@ Objetivo aspiracional:
 ```text
 Backlog Intake
 -> Knowledge Sync
+-> Technical Discovery
+-> Shared Contract Decision
 -> Portfolio / Priority Review
 -> Work Selection
 -> Refinement
@@ -116,6 +118,8 @@ Agentes ya definidos:
 - `AGENT-BKL-001`: Project / Backlog Agent.
 - `AGENT-REF-001`: Refinement Agent.
 - `AGENT-ARCH-001`: Architecture Agent.
+- `AGENT-DISC-001`: Technical Discovery Agent.
+- `AGENT-CONTRACT-001`: Shared Contract Agent.
 - `AGENT-MKT-001`: Market Intelligence & Demand Agent.
 - `AGENT-GROW-001`: Growth, Content & Education Agent.
 - `AGENT-REV-001`: Reviewer / Safety Agent.
@@ -131,6 +135,8 @@ Agentes ya definidos:
 | `AGENT-PLAN-001` | si | `project-planning` | `AGENT-PLAN-001` | si | operativo DRAFT |
 | `AGENT-REF-001` | si | `project-refinement` | `AGENT-REF-001` | si | operativo DRAFT |
 | `AGENT-BKL-001` | si | `project-backlog` | `AGENT-BKL-001` | si | operativo DRAFT |
+| `AGENT-DISC-001` | si | `project-discovery` | `AGENT-DISC-001` | si | operativo DRAFT |
+| `AGENT-CONTRACT-001` | si | `project-contract` | `AGENT-CONTRACT-001` | si | operativo DRAFT |
 | `AGENT-ARCH-001` | si | `project-architecture` | `AGENT-ARCH-001` | si | operativo DRAFT |
 | `AGENT-ENG-001` | si | `project-engineering` | `AGENT-ENG-001` | si | operativo DRAFT |
 | `AGENT-QA-001` | si | `project-qa-evidence` | `AGENT-QA-001` | si | operativo DRAFT |
@@ -227,6 +233,15 @@ story_lifecycle:
   knowledge_check:
     owner: AGENT-KNOW-001
     output: contexto y evidencia existente
+  technical_discovery:
+    owner: AGENT-DISC-001
+    output: repos, entry points, impacto, dependencias, pruebas, riesgos y unknowns
+  contract_decision:
+    owner: AGENT-DISC-001
+    output: sharedContract.recommended true/false
+  shared_contract:
+    owner: AGENT-CONTRACT-001
+    output: contrato compartido cuando aplique
   refinement:
     owner: AGENT-REF-001
     output: criterios, tareas, DoR, DoD, riesgos, evidencia esperada
@@ -246,6 +261,49 @@ story_lifecycle:
     owner: AGENT-BKL-001
     output: backlog actualizado y artefactos versionados
 ```
+
+## Artefactos intermedios por HU
+
+Para evitar depender de memoria conversacional, los agentes deben intercambiar contexto mediante
+artefactos versionables cuando el trabajo sea tecnico o de alto impacto.
+
+Ruta recomendada:
+
+```text
+project/agent-work/<backlog_id>/
+```
+
+Archivos:
+
+```text
+request.yaml
+discovery.yaml
+shared-contract.yaml
+story-draft.md
+review.yaml
+qa-readiness.yaml
+```
+
+Reglas:
+
+- `discovery.yaml` es obligatorio antes de finalizar HUs tecnicas que toquen codigo, repos, API,
+  MQTT, DB, eventos, frontend/backend, infraestructura o CI/CD.
+- `shared-contract.yaml` solo existe cuando `AGENT-DISC-001` recomienda contrato compartido.
+- `AGENT-REF-001` consume Discovery y Contract; no debe inventarlos ni modificarlos.
+- `AGENT-REV-001` audita trazabilidad entre requerimiento, Discovery, Contract y HU.
+- `AGENT-QA-001` valida evidencia y readiness; no reemplaza review tecnico.
+
+## Clasificacion de evidencia tecnica
+
+Toda afirmacion tecnica de Discovery o Contract debe estar marcada como:
+
+- `CONFIRMED`: suministrada explicitamente por el humano o requerimiento.
+- `DISCOVERED`: encontrada en codigo, configuracion o documentacion.
+- `INFERRED`: inferencia razonable basada en evidencia citada.
+- `PROPOSED`: cambio recomendado que aun no existe.
+- `UNKNOWN`: no pudo determinarse.
+
+Nunca convertir `INFERRED` o `PROPOSED` en `DISCOVERED`.
 
 ## Trabajo autonomo permitido
 

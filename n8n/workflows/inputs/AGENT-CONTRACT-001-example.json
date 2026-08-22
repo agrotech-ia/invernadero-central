@@ -1,0 +1,6 @@
+{
+  "message": "define el contrato compartido para EN-EDGE-001 si Discovery lo recomienda",
+  "backlog_id": "EN-EDGE-001",
+  "discovery_ref": "project/agent-work/EN-EDGE-001/discovery.yaml",
+  "dry_run": true
+}

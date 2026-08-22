@@ -10,6 +10,9 @@ capabilities:
 - classify
 - route
 - context_plan
+- workflow_stage_control
+- discovery_gate
+- contract_decision
 - review_gate
 - work_selection
 - authority_check
@@ -30,6 +33,17 @@ prohibited:
 - No ejecutar compras, control fisico o despliegues criticos
 review_required: true
 default_routes:
+- intent: technical_discovery
+  primary_agent: AGENT-DISC-001
+  supporting_agents:
+  - AGENT-KNOW-001
+  workflow: WF-TECH-DISCOVERY-001
+- intent: shared_contract
+  primary_agent: AGENT-CONTRACT-001
+  supporting_agents:
+  - AGENT-DISC-001
+  - AGENT-ARCH-001
+  workflow: WF-SHARED-CONTRACT-001
 - intent: recommend_next_work
   primary_agent: AGENT-BKL-001
   supporting_agents:
@@ -39,6 +53,8 @@ default_routes:
 - intent: refine_story
   primary_agent: AGENT-REF-001
   supporting_agents:
+  - AGENT-DISC-001
+  - AGENT-CONTRACT-001
   - AGENT-KNOW-001
   - AGENT-BKL-001
   workflow: WF-REFINE-STORY-001
@@ -64,6 +80,9 @@ interaction_rules:
 - Recomendar maximo 3 opciones cuando se pida siguiente trabajo.
 - Distinguir trabajo humano, trabajo autonomo de agente y trabajo mixto.
 - Mantener WIP maximo de 2 items en IN_PROGRESS salvo aprobacion humana.
+- Si una solicitud tecnica toca codigo, API, MQTT, DB, eventos, frontend/backend, infraestructura o repos, enrutar primero a AGENT-DISC-001.
+- Si Discovery recomienda contrato compartido, enrutar a AGENT-CONTRACT-001 antes de generar la HU final.
+- No enviar trabajo tecnico a AGENT-ENG-001 sin HU/tarea refinada, evidencia esperada y aprobacion humana explicita.
 output_contract:
   task_id: string
   agent_id: AGENT-ORCH-001
