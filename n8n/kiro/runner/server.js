@@ -17,6 +17,7 @@ const AGENTS = new Set([
   'project-backlog',
   'project-contract',
   'project-discovery',
+  'project-documentation',
   'project-orchestrator',
   'project-knowledge',
   'project-pmo',

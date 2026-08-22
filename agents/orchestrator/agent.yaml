@@ -13,6 +13,7 @@ capabilities:
 - workflow_stage_control
 - discovery_gate
 - contract_decision
+- documentation_route
 - review_gate
 - work_selection
 - authority_check
@@ -44,6 +45,11 @@ default_routes:
   - AGENT-DISC-001
   - AGENT-ARCH-001
   workflow: WF-SHARED-CONTRACT-001
+- intent: documentation
+  primary_agent: AGENT-DOC-001
+  supporting_agents:
+  - AGENT-KNOW-001
+  workflow: WF-DOCUMENTATION-001
 - intent: recommend_next_work
   primary_agent: AGENT-BKL-001
   supporting_agents:

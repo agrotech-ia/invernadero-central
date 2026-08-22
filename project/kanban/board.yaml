@@ -97,7 +97,12 @@ cards:
       status: DONE
       evidence:
       - project/evidence/agents/AGENT-DISC-CONTRACT-001-2026-08-22.md
-    next_action: Ejecutar primer Discovery real para EN-EDGE-001 y persistir artefacto tras aprobacion humana.
+    - task_id: T-AGT-DOC-001
+      title: Operacionalizar Documentation Agent para guias y ejemplos del proyecto
+      status: DONE
+      evidence:
+      - project/evidence/agents/AGENT-DOC-001-2026-08-22.md
+    next_action: Ejecutar primer Discovery real para EN-EDGE-001 y generar guia DRAFT de uso Discovery/Contract.
   EN-QA-001:
     title: Implementar framework V&V y persistencia de evidencia
     type: ENABLER

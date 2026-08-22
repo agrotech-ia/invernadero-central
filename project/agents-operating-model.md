@@ -120,6 +120,7 @@ Agentes ya definidos:
 - `AGENT-ARCH-001`: Architecture Agent.
 - `AGENT-DISC-001`: Technical Discovery Agent.
 - `AGENT-CONTRACT-001`: Shared Contract Agent.
+- `AGENT-DOC-001`: Documentation Agent.
 - `AGENT-MKT-001`: Market Intelligence & Demand Agent.
 - `AGENT-GROW-001`: Growth, Content & Education Agent.
 - `AGENT-REV-001`: Reviewer / Safety Agent.
@@ -137,6 +138,7 @@ Agentes ya definidos:
 | `AGENT-BKL-001` | si | `project-backlog` | `AGENT-BKL-001` | si | operativo DRAFT |
 | `AGENT-DISC-001` | si | `project-discovery` | `AGENT-DISC-001` | si | operativo DRAFT |
 | `AGENT-CONTRACT-001` | si | `project-contract` | `AGENT-CONTRACT-001` | si | operativo DRAFT |
+| `AGENT-DOC-001` | si | `project-documentation` | `AGENT-DOC-001` | si | operativo DRAFT |
 | `AGENT-ARCH-001` | si | `project-architecture` | `AGENT-ARCH-001` | si | operativo DRAFT |
 | `AGENT-ENG-001` | si | `project-engineering` | `AGENT-ENG-001` | si | operativo DRAFT |
 | `AGENT-QA-001` | si | `project-qa-evidence` | `AGENT-QA-001` | si | operativo DRAFT |
@@ -260,6 +262,9 @@ story_lifecycle:
   persistence:
     owner: AGENT-BKL-001
     output: backlog actualizado y artefactos versionados
+  documentation:
+    owner: AGENT-DOC-001
+    output: guia, ejemplo, runbook o troubleshooting trazable cuando aplique
 ```
 
 ## Artefactos intermedios por HU

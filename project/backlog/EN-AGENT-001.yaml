@@ -62,8 +62,20 @@ implementation_progress:
   - Orchestrator enruta trabajo tecnico a Discovery antes de Refinement.
   - Contract se ejecuta cuando Discovery recomienda contrato compartido.
   - Chat gateway enruta solicitudes de discovery e interfaces compartidas a los agentes correctos.
+- task_id: T-AGT-DOC-001
+  title: Operacionalizar Documentation Agent para guias y ejemplos del proyecto
+  status: DONE
+  completed_at: '2026-08-22'
+  evidence:
+  - project/evidence/agents/AGENT-DOC-001-2026-08-22.md
+  notes:
+  - Se agrego AGENT-DOC-001 con perfil Kiro project-documentation.
+  - n8n expone /webhook/project-documentation.
+  - Chat gateway enruta solicitudes de documentacion, guias, ejemplos y runbooks.
+  - El agente separa contenido verificado de UNKNOWN/PROPOSED.
 remaining_work:
 - Ejecutar una prueba live corta desde el chat con Kiro para PMO/Backlog/Refinement.
 - Ejecutar el primer Discovery real para EN-EDGE-001 y persistir `project/agent-work/EN-EDGE-001/discovery.yaml` tras aprobacion humana.
+- Generar primera guia DRAFT con AGENT-DOC-001 para uso de Discovery/Contract.
 - Definir el contrato final de persistencia aprobada para cambios de backlog/Kanban.
 - Pasar EN-AGENT-001 a VALIDATION cuando QA revise la evidencia de suite.

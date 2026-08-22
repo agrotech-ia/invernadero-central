@@ -1,0 +1,6 @@
+{
+  "message": "crea una guia de uso para ejecutar discovery y contract desde chat y curl",
+  "topic": "agent-discovery-contract-usage",
+  "audience": "humano operador del proyecto",
+  "dry_run": true
+}
