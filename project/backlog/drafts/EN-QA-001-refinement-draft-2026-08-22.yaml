@@ -1,0 +1,180 @@
+id: EN-QA-001
+title: Implementar framework V&V y persistencia de evidencia
+type: ENABLER
+status: REFINEMENT
+priority: P0
+target: FOUNDATION
+expert_role: QA Engineer
+reviewer_role: Solution / IoT Architect
+agent_owner: AGENT-QA-001
+review_agent: AGENT-REV-001
+source:
+  backlog_parent: EN-QA-001
+  decision_refs:
+  - DEC-050
+  - DEC-061
+  - DEC-071
+  - DEC-075
+  - DEC-076
+  evidence_refs:
+  - project/validation/master-vv-matrix.yaml
+  - project/validation/templates/test-case.yaml
+  - project/agent-work/EN-EDGE-001/discovery.yaml
+problem: El proyecto tiene reglas generales de evidencia, pero no un marco formal y reusable para cerrar HUs, validar V&V y evitar DONE sin pruebas verificables.
+outcome: Sistema minimo de QA/V&V que define evidencia, gates Kanban, plantillas, indices y primer paquete QA para EN-EDGE-001.
+scope:
+  in:
+  - Estructura estandar para evidencia por HU/enabler.
+  - Reglas de paso a READY, VALIDATION y DONE.
+  - Plantillas de test case, evidence index y validation report.
+  - Checklist QA por tipo de trabajo: sensor, edge, web, hardware, docs, agent.
+  - Primer paquete QA para EN-EDGE-001 usando el Discovery live.
+  out:
+  - Ejecutar pruebas fisicas reales.
+  - Implementar ingestor MQTT->DB.
+  - Cerrar HUs como DONE.
+  - Aprobar compras, control fisico o despliegues criticos.
+granularity:
+  size: M
+  rule: Dividir en tareas/HUs XS-S que puedan completarse en una o dos sesiones.
+dependencies:
+- id: EN-AGENT-001
+  reason: Requiere agentes QA, Review, Documentation y Discovery operativos.
+- id: EN-EDGE-001
+  reason: Sirve como primer caso tecnico para validar evidencia end-to-end.
+acceptance_criteria:
+- El repositorio contiene una convencion documentada de evidencia por HU/enabler.
+- Existe una plantilla de evidence index por item.
+- Existe una plantilla de validation report por item.
+- Existen reglas documentadas para READY, VALIDATION y DONE.
+- EN-EDGE-001 tiene checklist QA inicial basado en Discovery.
+- Ninguna regla exige evidencia imposible o no proporcional al tipo de trabajo.
+definition_of_ready:
+- EN-AGENT-001 tiene agentes QA/Reviewer/Documentation operativos.
+- project/validation/master-vv-matrix.yaml existe.
+- project/validation/templates/test-case.yaml existe.
+- Discovery live de EN-EDGE-001 esta persistido como DRAFT.
+- Riesgos y tipos de evidencia minima estan identificados.
+definition_of_done:
+- Plantillas QA versionadas.
+- Reglas de gate documentadas.
+- Primer paquete QA para EN-EDGE-001 creado como DRAFT.
+- QA Agent revisa el paquete y recomienda siguiente estado.
+- Reviewer confirma que no se marca DONE sin evidencia.
+proposed_children:
+- id: T-QA-001
+  title: Definir taxonomia y estructura de evidencia por tipo de trabajo
+  type: TASK
+  status: READY
+  priority: P0
+  role: QA Engineer
+  agent: AGENT-QA-001
+  can_agent_execute: true
+  output_artifacts:
+  - project/validation/evidence-taxonomy.yaml
+  - project/evidence/README.md
+  evidence_expected:
+  - YAML valido.
+  - README con ejemplos por tipo de evidencia.
+- id: T-QA-002
+  title: Crear plantilla de evidence index por HU/enabler
+  type: TASK
+  status: READY
+  priority: P0
+  role: QA Engineer
+  agent: AGENT-QA-001
+  can_agent_execute: true
+  output_artifacts:
+  - project/validation/templates/evidence-index.yaml
+  evidence_expected:
+  - Plantilla YAML valida.
+  - Campos para evidencia, fuente, fecha, comando, resultado, reviewer y limitaciones.
+- id: T-QA-003
+  title: Crear plantilla de validation report por HU/enabler
+  type: TASK
+  status: READY
+  priority: P0
+  role: QA Engineer
+  agent: AGENT-QA-001
+  can_agent_execute: true
+  output_artifacts:
+  - project/validation/templates/validation-report.yaml
+  evidence_expected:
+  - Plantilla YAML valida.
+  - Decision QA limitada a READY_RECOMMENDED, VALIDATION_RECOMMENDED, DONE_READY, CHANGES_REQUIRED o BLOCKED.
+- id: T-QA-004
+  title: Definir gates Kanban READY, VALIDATION y DONE
+  type: TASK
+  status: READY
+  priority: P0
+  role: QA Engineer
+  agent: AGENT-QA-001
+  can_agent_execute: true
+  output_artifacts:
+  - project/validation/kanban-gates.yaml
+  evidence_expected:
+  - Reglas por estado.
+  - Evidencia minima por tipo de item.
+  - Condiciones que obligan review humana.
+- id: T-QA-005
+  title: Crear paquete QA inicial para EN-EDGE-001
+  type: TASK
+  status: READY
+  priority: P0
+  role: QA Engineer
+  agent: AGENT-QA-001
+  can_agent_execute: true
+  dependencies:
+  - T-QA-001
+  - T-QA-002
+  - T-QA-003
+  - T-QA-004
+  output_artifacts:
+  - project/validation/items/EN-EDGE-001/qa-readiness.yaml
+  - project/validation/items/EN-EDGE-001/test-cases.yaml
+  evidence_expected:
+  - Test cases derivados de project/agent-work/EN-EDGE-001/discovery.yaml.
+  - Criterios para validar TimescaleDB, MQTT, ingestor, persistencia y healthcheck.
+- id: T-QA-006
+  title: Documentar guia de uso del framework QA/V&V
+  type: TASK
+  status: READY
+  priority: P1
+  role: Technical Writer / Developer Experience
+  agent: AGENT-DOC-001
+  can_agent_execute: true
+  dependencies:
+  - T-QA-001
+  - T-QA-004
+  output_artifacts:
+  - project/docs/qa-vv-framework-guide.md
+  evidence_expected:
+  - Guia DRAFT con comandos, ejemplos y rutas.
+validation:
+  vv_matrix_refs:
+  - Raspberry/Edge
+  - Web real-data
+  - Suelo 7-en-1
+  test_cases:
+  - id: TC-QA-001
+    title: Validar estructura de evidencia por item
+    expected_evidence: evidence-taxonomy.yaml y evidence-index.yaml validos.
+  - id: TC-QA-002
+    title: Validar que EN-EDGE-001 tiene paquete QA inicial
+    expected_evidence: qa-readiness.yaml y test-cases.yaml para EN-EDGE-001.
+risks:
+- risk: Crear demasiado proceso antes de ejecutar.
+  mitigation: Mantener plantillas minimas y aplicarlas primero a EN-EDGE-001.
+- risk: Marcar READY tareas que aun dependen de decision humana.
+  mitigation: Las tareas son DRAFT hasta aprobacion; los gates separan recomendacion de decision.
+- risk: Evidencia fisica no disponible inmediatamente.
+  mitigation: Separar evidencia documental/local de evidencia fisica/lab.
+human_approval_required_for:
+- mover EN-QA-001 a READY o DONE
+- cerrar items como DONE
+- control fisico
+- compras
+- despliegues criticos
+open_questions:
+- Debemos usar YAML como formato unico para evidence-index y validation-report?
+notes: Refinamiento DRAFT creado tras Discovery live de EN-EDGE-001.

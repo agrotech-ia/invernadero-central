@@ -149,11 +149,14 @@ project/backlog/procurement-template.yaml
 project/backlog/templates/hu-template.yaml
 project/context/conversation-context-2026-08-11.md
 project/agent-work/README.md
+project/agent-work/EN-EDGE-001/discovery.yaml
+project/backlog/drafts/EN-QA-001-refinement-draft-2026-08-22.yaml
 project/evidence/agents/AGENT-KNOW-001-2026-08-22.md
 project/evidence/agents/AGENT-BKL-001-dynamic-2026-08-22.md
 project/evidence/agents/AGENT-SUITE-OPERATIONAL-2026-08-22.md
 project/evidence/agents/AGENT-DISC-CONTRACT-001-2026-08-22.md
 project/evidence/agents/AGENT-DOC-001-2026-08-22.md
+project/evidence/discovery/EN-EDGE-001-discovery-2026-08-22.md
 project/planning/current-state-baseline.yaml
 project/planning/drafts/project-plan-draft-2026-08-13.md
 project/kanban/README.md

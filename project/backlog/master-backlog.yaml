@@ -56,12 +56,21 @@ items:
   priority: P0
   target: FOUNDATION
   owner_role: QA Engineer
-  status: READY
+  status: REFINEMENT
   reviewer_role: Solution / IoT Architect
   effort: M
   risk: MEDIUM
-  dependencies: []
+  dependencies:
+  - EN-AGENT-001
   source: HU-009
+  progress:
+  - task_id: T-QA-REFINE-001
+    title: Refinar framework V&V en tareas pequenas
+    status: DONE
+    evidence:
+    - project/backlog/drafts/EN-QA-001-refinement-draft-2026-08-22.yaml
+    - project/agent-work/EN-EDGE-001/discovery.yaml
+  next_action: Ejecutar T-QA-001 para definir taxonomia y estructura de evidencia.
 - id: HU-SOIL-001
   title: Validar y caracterizar sensor de suelo 7-en-1
   type: STORY

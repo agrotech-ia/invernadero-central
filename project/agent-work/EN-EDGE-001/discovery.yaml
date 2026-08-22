@@ -1,0 +1,266 @@
+backlog_id: EN-EDGE-001
+title: Validar runtime Raspberry MQTT->DB
+agent_id: AGENT-DISC-001
+kiro_agent: project-discovery
+status: DRAFT
+created_at: '2026-08-22'
+source:
+  request: Discovery live ejecutado por webhook /webhook/project-discovery
+  evidence_raw: /home/chuchosam/.codex/attachments/7d6cb3eb-b4a5-4cdb-9899-85a081c5e99b/pasted-text.txt
+  duration_ms: 152648
+  exit_code: 0
+summary:
+  current_behavior: EN-EDGE-001 busca validar el runtime edge Raspberry MQTT->DB.
+  main_gap: No existe implementacion del ingestor MQTT->DB; solo existe logger JSONL.
+  minimum_scope:
+  - Validar que TimescaleDB corre en Raspberry usando Docker.
+  - Implementar ingestor minimo MQTT subscriber -> INSERT.
+  - Probar E2E con nodo real publicando.
+  - Agregar healthcheck o log minimo.
+architecture:
+- layer: Broker MQTT
+  component: Mosquitto en Raspberry Pi 5
+  repo: sensors
+  status: Configuracion existe y flujo WiFi->MQTT->JSONL fue probado.
+  classification: CONFIRMED
+- layer: Ingesta MQTT->DB
+  component: sensor-ingestor
+  repo: sensors
+  status: No existe codigo implementado; solo esta mencionado como objetivo.
+  classification: CONFIRMED
+- layer: Database
+  component: PostgreSQL 16 + TimescaleDB
+  repo: sensors/db
+  status: Schema V1, seed y bootstrap existen.
+  classification: CONFIRMED
+- layer: API REST
+  component: FastAPI
+  repo: sensors
+  status: No existe codigo implementado; solo mencionado en docs.
+  classification: CONFIRMED
+- layer: Logger temporal
+  component: raspberry-pi/mqtt_logger.py
+  repo: sensors
+  status: Codigo funcional que guarda JSONL.
+  classification: CONFIRMED
+- layer: Web UI
+  component: React + Vite
+  repo: web
+  status: Mock data, sin integracion API real.
+  classification: CONFIRMED
+impact_map:
+- action: Crear servicio ingestor MQTT->DB
+  repos:
+  - sensors
+  impact_type: Codigo nuevo
+- action: Modificar docker compose o runtime para incluir ingestor
+  repos:
+  - sensors
+  impact_type: Modificacion
+- action: Validar schema_v1 contra contrato MQTT
+  repos:
+  - sensors
+  impact_type: Verificacion
+- action: Probar persistencia E2E MQTT->TimescaleDB
+  repos:
+  - sensors
+  impact_type: Prueba integracion
+- action: Definir health check y observabilidad minima
+  repos:
+  - sensors
+  impact_type: Codigo nuevo
+- action: Habilitar futuro dashboard con datos reales
+  repos:
+  - web
+  impact_type: Dependencia inversa
+change_inventory:
+- path: raspberry-pi/sensor_ingestor.py
+  action: CREATE
+  classification: PROPOSED
+  reason: Entregable core no existente.
+- path: db/docker-compose.yml
+  action: MODIFY
+  classification: INFERRED
+  reason: Podria agregarse servicio de ingesta.
+- path: raspberry-pi/requirements.txt
+  action: MODIFY
+  classification: INFERRED
+  reason: Probable necesidad de driver PostgreSQL.
+- path: raspberry-pi/test-ingestor.sh
+  action: CREATE
+  classification: PROPOSED
+  reason: Prueba de smoke/integracion para ingesta.
+- path: db/schema_v1.sql
+  action: NO_CHANGE
+  classification: CONFIRMED
+  reason: Ya soporta sensor_readings y device_status_readings.
+- path: docs/data-contracts.md
+  action: NO_CHANGE
+  classification: CONFIRMED
+  reason: Ya define payloads MQTT V1.
+dependencies:
+- name: Mosquitto operativo en Raspberry
+  type: runtime
+  status: Probado localmente
+  classification: CONFIRMED
+- name: PostgreSQL + TimescaleDB
+  type: runtime
+  status: Schema listo y compose listo
+  classification: CONFIRMED
+- name: paho-mqtt
+  type: library
+  status: Pinned en raspberry-pi/requirements.txt
+  classification: CONFIRMED
+- name: Driver PostgreSQL Python
+  type: library
+  status: No declarado
+  classification: UNKNOWN
+- name: Contrato MQTT V1
+  type: contract
+  status: Definido en docs/data-contracts.md
+  classification: CONFIRMED
+reverse_dependencies:
+- consumer: Dashboard con datos reales
+  backlog_id: HU-WEB-001
+  needs: API sobre datos persistidos
+  classification: CONFIRMED
+- consumer: Validacion sensor suelo E2E
+  backlog_id: HU-SOIL-001
+  needs: MQTT->DB funcional
+  classification: CONFIRMED
+- consumer: Primera regla/alerta
+  backlog_id: HU-AUTO-001
+  needs: Motor lee de DB
+  classification: INFERRED
+- consumer: Prueba end-to-end MVP
+  backlog_id: EXP-E2E-001
+  needs: Flujo completo validado
+  classification: CONFIRMED
+infra_surface:
+- component: Raspberry Pi 5
+  status: AVAILABLE
+  classification: CONFIRMED
+- component: Mosquitto
+  status: Instalado y probado
+  classification: CONFIRMED
+- component: TimescaleDB Docker container
+  status: Compose existe; no hay evidencia de uptime permanente.
+  classification: INFERRED
+- component: Servicio ingestor
+  status: No existe
+  classification: CONFIRMED
+- component: FastAPI / API REST
+  status: No existe
+  classification: CONFIRMED
+- component: Systemd units custom
+  status: No existen
+  classification: CONFIRMED
+- component: Backup / retencion
+  status: No existe
+  classification: CONFIRMED
+- component: Observabilidad / healthcheck custom
+  status: No existe
+  classification: CONFIRMED
+test_surface:
+- test: raspberry-pi/test-mqtt-local.sh
+  type: smoke
+  status: Existe
+  classification: CONFIRMED
+- test: raspberry-pi/mqtt_logger.py
+  type: manual logger
+  status: Existe
+  classification: CONFIRMED
+- test: Tests automatizados de ingesta
+  type: unit/integration
+  status: No existen
+  classification: CONFIRMED
+- test: Tests de schema DB
+  type: DDL correctness
+  status: No existen; bootstrap usa ON_ERROR_STOP.
+  classification: CONFIRMED
+- test: Web vitest
+  type: unit
+  status: Config existe y hay App.test.jsx.
+  classification: CONFIRMED
+docs_surface:
+- path: raspberry-pi/README.md
+  relevance: Setup MQTT
+  classification: CONFIRMED
+- path: docs/data-contracts.md
+  relevance: Contrato MQTT V1, spec del ingestor
+  classification: CONFIRMED
+- path: docs/architecture.md
+  relevance: Diseno general de capas
+  classification: CONFIRMED
+- path: docs/system-flow.md
+  relevance: Flujo E2E
+  classification: CONFIRMED
+- path: docs/implementation-roadmap.md
+  relevance: Bloque 2 describe EN-EDGE-001
+  classification: CONFIRMED
+- path: db/README.md
+  relevance: Bootstrap DB
+  classification: CONFIRMED
+- path: project/architecture/target-architecture.md
+  relevance: Arquitectura objetivo resumida
+  classification: CONFIRMED
+risks:
+- id: R1
+  risk: El ingestor no existe; EN-EDGE-001 implica codigo nuevo sin precedente local.
+  severity: HIGH
+  classification: CONFIRMED
+- id: R2
+  risk: Imagen TimescaleDB en Raspberry Pi 5 aarch64 podria tener limitaciones.
+  severity: MEDIUM
+  classification: INFERRED
+- id: R3
+  risk: Persistencia ante reboot no esta definida para servicios custom.
+  severity: MEDIUM
+  classification: CONFIRMED
+- id: R4
+  risk: Hypertables sin retencion pueden llenar almacenamiento de 64 GB.
+  severity: MEDIUM
+  classification: INFERRED
+- id: R5
+  risk: Sin observabilidad, un fallo silencioso de ingesta puede perder datos.
+  severity: MEDIUM
+  classification: CONFIRMED
+- id: R6
+  risk: allow_anonymous true en MQTT es riesgo de seguridad aceptable solo en lab.
+  severity: LOW
+  classification: CONFIRMED
+- id: R7
+  risk: Stack del ingestor no decidido.
+  severity: MEDIUM
+  classification: CONFIRMED
+unknowns:
+- id: U1
+  question: TimescaleDB fue levantado y probado en Raspberry real o solo existe compose?
+  impact: Bloquea validacion.
+- id: U2
+  question: Se prefiere Python u otro lenguaje para el ingestor?
+  impact: Decision arquitectonica.
+- id: U3
+  question: El ingestor debe correr como script, systemd service o contenedor Docker?
+  impact: Modelo operativo.
+- id: U4
+  question: Cual es el throughput esperado?
+  impact: Dimensionamiento.
+- id: U5
+  question: Cual es la politica de retencion inicial?
+  impact: Storage.
+- id: U6
+  question: EN-EDGE-001 incluye FastAPI/API REST o solo MQTT->DB?
+  impact: Scope boundary.
+- id: U7
+  question: Hay .env real configurado en Raspberry o solo example?
+  impact: Setup state.
+sharedContract:
+  recommended: true
+  reasons:
+  - El ingestor consumira el contrato MQTT ya definido en docs/data-contracts.md.
+  - El mapeo JSON MQTT -> columnas SQL es un contrato implicito que debe formalizarse.
+  - El flujo E2E cruza firmware, ingestor, DB, API futura y web.
+  scope_recommendation: Formalizar docs/data-contracts.md como artefacto versionado y validable antes de implementar ingesta.
+next_recommended_agent: AGENT-CONTRACT-001
+human_question: Se confirma que EN-EDGE-001 cubre solo MQTT->DB y no API REST en esta iteracion?

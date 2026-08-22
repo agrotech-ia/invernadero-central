@@ -52,8 +52,8 @@ lanes:
   - HU-WATER-003
   - HU-WATER-005
   - EN-PWR-001
-  READY:
   - EN-QA-001
+  READY:
   - HU-SOIL-001
   - EN-EDGE-001
   - EN-MKT-001
@@ -109,13 +109,20 @@ cards:
     priority: P0
     expert_role: QA Engineer
     reviewer_role: Solution / IoT Architect
-    status: READY
+    status: REFINEMENT
     effort: M
     mode_fit:
     - docs_governance
     - deep_work
-    granularity: needs_task_breakdown
-    next_action: Definir estructura de evidencia, casos de prueba y reglas para mover a DONE.
+    granularity: draft_breakdown_ready
+    progress:
+    - task_id: T-QA-REFINE-001
+      title: Refinar framework V&V en tareas pequenas
+      status: DONE
+      evidence:
+      - project/backlog/drafts/EN-QA-001-refinement-draft-2026-08-22.yaml
+      - project/agent-work/EN-EDGE-001/discovery.yaml
+    next_action: Ejecutar T-QA-001 para definir taxonomia y estructura de evidencia.
   HU-SOIL-001:
     title: Validar y caracterizar sensor de suelo 7-en-1
     type: STORY

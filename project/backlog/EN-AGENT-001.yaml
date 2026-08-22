@@ -75,7 +75,7 @@ implementation_progress:
   - El agente separa contenido verificado de UNKNOWN/PROPOSED.
 remaining_work:
 - Ejecutar una prueba live corta desde el chat con Kiro para PMO/Backlog/Refinement.
-- Ejecutar el primer Discovery real para EN-EDGE-001 y persistir `project/agent-work/EN-EDGE-001/discovery.yaml` tras aprobacion humana.
+- Ejecutar AGENT-CONTRACT-001 para EN-EDGE-001 porque Discovery recomendo contrato compartido.
 - Generar primera guia DRAFT con AGENT-DOC-001 para uso de Discovery/Contract.
 - Definir el contrato final de persistencia aprobada para cambios de backlog/Kanban.
 - Pasar EN-AGENT-001 a VALIDATION cuando QA revise la evidencia de suite.
