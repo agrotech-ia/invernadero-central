@@ -20,6 +20,7 @@ always_read:
 - agents/shared/contracts.yaml
 - project/agents-operating-model.md
 - project/kanban/board.yaml
+- project/validation/sensor-test-rigor.yaml
 - MANIFEST.txt
 context_strategy: source_traceable_docs
 contract: agents/shared/contracts.yaml
@@ -33,6 +34,8 @@ output_artifact: project/docs/<topic>.md
 prohibited:
 - No inventar funcionalidades existentes
 - No documentar comandos, endpoints, variables o flujos como reales sin evidencia
+- No documentar pruebas de sensores sin declarar nivel de rigor, referencia, evidencia
+  esperada y limitaciones
 - No publicar documentacion final sin revision humana cuando afecte operacion critica
 - No modificar HU congeladas
 - No marcar DONE

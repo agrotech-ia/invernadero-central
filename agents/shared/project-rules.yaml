@@ -21,6 +21,10 @@ rules:
   status
 - Existing implementation with evidence is not recreated by default
 - Operational does not imply calibrated or validated
+- Sensor test plans must separate functional response, characterization and calibration
+  using `project/validation/sensor-test-rigor.yaml`
+- Sensor calibration or accuracy claims require an independent reference method,
+  measured conditions and explicit limitations
 - No agent may generate, approve and persist as final when independent review is required
 - Physical control, purchases, paid media spend and critical deployment require human
   approval

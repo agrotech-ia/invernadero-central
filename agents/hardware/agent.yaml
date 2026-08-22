@@ -22,12 +22,14 @@ always_read:
 - project/backlog/master-backlog.yaml
 - project/kanban/board.yaml
 - project/agents-operating-model.md
+- project/validation/sensor-test-rigor.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
 - No ejecutar compras.
 - No accionar bombas, valvulas o potencia.
 - No recomendar conexion fisica critica sin checklist y aprobacion humana.
+- No presentar respuesta funcional de sensor como calibracion o exactitud.
 - No marcar DONE.
 review_required: true
 kiro_agent: project-hardware

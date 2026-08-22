@@ -1,0 +1,120 @@
+version: '1.0'
+status: ACTIVE
+owner_agent: AGENT-QA-001
+review_agent: AGENT-REV-001
+created_at: '2026-08-22'
+purpose: >
+  Definir reglas minimas para que agentes y humanos generen planes de prueba
+  rigurosos para sensores, evitando confundir respuesta funcional con medicion
+  validada o calibrada.
+applies_to:
+- Sensores fisicos
+- Pruebas de laboratorio
+- Caracterizacion de mediciones
+- Calibracion de sensores
+- Guias de prueba y evidencia
+principles:
+- Operacional no implica calibrado ni validado.
+- Una prueba funcional solo demuestra que el sensor responde.
+- Una caracterizacion demuestra tendencia, repetibilidad, ruido y limites observados.
+- Una calibracion requiere comparar contra una referencia independiente.
+- El tipo de muestra, condiciones y metodo de referencia deben registrarse.
+- Si no hay referencia independiente, el resultado debe declararse como funcional o relativo.
+required_test_levels:
+  functional_response:
+    description: Verifica que el sensor entrega lectura y cambia ante condiciones contrastantes.
+    sufficient_for:
+    - readiness inicial
+    - detectar sensor muerto
+    - decidir si continuar caracterizacion
+    not_sufficient_for:
+    - declarar exactitud
+    - calibrar
+    - cerrar validacion cuantitativa
+    required_evidence:
+    - setup_description
+    - raw_readings
+    - contrasting_conditions
+    - observed_direction
+  characterization:
+    description: Evalua varios puntos controlados para tendencia, monotonicidad, ruido y repetibilidad.
+    sufficient_for:
+    - decidir si el sensor sirve para integracion inicial
+    - definir rangos observados del proyecto
+    required_evidence:
+    - measured_points
+    - repeated_readings
+    - min_max_average
+    - context_conditions
+    - limitations
+  calibration:
+    description: Compara lectura del sensor contra referencia independiente.
+    sufficient_for:
+    - estimar error
+    - definir curva o ajuste
+    - declarar precision aproximada dentro del rango probado
+    required_evidence:
+    - reference_method
+    - reference_values
+    - sensor_values
+    - error_or_delta
+    - validity_range
+    - limitations
+soil_moisture_specific:
+  reference_method: humedad gravimetrica simplificada
+  formula: humedad_gravimetrica_% = masa_agua / masa_suelo_seco * 100
+  practical_assumption: 1 ml de agua se aproxima a 1 g.
+  minimum_controls:
+  - masa de suelo seco
+  - tipo de suelo observado
+  - volumen o masa de agua agregada
+  - tiempo de estabilizacion
+  - numero de repeticiones por punto
+  - temperatura/condicion ambiental si esta disponible
+  recommended_points_for_500g_soil:
+  - point: P0
+    water_ml: 0
+    approximate_gravimetric_moisture: 0 %
+    use: seco de referencia
+  - point: P1
+    water_ml: 25
+    approximate_gravimetric_moisture: 5 %
+    use: bajo
+  - point: P2
+    water_ml: 50
+    approximate_gravimetric_moisture: 10 %
+    use: medio bajo
+  - point: P3
+    water_ml: 100
+    approximate_gravimetric_moisture: 20 %
+    use: medio alto
+  - point: P4
+    water_ml: 150
+    approximate_gravimetric_moisture: 30 %
+    use: alto
+  - point: P5
+    water_ml: saturated_then_drained
+    approximate_gravimetric_moisture: depends_on_soil
+    use: capacidad de campo aproximada
+  - point: P6
+    water_ml: waterlogged
+    approximate_gravimetric_moisture: not_primary_calibration_point
+    use: extremo funcional
+  cautions:
+  - Los puntos no son universales; dependen de textura, compactacion, densidad aparente, materia organica y sales.
+  - Encharcado es util como extremo funcional, pero no debe ser punto principal de calibracion.
+  - Para humedad volumetrica se requiere densidad aparente.
+  - Si no se seca el suelo en horno o metodo equivalente, declarar el metodo como aproximado.
+agent_requirements:
+- Todo plan de prueba de sensor debe declarar nivel: functional_response, characterization o calibration.
+- Todo documento de pruebas debe incluir materiales, condiciones controladas, evidencia esperada, riesgos y limitaciones.
+- Si el usuario pide "que tan bien mide", "precision", "calibracion" o "exactitud", el agente debe pedir o proponer referencia independiente.
+- Si el usuario solo pide iniciar o verificar respuesta, el agente puede proponer prueba funcional con estados relativos.
+- El agente debe evitar afirmar valores agronomicos universales sin fuente y contexto de tipo de suelo/cultivo.
+source_refs:
+- label: FAO soil moisture conditions
+  url: https://www.fao.org/4/R4082E/r4082e03.htm
+- label: FAO glossary of soil moisture terms
+  url: https://www.fao.org/4/Y4690E/y4690e04.htm
+- label: ISO 20244:2018 soil water content screening
+  url: https://www.iso.org/standard/67406.html

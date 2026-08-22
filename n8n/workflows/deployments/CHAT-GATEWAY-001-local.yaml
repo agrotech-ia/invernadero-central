@@ -42,6 +42,11 @@ memory_validation:
   command: POST http://localhost:5678/webhook/project-agent-chat with messages history
   result: SUCCESS
   notes: Gateway used recent chat history to interpret short follow-up "entonces c y luego a" in soil sensor planning context.
+sensor_rigor_validation:
+  date: '2026-08-22'
+  command: POST http://localhost:5678/webhook/project-agent-chat
+  result: SUCCESS
+  notes: Gateway referenced project/validation/sensor-test-rigor.yaml and separated functional response, characterization and calibration for soil sensor test planning.
 next_validation:
 - Open the workflow URL.
 - Test the webhook with payload from n8n/workflows/inputs/CHAT-GATEWAY-001-example.json.

@@ -45,6 +45,9 @@ Responsabilidades:
   Engineering, QA, Edge, Web, Hardware o Reviewer cuando la intencion del humano es clara;
 - aplica el pipeline tecnico Intake -> Knowledge -> Discovery -> Contract Decision
   -> Refinement -> Review -> QA -> Human Gate cuando la solicitud lo requiere;
+- cuando el humano pide planes o documentos de pruebas de sensores, exige aplicar
+  `project/validation/sensor-test-rigor.yaml` y enruta a Refinement, QA, Hardware
+  o Documentation segun la intencion;
 - responde con una sola pregunta siguiente;
 - mantiene restricciones de gobernanza.
 

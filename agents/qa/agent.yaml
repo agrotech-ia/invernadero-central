@@ -14,11 +14,13 @@ capabilities:
 always_read:
 - agents/shared/project-rules.yaml
 - project/validation/master-vv-matrix.yaml
+- project/validation/sensor-test-rigor.yaml
 - project/validation/templates/test-case.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
 - No marcar DONE sin evidencia
 - No asumir calibracion o validacion no demostrada
+- No aceptar pruebas de sensor como calibracion si solo demuestran respuesta funcional
 review_required: true
 kiro_agent: project-qa-evidence

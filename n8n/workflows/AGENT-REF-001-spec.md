@@ -7,6 +7,12 @@ Estado: DRAFT
 Conectar n8n con `project-refinement`, el agente Kiro encargado de convertir una HU/enabler
 seleccionada en trabajo granular, verificable y revisable.
 
+Para HUs de sensores debe aplicar `project/validation/sensor-test-rigor.yaml` y no mezclar en una sola HU:
+
+- respuesta funcional;
+- caracterizacion;
+- calibracion contra referencia independiente.
+
 ## Flujo
 
 ```text
