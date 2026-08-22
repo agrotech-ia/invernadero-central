@@ -89,6 +89,66 @@ items:
   risk: MEDIUM
   dependencies: []
   source: HU-009
+  progress:
+  - task_id: T-SOIL-PLAN-001
+    title: Desglosar pruebas de sensor de suelo y publicar guia operativa
+    status: DONE
+    evidence:
+    - project/backlog/soil/HU-SOIL-001-breakdown.yaml
+    - project/guides/sensors/soil-moisture-test-plan.md
+    - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
+  next_action: Tomar HU-SOIL-LAB-001 para preparar banco de pruebas y materiales.
+- id: HU-SOIL-LAB-001
+  title: Preparar banco de pruebas y materiales del sensor de suelo
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: QA Engineer
+  status: READY
+  reviewer_role: Solution / IoT Architect
+  effort: S
+  risk: MEDIUM
+  dependencies: []
+  source: HU-SOIL-001
+- id: HU-SOIL-LAB-002
+  title: Capturar lectura cruda estable del sensor de suelo
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: Firmware Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: S
+  risk: MEDIUM
+  dependencies:
+  - HU-SOIL-LAB-001
+  source: HU-SOIL-001
+- id: HU-SOIL-LAB-003
+  title: Caracterizar lecturas en seco, humedo y saturado
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: QA Engineer
+  status: BACKLOG
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: MEDIUM
+  dependencies:
+  - HU-SOIL-LAB-002
+  source: HU-SOIL-001
+- id: HU-SOIL-DATA-001
+  title: Definir payload MQTT V1 para medicion de suelo
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: Backend / IoT Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: S
+  risk: MEDIUM
+  dependencies:
+  - HU-SOIL-LAB-003
+  source: HU-SOIL-001
 - id: HU-WATER-001
   title: Implementar nodo de pH de agua
   type: STORY

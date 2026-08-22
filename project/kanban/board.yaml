@@ -34,6 +34,9 @@ selection_modes:
 lanes:
   IDEA: []
   BACKLOG:
+  - HU-SOIL-LAB-002
+  - HU-SOIL-LAB-003
+  - HU-SOIL-DATA-001
   - HU-WATER-002
   - HU-WATER-004
   - HU-WEB-001
@@ -55,6 +58,7 @@ lanes:
   - EN-QA-001
   READY:
   - HU-SOIL-001
+  - HU-SOIL-LAB-001
   - EN-EDGE-001
   - EN-MKT-001
   - EN-GROW-001
@@ -140,8 +144,82 @@ cards:
     mode_fit:
     - physical_lab
     - docs_governance
-    granularity: needs_task_breakdown
-    next_action: Refinar en tareas T-SOIL pequenas sin reimplementar firmware existente.
+    granularity: parent_with_children
+    progress:
+    - task_id: T-SOIL-PLAN-001
+      title: Desglosar pruebas de sensor de suelo y publicar guia operativa
+      status: DONE
+      evidence:
+      - project/backlog/soil/HU-SOIL-001-breakdown.yaml
+      - project/guides/sensors/soil-moisture-test-plan.md
+      - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
+    next_action: Tomar HU-SOIL-LAB-001 para preparar banco de pruebas y materiales.
+  HU-SOIL-LAB-001:
+    title: Preparar banco de pruebas y materiales del sensor de suelo
+    type: STORY
+    priority: P0
+    expert_role: QA Engineer
+    reviewer_role: Solution / IoT Architect
+    status: READY
+    effort: S
+    mode_fit:
+    - physical_lab
+    - docs_governance
+    granularity: executable
+    guide_path: project/guides/sensors/soil-moisture-test-plan.md
+    web_path: /project/guides/sensors/soil-moisture-test-plan
+    next_action: Completar checklist de materiales, seguridad, modelo y protocolo antes de energizar.
+  HU-SOIL-LAB-002:
+    title: Capturar lectura cruda estable del sensor de suelo
+    type: STORY
+    priority: P0
+    expert_role: Firmware Engineer
+    reviewer_role: QA Engineer
+    status: BACKLOG
+    effort: S
+    mode_fit:
+    - physical_lab
+    - coding
+    granularity: executable_after_dependency
+    dependencies:
+    - HU-SOIL-LAB-001
+    guide_path: project/guides/sensors/soil-moisture-test-plan.md
+    web_path: /project/guides/sensors/soil-moisture-test-plan
+    next_action: Ejecutar lectura local y guardar al menos 5 muestras crudas.
+  HU-SOIL-LAB-003:
+    title: Caracterizar lecturas en seco, humedo y saturado
+    type: STORY
+    priority: P0
+    expert_role: QA Engineer
+    reviewer_role: Solution / IoT Architect
+    status: BACKLOG
+    effort: M
+    mode_fit:
+    - physical_lab
+    - docs_governance
+    granularity: executable_after_dependency
+    dependencies:
+    - HU-SOIL-LAB-002
+    guide_path: project/guides/sensors/soil-moisture-test-plan.md
+    web_path: /project/guides/sensors/soil-moisture-test-plan
+    next_action: Medir tres condiciones y registrar tabla comparativa.
+  HU-SOIL-DATA-001:
+    title: Definir payload MQTT V1 para medicion de suelo
+    type: STORY
+    priority: P0
+    expert_role: Backend / IoT Engineer
+    reviewer_role: QA Engineer
+    status: BACKLOG
+    effort: S
+    mode_fit:
+    - docs_governance
+    - coding
+    granularity: executable_after_dependency
+    dependencies:
+    - HU-SOIL-LAB-003
+    guide_path: project/guides/sensors/soil-moisture-test-plan.md
+    web_path: /project/guides/sensors/soil-moisture-test-plan
+    next_action: Crear contrato DRAFT soil.telemetry.v1 con ejemplo JSON.
   EN-EDGE-001:
     title: Validar runtime Raspberry MQTT->DB
     type: ENABLER

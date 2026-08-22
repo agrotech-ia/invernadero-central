@@ -1,0 +1,286 @@
+parent:
+  id: HU-SOIL-001
+  title: Validar y caracterizar sensor de suelo 7-en-1
+  status: READY
+  note: Historia parent mantiene la intencion general; la ejecucion debe tomarse desde las HUs hijas.
+
+children:
+- id: HU-SOIL-LAB-001
+  title: Preparar banco de pruebas y materiales del sensor de suelo
+  type: STORY
+  status: READY
+  priority: P0
+  target: MVP
+  expert_role: QA Engineer
+  reviewer_role: Solution / IoT Architect
+  agent_owner: AGENT-QA-001
+  review_agent: AGENT-REV-001
+  source:
+    backlog_parent: HU-SOIL-001
+    evidence_refs:
+    - project/guides/sensors/soil-moisture-test-plan.md
+  problem: No se puede iniciar prueba fisica confiable sin banco, materiales, riesgos y evidencia definidos.
+  outcome: Banco de pruebas preparado y documentado para ejecutar primera lectura cruda sin improvisacion.
+  scope:
+    in:
+    - Identificar materiales minimos.
+    - Verificar alimentacion y conexion antes de energizar.
+    - Crear indice de evidencia.
+    - Registrar riesgos y condiciones iniciales.
+    out:
+    - Capturar lecturas productivas.
+    - Calibrar sensor.
+    - Integrar MQTT o base de datos.
+  granularity:
+    size: S
+    rule: Completable en una sesion de laboratorio.
+    split_if:
+    - Se requiere comprar componentes no disponibles.
+    - El sensor usa protocolo desconocido y bloquea conexion.
+  dependencies: []
+  acceptance_criteria:
+  - Existe lista de materiales marcada como disponible, faltante o pendiente.
+  - Existe checklist de seguridad antes de energizar.
+  - Existe evidencia inicial en project/evidence/soil-moisture/.
+  - Se confirma modelo, voltaje y protocolo real o queda blocker explicito.
+  definition_of_ready:
+  - Guia DRAFT creada.
+  - Rol experto y revisor asignados.
+  - Evidencia esperada definida.
+  definition_of_done:
+  - Checklist completado.
+  - Evidencia guardada o referenciada.
+  - Riesgos abiertos registrados.
+  - Reviewer decide PASS, PARTIAL o FAIL.
+  tasks:
+  - id: T-SOIL-LAB-001
+    title: Preparar inventario y seguridad del banco de pruebas
+    role: QA Engineer
+    agent: AGENT-QA-001
+    can_agent_execute: false
+    evidence_expected:
+    - checklist_safety
+    - materials_status
+    - setup_description
+  validation:
+    vv_matrix_refs:
+    - soil-sensor-lab-readiness
+    test_cases:
+    - id: TC-SOIL-LAB-001
+      title: Banco listo para energizar
+      expected_evidence: evidence index con materiales, voltaje, protocolo y riesgos.
+  risks:
+  - risk: Sensor o interfaz no disponible.
+    mitigation: Registrar faltante y abrir procurement pequeno antes de continuar.
+  - risk: Voltaje incorrecto puede danar sensor o host.
+    mitigation: Verificar con multimetro antes de conectar datos.
+  human_approval_required_for:
+  - compras
+  - control fisico
+  open_questions:
+  - Cual es el modelo/protocolo exacto del sensor de suelo 7-en-1?
+  notes: Primera HU recomendada para comenzar pruebas del sensor de suelo.
+
+- id: HU-SOIL-LAB-002
+  title: Capturar lectura cruda estable del sensor de suelo
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Firmware Engineer
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-QA-001
+  source:
+    backlog_parent: HU-SOIL-001
+    evidence_refs:
+    - project/guides/sensors/soil-moisture-test-plan.md
+  problem: El proyecto necesita confirmar que el sensor entrega datos legibles antes de calibrar o integrar.
+  outcome: Lecturas crudas repetibles guardadas con contexto de ejecucion.
+  scope:
+    in:
+    - Ejecutar lectura local.
+    - Capturar al menos 5 muestras.
+    - Registrar comando, salida y errores.
+    out:
+    - Calibracion agronomica.
+    - MQTT, DB o dashboard.
+  granularity:
+    size: S
+    rule: Una sesion de firmware/laboratorio con sensor conectado.
+    split_if:
+    - No existe script o herramienta para leer el protocolo.
+  dependencies:
+  - id: HU-SOIL-LAB-001
+    reason: Requiere banco preparado y conexion segura.
+  acceptance_criteria:
+  - Hay comando o script usado para leer el sensor.
+  - Hay al menos 5 lecturas crudas o evidencia clara de fallo reproducible.
+  - Cada lectura tiene timestamp y contexto minimo.
+  - Si falla, se registra error y siguiente hipotesis.
+  definition_of_ready:
+  - Banco de pruebas validado.
+  - Protocolo identificado.
+  - Evidencia esperada definida.
+  definition_of_done:
+  - Log crudo versionado o referenciado.
+  - Resultado PASS/PARTIAL/FAIL recomendado por QA.
+  tasks:
+  - id: T-SOIL-LAB-002
+    title: Obtener primera serie de lecturas crudas
+    role: Firmware Engineer
+    agent: AGENT-ENG-001
+    can_agent_execute: false
+    evidence_expected:
+    - raw_payload_or_log
+    - command_used
+    - failure_mode_checked
+  validation:
+    vv_matrix_refs:
+    - soil-sensor-raw-read
+    test_cases:
+    - id: TC-SOIL-LAB-002
+      title: Lectura cruda repetible
+      expected_evidence: JSONL o log con muestras y contexto.
+  risks:
+  - risk: Protocolo no soportado por codigo actual.
+    mitigation: Abrir spike tecnico pequeno para driver o herramienta Modbus.
+  human_approval_required_for:
+  - control fisico
+  open_questions: []
+  notes: No transformar valores todavia; primero conservar dato crudo.
+
+- id: HU-SOIL-LAB-003
+  title: Caracterizar lecturas en seco, humedo y saturado
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: QA Engineer
+  reviewer_role: Solution / IoT Architect
+  agent_owner: AGENT-QA-001
+  review_agent: AGENT-REV-001
+  source:
+    backlog_parent: HU-SOIL-001
+    evidence_refs:
+    - project/guides/sensors/soil-moisture-test-plan.md
+  problem: Una lectura aislada no demuestra comportamiento util del sensor frente a cambios de humedad.
+  outcome: Tabla comparativa de condiciones que permite decidir si se continua a payload MQTT V1.
+  scope:
+    in:
+    - Medir seco, humedo y saturado.
+    - Registrar condiciones y observaciones.
+    - Comparar coherencia relativa.
+    out:
+    - Curva final de calibracion.
+    - Recomendaciones agronomicas definitivas.
+  granularity:
+    size: M
+    rule: Puede tomar una o dos sesiones con preparacion de muestras.
+    split_if:
+    - Se requieren mas puntos de calibracion o repeticion estadistica amplia.
+  dependencies:
+  - id: HU-SOIL-LAB-002
+    reason: Requiere lectura cruda estable.
+  acceptance_criteria:
+  - Existe tabla con al menos tres condiciones: seco, humedo, saturado.
+  - Cada muestra tiene timestamp, condicion y lectura cruda.
+  - La conclusion declara PASS/PARTIAL/FAIL y limitaciones.
+  definition_of_ready:
+  - Lectura cruda estable disponible.
+  - Condiciones de muestra definidas.
+  definition_of_done:
+  - CSV o tabla versionada.
+  - Conclusion revisada.
+  tasks:
+  - id: T-SOIL-LAB-003
+    title: Medir tres condiciones controladas
+    role: QA Engineer
+    agent: AGENT-QA-001
+    can_agent_execute: false
+    evidence_expected:
+    - characterization_csv
+    - context_conditions
+    - reviewer_conclusion
+  validation:
+    vv_matrix_refs:
+    - soil-sensor-characterization
+    test_cases:
+    - id: TC-SOIL-LAB-003
+      title: Lecturas cambian por condicion
+      expected_evidence: tabla comparativa con observaciones.
+  risks:
+  - risk: Las muestras no son suficientemente controladas.
+    mitigation: Declarar limitacion y usar solo decision de avance tecnica.
+  human_approval_required_for:
+  - control fisico
+  open_questions: []
+  notes: Esta HU decide si se habilita contrato de telemetria.
+
+- id: HU-SOIL-DATA-001
+  title: Definir payload MQTT V1 para medicion de suelo
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Backend / IoT Engineer
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-CONTRACT-001
+  review_agent: AGENT-QA-001
+  source:
+    backlog_parent: HU-SOIL-001
+    evidence_refs:
+    - project/guides/sensors/soil-moisture-test-plan.md
+  problem: Sin contrato de payload no se puede integrar lectura de suelo a edge, storage ni web de forma trazable.
+  outcome: Contrato MQTT DRAFT con ejemplo JSON y campos minimos para soil telemetry.
+  scope:
+    in:
+    - Definir topico propuesto.
+    - Definir payload minimo V1.
+    - Mapear campos crudos y normalizados.
+    out:
+    - Implementacion de broker.
+    - Persistencia real.
+    - UI final.
+  granularity:
+    size: S
+    rule: Una sesion de contrato compartido.
+    split_if:
+    - Aparecen multiples sensores o dominios de telemetria adicionales.
+  dependencies:
+  - id: HU-SOIL-LAB-003
+    reason: Requiere conocer campos reales del sensor.
+  acceptance_criteria:
+  - Existe payload JSON de ejemplo.
+  - Campos obligatorios y opcionales estan documentados.
+  - El contrato declara version, device_id, timestamp y raw_values.
+  definition_of_ready:
+  - Lecturas crudas disponibles.
+  - Campos reales identificados.
+  definition_of_done:
+  - Contrato versionado.
+  - QA revisa consistencia con evidencia.
+  tasks:
+  - id: T-SOIL-DATA-001
+    title: Crear contrato MQTT soil.telemetry.v1
+    role: Backend / IoT Engineer
+    agent: AGENT-CONTRACT-001
+    can_agent_execute: true
+    evidence_expected:
+    - payload_schema
+    - sample_json
+    - source_refs
+  validation:
+    vv_matrix_refs:
+    - soil-telemetry-contract-v1
+    test_cases:
+    - id: TC-SOIL-DATA-001
+      title: Payload ejemplo valida campos minimos
+      expected_evidence: contrato y ejemplo JSON.
+  risks:
+  - risk: Contrato se define antes de conocer campos reales.
+    mitigation: Mantener como DRAFT hasta cerrar HU-SOIL-LAB-003.
+  human_approval_required_for:
+  - cambios de arquitectura mayor
+  open_questions: []
+  notes: Esta HU prepara integracion con EN-EDGE-001 y HU-WEB-001.
