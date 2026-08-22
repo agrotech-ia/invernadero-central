@@ -66,6 +66,59 @@ Deseables:
 | HU-SOIL-DATA-001 | Definir payload MQTT V1 para medicion de suelo | BACKLOG | Backend / IoT Engineer | contrato payload, ejemplo JSON |
 | HU-SOIL-WEB-001 | Publicar guia y ruta web de pruebas de suelo | DONE | Frontend Engineer | ruta web, build |
 
+## Rigurosidad recomendada
+
+La prueba debe separarse en tres niveles:
+
+1. Prueba funcional: confirmar que el sensor cambia cuando el suelo pasa de seco a humedo y saturado.
+2. Caracterizacion relativa: medir varios puntos controlados para ver monotonicidad, ruido y repetibilidad.
+3. Calibracion: comparar el sensor contra una referencia independiente de humedad del suelo.
+
+Para `HU-SOIL-LAB-001` y `HU-SOIL-LAB-002`, no se requieren valores agronomicos puntuales. Si el objetivo es decidir si el sensor esta vivo y si la lectura responde de forma coherente, basta con seco, humedo y saturado, siempre que se registre el contexto.
+
+Para `HU-SOIL-LAB-003`, si queremos rigurosidad suficiente para confiar en el dato, usar metodo gravimetrico simplificado:
+
+1. Tomar una masa conocida de suelo seco, por ejemplo 500 g.
+2. Registrar tipo de suelo observado: arena, franco, arcilloso o mezcla desconocida.
+3. Agregar agua medida por masa o volumen. Como aproximacion practica, 1 ml de agua equivale a 1 g.
+4. Mezclar de forma uniforme.
+5. Esperar 10 a 20 minutos para estabilizacion antes de medir.
+6. Tomar 5 lecturas por punto.
+7. Calcular humedad gravimetrica aproximada:
+
+```text
+humedad_gravimetrica_% = masa_agua / masa_suelo_seco * 100
+```
+
+Ejemplo con 500 g de suelo seco:
+
+| Punto | Agua agregada | Humedad gravimetrica aproximada | Uso |
+| --- | ---: | ---: | --- |
+| P0 | 0 ml | 0 % | Seco de referencia |
+| P1 | 25 ml | 5 % | Bajo |
+| P2 | 50 ml | 10 % | Medio bajo |
+| P3 | 100 ml | 20 % | Medio alto |
+| P4 | 150 ml | 30 % | Alto |
+| P5 | Saturado y drenado | Depende del suelo | Field capacity aproximada |
+| P6 | Encharcado | No usar para calibracion principal | Prueba de extremo |
+
+Notas:
+
+- Los puntos anteriores no son universales; cambian por textura, compactacion, densidad aparente, materia organica y sales.
+- El valor de sensor debe aumentar o disminuir de forma monotona segun la escala del fabricante.
+- El suelo encharcado sirve para probar extremo, pero no como punto principal de calibracion, porque puede representar saturacion temporal y no humedad util.
+- Para convertir humedad gravimetrica a volumetrica se requiere densidad aparente:
+
+```text
+humedad_volumetrica = humedad_gravimetrica * densidad_aparente / densidad_agua
+```
+
+Fuentes de referencia:
+
+- FAO define saturacion, capacidad de campo, punto de marchitez permanente y agua disponible como conceptos dependientes del tipo de suelo.
+- FAO relaciona el agua disponible con textura: arena, franco y arcilla tienen capacidades de retencion muy distintas.
+- ISO 20244:2018 referencia la determinacion rapida de contenido de agua y advierte que la matriz del suelo influye el resultado; tambien referencia ISO 11465 como metodo estandar relacionado.
+
 ## Paso a paso inicial
 
 ### 1. Antes de conectar
