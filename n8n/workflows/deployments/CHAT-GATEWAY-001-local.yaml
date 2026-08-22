@@ -34,7 +34,7 @@ last_validation:
   command: POST http://localhost:5678/webhook/project-agent-chat
   result: SUCCESS
   auth_result: authorization_header
-  notes: Dry run validated for Knowledge, PMO, Planning and Refinement routing; live Refinement call returned EN-AGENT-001 draft.
+  notes: Dry run validated for Knowledge, Backlog, PMO, Planning and Refinement routing; live Refinement call returned EN-AGENT-001 draft.
 next_validation:
 - Open the workflow URL.
 - Test the webhook with payload from n8n/workflows/inputs/CHAT-GATEWAY-001-example.json.

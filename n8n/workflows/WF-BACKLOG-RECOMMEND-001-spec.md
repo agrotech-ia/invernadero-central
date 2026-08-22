@@ -14,6 +14,17 @@ Que deberia trabajar ahora?
 
 No debe ejecutar cambios todavia. Solo recomienda opciones y pide una decision humana.
 
+## Flujo actual
+
+```text
+Webhook /project-backlog
+-> Build Kiro Backlog Request
+-> Call Kiro Runner
+```
+
+El workflow llama al workspace agent Kiro `project-backlog`; debe leer backlog y
+Kanban en vivo desde Git, no usar snapshots quemados en el workflow.
+
 ## Input
 
 ```json

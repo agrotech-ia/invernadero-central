@@ -1,37 +1,80 @@
 {
-  "name": "AGENT-BKL-001 - Backlog Recommend",
+  "id": "V3orePoN5iNN0Q8B",
+  "name": "AGENT-BKL-001 - Kiro Backlog Recommend",
+  "active": true,
   "nodes": [
     {
-      "parameters": {},
-      "id": "manual-trigger",
-      "name": "Manual Trigger",
-      "type": "n8n-nodes-base.manualTrigger",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-backlog",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "backlog-webhook",
+      "name": "Backlog Webhook",
+      "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -640,
+        -720,
+        0
+      ],
+      "webhookId": "project-backlog"
+    },
+    {
+      "parameters": {
+        "functionCode": "const incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst body = incoming.body || incoming;\nconst availableTime = String(body.available_time || body.availableTime || 'unknown');\nconst preferredMode = String(body.preferred_mode || body.preferredMode || 'any');\nconst maxOptions = Math.min(Number(body.max_options || body.maxOptions || 3), 3);\nconst respectWip = body.respect_wip !== false;\nconst dryRun = body.dry_run !== false;\n\nconst prompt = [\n  'Recomienda siguiente trabajo del backlog del proyecto Invernadero Central leyendo el estado versionado actual.',\n  `Solicitud: ${body.request || body.message || 'Recomendar siguiente trabajo del backlog'}.`,\n  `Tiempo disponible humano: ${availableTime}.`,\n  `Modo preferido: ${preferredMode}.`,\n  `Maximo de opciones: ${maxOptions}.`,\n  `Respetar WIP: ${respectWip}.`,\n  'Lee project/backlog/master-backlog.yaml y project/kanban/board.yaml en vivo; no uses snapshots.',\n  'Considera prioridad, estado, WIP, dependencias, riesgo, fase del roadmap, rol experto, rol revisor, evidencias faltantes y si necesita refinamiento granular.',\n  'Devuelve maximo 3 opciones con backlog_id, title, current_status, priority, role, reviewer_role, why_now, next_step, work_type, blockers y recommendation_warning.',\n  'Si WIP esta lleno, recomienda continuar o desbloquear items en IN_PROGRESS/VALIDATION, no jalar trabajo nuevo.',\n  'No muevas estados Kanban, no marques DONE, no edites HU congeladas, no inventes evidencia, no hagas commits.',\n  'Haz una sola pregunta final al humano: cual opcion quiere tomar ahora.'\n].join(' ');\n\nreturn [{\n  json: {\n    agent: 'project-backlog',\n    workspace: 'central',\n    prompt,\n    mode: 'backlog-recommendation',\n    approval_required: true,\n    dry_run: dryRun,\n    metadata: {\n      task_id: 'WF-BACKLOG-RECOMMEND-001',\n      agent_id: 'AGENT-BKL-001',\n      available_time: availableTime,\n      preferred_mode: preferredMode,\n      max_options: maxOptions,\n      respect_wip: respectWip,\n      requested_by: body.requested_by || 'chat-gateway'\n    }\n  }\n}];"
+      },
+      "id": "build-kiro-backlog-request",
+      "name": "Build Kiro Backlog Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -460,
         0
       ]
     },
     {
       "parameters": {
-        "functionCode": "const defaultRequest = {\n  task_id: 'WF-BACKLOG-RECOMMEND-001',\n  available_time: 'unknown',\n  preferred_mode: 'any',\n  max_options: 3,\n  respect_wip: true,\n};\n\nconst incoming = items && items[0] && items[0].json ? items[0].json : {};\nconst request = Object.keys(incoming).length ? { ...defaultRequest, ...incoming } : defaultRequest;\n\nconst wip = {\n  IN_PROGRESS: [],\n  VALIDATION: [],\n  limits: {\n    IN_PROGRESS: 2,\n    VALIDATION: 3,\n  },\n};\n\nconst cards = [\n  {\n    backlog_id: 'EN-AGENT-001',\n    title: 'Bootstrap plataforma multiagente local',\n    current_status: 'READY',\n    priority: 'P0',\n    role: 'Solution / IoT Architect',\n    reviewer_role: 'QA Engineer',\n    effort: 'M',\n    mode_fit: ['docs_governance', 'deep_work'],\n    granularity: 'needs_task_breakdown',\n    can_agent_execute: true,\n    next_step: 'Continuar conectando Backlog Agent y luego Refinement Agent para operar el ciclo completo.',\n    why_now: 'Es la base para que el resto del proyecto pueda avanzar con agentes, seleccion de trabajo, revision y evidencia.',\n    dependencies: [],\n    blockers: [],\n  },\n  {\n    backlog_id: 'EN-QA-001',\n    title: 'Implementar framework V&V y persistencia de evidencia',\n    current_status: 'READY',\n    priority: 'P0',\n    role: 'QA Engineer',\n    reviewer_role: 'Solution / IoT Architect',\n    effort: 'M',\n    mode_fit: ['docs_governance', 'deep_work'],\n    granularity: 'needs_task_breakdown',\n    can_agent_execute: true,\n    next_step: 'Crear estructura de evidencia y reglas para que ninguna HU pase a DONE sin prueba verificable.',\n    why_now: 'Acelera el proyecto sin perder control: cada avance de sensores, web o edge necesita evidencia trazable.',\n    dependencies: [],\n    blockers: [],\n  },\n  {\n    backlog_id: 'EN-EDGE-001',\n    title: 'Validar runtime Raspberry MQTT->DB',\n    current_status: 'READY',\n    priority: 'P0',\n    role: 'DevOps / Platform Engineer',\n    reviewer_role: 'QA Engineer',\n    effort: 'M',\n    mode_fit: ['coding', 'deep_work'],\n    granularity: 'needs_task_breakdown',\n    can_agent_execute: true,\n    next_step: 'Definir ingesta minima MQTT a PostgreSQL/TimescaleDB con contratos V1.',\n    why_now: 'Desbloquea la cadena real SENSOR -> TELEMETRY -> STORAGE y prepara la integracion web.',\n    dependencies: [],\n    blockers: [],\n  },\n  {\n    backlog_id: 'HU-SOIL-001',\n    title: 'Validar y caracterizar sensor de suelo 7-en-1',\n    current_status: 'READY',\n    priority: 'P0',\n    role: 'QA Engineer',\n    reviewer_role: 'Solution / IoT Architect',\n    effort: 'M',\n    mode_fit: ['physical_lab', 'docs_governance'],\n    granularity: 'needs_task_breakdown',\n    can_agent_execute: false,\n    next_step: 'Refinar tareas T-SOIL pequenas sin reimplementar firmware existente.',\n    why_now: 'Hay implementacion operacional existente y falta convertirla en evidencia validada.',\n    dependencies: [],\n    blockers: ['Requiere trabajo fisico/laboratorio para evidencia completa.'],\n  },\n  {\n    backlog_id: 'HU-WATER-001',\n    title: 'Implementar nodo de pH de agua',\n    current_status: 'REFINEMENT',\n    priority: 'P0',\n    role: 'Firmware Engineer',\n    reviewer_role: 'QA Engineer',\n    effort: 'M',\n    mode_fit: ['coding', 'physical_lab'],\n    granularity: 'needs_refinement',\n    can_agent_execute: true,\n    next_step: 'Separar firmware, calibracion y validacion en HUs granulares.',\n    why_now: 'Es P0, pero todavia necesita refinamiento antes de ejecucion segura.',\n    dependencies: [],\n    blockers: ['Necesita separar implementacion de calibracion/validacion.'],\n  },\n  {\n    backlog_id: 'EN-PWR-001',\n    title: 'Diseñar arquitectura de potencia y protecciones',\n    current_status: 'REFINEMENT',\n    priority: 'P0',\n    role: 'Hardware Engineer',\n    reviewer_role: 'QA Engineer',\n    effort: 'M',\n    mode_fit: ['physical_lab', 'deep_work'],\n    granularity: 'needs_refinement',\n    can_agent_execute: false,\n    next_step: 'Dividir calculos, protecciones, gabinete, pruebas y procurement.',\n    why_now: 'Control fisico, valvulas y bombas dependen de potencia/protecciones confiables.',\n    dependencies: [],\n    blockers: ['Requiere decisiones de hardware y aprobacion humana para compras/control fisico.'],\n  },\n];\n\nconst priorityWeight = { P0: 0, P1: 1, P2: 2 };\nconst statusWeight = { READY: 0, REFINEMENT: 1, BACKLOG: 2, IDEA: 3, IN_PROGRESS: 4, VALIDATION: 5, DONE: 99 };\nconst effortWeight = { XS: 0, S: 1, M: 2, L: 3 };\n\nfunction modeScore(card) {\n  if (!request.preferred_mode || request.preferred_mode === 'any') return 0;\n  return card.mode_fit.includes(request.preferred_mode) ? -2 : 2;\n}\n\nfunction timeScore(card) {\n  if (request.available_time === 'short') return effortWeight[card.effort] || 2;\n  if (request.available_time === 'medium') return card.effort === 'M' ? -1 : 0;\n  if (request.available_time === 'long') return card.effort === 'M' || card.effort === 'L' ? -1 : 0;\n  return 0;\n}\n\nconst canTakeMore = !request.respect_wip || wip.IN_PROGRESS.length < wip.limits.IN_PROGRESS;\nconst candidates = cards\n  .filter((card) => card.current_status !== 'DONE')\n  .filter((card) => canTakeMore || card.current_status === 'IN_PROGRESS')\n  .map((card) => ({\n    ...card,\n    score: (priorityWeight[card.priority] ?? 9) * 10\n      + (statusWeight[card.current_status] ?? 9) * 3\n      + modeScore(card)\n      + timeScore(card),\n  }))\n  .sort((a, b) => a.score - b.score || a.backlog_id.localeCompare(b.backlog_id))\n  .slice(0, request.max_options || 3)\n  .map(({ score, ...card }) => ({\n    ...card,\n    work_type: card.can_agent_execute ? 'agent_or_mixed' : 'human_or_mixed',\n    recommendation_warning: card.granularity === 'needs_task_breakdown' || card.granularity === 'needs_refinement'\n      ? 'Antes de ejecutar, refinar en HUs/tareas mas pequenas con evidencia esperada.'\n      : 'Lista para ejecucion acotada.',\n  }));\n\nreturn [{\n  json: {\n    task_id: request.task_id,\n    agent_id: 'AGENT-BKL-001',\n    status: 'SUCCESS',\n    summary: 'Recomendacion de siguiente trabajo generada desde snapshot del tablero Kanban versionado.',\n    wip_status: {\n      in_progress_count: wip.IN_PROGRESS.length,\n      in_progress_limit: wip.limits.IN_PROGRESS,\n      can_take_more: canTakeMore,\n    },\n    selection_context: {\n      available_time: request.available_time,\n      preferred_mode: request.preferred_mode,\n      max_options: request.max_options,\n    },\n    recommended_options: candidates,\n    requires_human_selection: true,\n    question_for_human: 'Cual opcion quieres tomar ahora?',\n    next_action_after_selection: 'Enviar la opcion elegida a WF-REFINE-STORY-001 antes de ejecutar.',\n    evidence: [\n      'project/kanban/board.yaml',\n      'project/backlog/master-backlog.yaml',\n      'project/agents-operating-model.md',\n      'project/roles/expert-role-catalog.yaml'\n    ],\n  }\n}];"
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "http://agent-runner:8080/kiro/run",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
       },
-      "id": "backlog-recommend",
-      "name": "Backlog Recommend",
-      "type": "n8n-nodes-base.function",
+      "id": "call-kiro-runner",
+      "name": "Call Kiro Runner",
+      "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        -360,
+        -200,
         0
-      ]
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "b39VeJvBxPMGkMXz",
+          "name": "n8n"
+        }
+      }
     }
   ],
   "connections": {
-    "Manual Trigger": {
+    "Backlog Webhook": {
       "main": [
         [
           {
-            "node": "Backlog Recommend",
+            "node": "Build Kiro Backlog Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Kiro Backlog Request": {
+      "main": [
+        [
+          {
+            "node": "Call Kiro Runner",
             "type": "main",
             "index": 0
           }

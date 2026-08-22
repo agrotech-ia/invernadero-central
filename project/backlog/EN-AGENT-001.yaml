@@ -29,8 +29,18 @@ implementation_progress:
   - AGENT-KNOW-001 tiene webhook n8n /webhook/project-knowledge.
   - CHAT-GATEWAY-001 enruta preguntas de contexto a project-knowledge.
   - La ejecucion live devolvio respuesta con fuentes y contradicciones.
+- task_id: T-AGT-BKL-001
+  title: Convertir Backlog Agent a recomendacion dinamica con Kiro/runner
+  status: DONE
+  completed_at: '2026-08-22'
+  evidence:
+  - project/evidence/agents/AGENT-BKL-001-dynamic-2026-08-22.md
+  notes:
+  - AGENT-BKL-001 tiene webhook n8n /webhook/project-backlog.
+  - El workflow llama a project-backlog via agent-runner.
+  - La ejecucion live leyo master-backlog.yaml y board.yaml en vivo.
+  - CHAT-GATEWAY-001 enruta solicitudes de siguiente trabajo a project-backlog.
 remaining_work:
-- Convertir AGENT-BKL-001 a version dinamica con Kiro/runner.
 - Crear WF-QA-EVIDENCE-001 para validar evidencia y DONE readiness.
 - Crear WF-EXECUTE-TASK-001 con guardas fuertes para ejecucion acotada.
 - Completar workflows dedicados para arquitectura/reviewer si se mantienen como gates separados.

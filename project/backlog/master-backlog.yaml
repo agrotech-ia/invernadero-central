@@ -29,7 +29,12 @@ items:
     evidence:
     - project/evidence/agents/AGENT-KNOW-001-2026-08-22.md
     - commit:394333c
-  next_action: Convertir AGENT-BKL-001 a version dinamica con Kiro/runner.
+  - task_id: T-AGT-BKL-001
+    title: Convertir Backlog Agent a recomendacion dinamica
+    status: DONE
+    evidence:
+    - project/evidence/agents/AGENT-BKL-001-dynamic-2026-08-22.md
+  next_action: Crear WF-QA-EVIDENCE-001 para validar evidencia y DONE readiness.
 - id: EN-QA-001
   title: Implementar framework V&V y persistencia de evidencia
   type: ENABLER
