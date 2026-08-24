@@ -95,7 +95,7 @@ stories:
 - id: HU-WEB-ROLE-001
   title: Definir roles, permisos y matriz de pantallas
   type: STORY
-  status: READY
+  status: VALIDATION
   priority: P0
   target: MVP
   expert_role: Product Manager
@@ -106,6 +106,9 @@ stories:
   evidence_expected:
   - project/product/web-role-screen-matrix.yaml
   - revision de arquitectura
+  evidence:
+  - project/product/web-role-screen-matrix.yaml
+  next_action: Revisar matriz y aprobar desbloqueo de HU-WEB-IA-001.
 - id: HU-WEB-IA-001
   title: Definir arquitectura de informacion y navegacion privada
   type: STORY

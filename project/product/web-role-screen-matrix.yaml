@@ -1,0 +1,449 @@
+version: '1.0'
+status: DRAFT
+created_at: '2026-08-24'
+backlog_id: HU-WEB-ROLE-001
+owner_role: Product Manager
+reviewer_role: Solution / IoT Architect
+source_refs:
+- project/architecture/aws-saas-target-architecture.md
+- project/backlog/web/EP-WEB-PLATFORM-001-roadmap.yaml
+- project/decisions/decision-register.yaml
+
+principles:
+- La landing publica vende la solucion y no requiere autenticacion.
+- La aplicacion privada debe operar por tenant, invernadero y rol.
+- Todo dato privado debe resolverse con `tenant_id`; el frontend no es fuente de seguridad.
+- El piloto puede usar rol mock, pero la arquitectura debe mapear a Cognito groups/claims.
+- Acciones fisicas, recomendaciones criticas y cambios de configuracion sensible requieren trazabilidad y, cuando aplique, aprobacion.
+- El chat interno del proyecto y el Agro Expert Chat son productos distintos.
+
+tenant_model:
+  required_context:
+  - tenant_id
+  - greenhouse_id
+  - user_id
+  - role
+  - permissions
+  - selected_crop_cycle_id
+  optional_context:
+  - farm_id
+  - zone_id
+  - device_id
+  - agronomist_assignment_id
+
+roles:
+- id: admin
+  label: Admin / Operador
+  purpose: Configurar y operar la plataforma para tenants, usuarios, invernaderos y dispositivos.
+  primary_goals:
+  - Crear y administrar invernaderos.
+  - Gestionar usuarios, roles y asignaciones.
+  - Registrar sensores/dispositivos.
+  - Revisar salud operativa de la plataforma.
+  permissions:
+  - tenant.read
+  - greenhouse.create
+  - greenhouse.read
+  - greenhouse.update
+  - user.invite
+  - user.assign_role
+  - device.register
+  - device.update
+  - alert.read
+  - evidence.read
+  - decision.read
+  restricted_permissions:
+  - billing.manage
+  - physical_control.execute
+  - agronomic_recommendation.approve
+  common_screens:
+  - private.home
+  - greenhouse.overview
+  - alerts.list
+  - evidence.library
+  own_screens:
+  - admin.tenants
+  - admin.greenhouses
+  - admin.users
+  - admin.devices
+  - admin.integrations
+  main_actions:
+  - Crear invernadero.
+  - Editar datos operativos del invernadero.
+  - Invitar usuario.
+  - Asignar rol.
+  - Registrar dispositivo.
+  - Ver estado de integraciones.
+  approval_required_for:
+  - eliminar invernadero
+  - cambiar configuracion critica de sensores
+  - ejecutar control fisico
+  - cambiar permisos de owner
+
+- id: farmer
+  label: Agricultor
+  purpose: Entender el estado actual del cultivo y tomar acciones operativas seguras.
+  primary_goals:
+  - Ver estado del cultivo.
+  - Revisar alertas accionables.
+  - Consultar estadisticas clave.
+  - Registrar observaciones de campo.
+  permissions:
+  - greenhouse.read
+  - telemetry.read
+  - alert.read
+  - task.read
+  - task.comment
+  - field_observation.create
+  - recommendation.read
+  - decision.read_own
+  restricted_permissions:
+  - greenhouse.create
+  - user.assign_role
+  - device.register
+  - agronomic_recommendation.approve
+  - physical_control.execute
+  common_screens:
+  - private.home
+  - greenhouse.overview
+  - alerts.list
+  - agro_chat
+  own_screens:
+  - farmer.dashboard
+  - farmer.crop_status
+  - farmer.tasks
+  - farmer.observations
+  main_actions:
+  - Ver humedad, temperatura, pH, EC y alertas.
+  - Registrar observacion de cultivo.
+  - Marcar tarea operativa como revisada.
+  - Preguntar al Agro Expert Chat con contexto del invernadero.
+  approval_required_for:
+  - ejecutar recomendacion critica
+  - ignorar alerta critica
+  - cambiar umbrales
+
+- id: agronomist
+  label: Agronomo
+  purpose: Interpretar datos agronomicos, aprobar recomendaciones y dejar trazabilidad tecnica.
+  primary_goals:
+  - Analizar datos por cultivo, zona e invernadero.
+  - Revisar recomendaciones pendientes.
+  - Aprobar, ajustar o rechazar recomendaciones.
+  - Consultar historial de decisiones y efectos observados.
+  permissions:
+  - greenhouse.read
+  - telemetry.read
+  - alert.read
+  - recommendation.read
+  - agronomic_recommendation.approve
+  - agronomic_recommendation.reject
+  - agronomic_note.create
+  - decision.read
+  - decision.create
+  - evidence.read
+  restricted_permissions:
+  - user.assign_role
+  - tenant.update
+  - device.register
+  - physical_control.execute
+  common_screens:
+  - private.home
+  - greenhouse.overview
+  - alerts.list
+  - evidence.library
+  - agro_chat
+  own_screens:
+  - agronomist.dashboard
+  - agronomist.approvals
+  - agronomist.decision_history
+  - agronomist.crop_analysis
+  main_actions:
+  - Aprobar recomendacion agronomica.
+  - Rechazar recomendacion con motivo.
+  - Crear nota tecnica.
+  - Revisar evidencia asociada a alerta.
+  - Consultar chat con fuentes cientificas y datos del cultivo.
+  approval_required_for:
+  - recomendaciones que impliquen control fisico automatico
+  - cambios de reglas globales
+  - recomendaciones fuera del cultivo/invernadero asignado
+
+- id: technician
+  label: Tecnico / Instalador
+  purpose: Instalar, mantener y diagnosticar sensores, conectividad y dispositivos.
+  primary_goals:
+  - Ver dispositivos asignados.
+  - Registrar instalacion y mantenimiento.
+  - Validar conectividad.
+  - Reportar fallas.
+  permissions:
+  - greenhouse.read_assigned
+  - device.read
+  - device.installation_update
+  - device.maintenance_create
+  - telemetry.read_device_health
+  - evidence.create
+  - alert.read_device
+  restricted_permissions:
+  - user.assign_role
+  - agronomic_recommendation.approve
+  - tenant.update
+  - physical_control.execute
+  common_screens:
+  - private.home
+  - evidence.library
+  own_screens:
+  - technician.dashboard
+  - technician.devices
+  - technician.maintenance
+  - technician.connectivity_checks
+  main_actions:
+  - Registrar instalacion.
+  - Subir evidencia de mantenimiento.
+  - Ejecutar checklist de conectividad no destructivo.
+  - Reportar sensor con falla.
+  approval_required_for:
+  - energizar configuracion nueva
+  - cambiar cableado critico
+  - reemplazar dispositivo productivo
+
+- id: owner
+  label: Owner / Empresa
+  purpose: Entender adopcion, operacion global, clientes/invernaderos y salud del negocio.
+  primary_goals:
+  - Ver metricas globales.
+  - Revisar tenants e invernaderos activos.
+  - Ver salud operativa y comercial.
+  - Consultar reportes ejecutivos.
+  permissions:
+  - tenant.read_all
+  - greenhouse.read_all
+  - operational_metrics.read
+  - commercial_metrics.read
+  - report.read
+  - alert.read_summary
+  - decision.read_summary
+  restricted_permissions:
+  - physical_control.execute
+  - device.installation_update
+  - agronomic_recommendation.approve
+  common_screens:
+  - private.home
+  - evidence.library
+  own_screens:
+  - owner.executive_dashboard
+  - owner.tenants_summary
+  - owner.operations_health
+  - owner.reports
+  main_actions:
+  - Ver resumen de operacion.
+  - Ver estado de clientes/invernaderos.
+  - Exportar reporte.
+  - Solicitar revision de oportunidad comercial.
+  approval_required_for:
+  - cambios comerciales sensibles
+  - claims publicos
+  - politicas de uso de datos
+
+screens:
+- id: public.landing
+  route: /
+  visibility: public
+  purpose: Vender la propuesta, educar y captar demos.
+  primary_roles: []
+  shared: false
+- id: auth.login
+  route: /login
+  visibility: public
+  purpose: Entrada a la aplicacion privada.
+  primary_roles:
+  - admin
+  - farmer
+  - agronomist
+  - technician
+  - owner
+  shared: true
+- id: private.home
+  route: /app
+  visibility: private
+  purpose: Inicio contextual segun rol y tenant.
+  primary_roles:
+  - admin
+  - farmer
+  - agronomist
+  - technician
+  - owner
+  shared: true
+- id: greenhouse.overview
+  route: /app/greenhouses/:greenhouseId
+  visibility: private
+  purpose: Estado general del invernadero seleccionado.
+  primary_roles:
+  - admin
+  - farmer
+  - agronomist
+  shared: true
+- id: alerts.list
+  route: /app/greenhouses/:greenhouseId/alerts
+  visibility: private
+  purpose: Alertas por severidad, estado, origen y accion recomendada.
+  primary_roles:
+  - admin
+  - farmer
+  - agronomist
+  shared: true
+- id: evidence.library
+  route: /app/evidence
+  visibility: private
+  purpose: Evidencia operativa, pruebas, reportes y soporte.
+  primary_roles:
+  - admin
+  - agronomist
+  - technician
+  - owner
+  shared: true
+- id: agro_chat
+  route: /app/agro-chat
+  visibility: private
+  purpose: Chat agricola experto con fuentes y contexto de cultivo.
+  primary_roles:
+  - farmer
+  - agronomist
+  shared: true
+- id: admin.greenhouses
+  route: /app/admin/greenhouses
+  visibility: private
+  purpose: Gestion de invernaderos.
+  primary_roles:
+  - admin
+  shared: false
+- id: admin.users
+  route: /app/admin/users
+  visibility: private
+  purpose: Gestion de usuarios, roles y asignaciones.
+  primary_roles:
+  - admin
+  shared: false
+- id: admin.devices
+  route: /app/admin/devices
+  visibility: private
+  purpose: Registro y gestion de sensores/dispositivos.
+  primary_roles:
+  - admin
+  shared: false
+- id: farmer.dashboard
+  route: /app/farmer/dashboard
+  visibility: private
+  purpose: Estado actual del cultivo y alertas accionables.
+  primary_roles:
+  - farmer
+  shared: false
+- id: agronomist.approvals
+  route: /app/agronomist/approvals
+  visibility: private
+  purpose: Recomendaciones pendientes de aprobacion.
+  primary_roles:
+  - agronomist
+  shared: false
+- id: agronomist.decision_history
+  route: /app/agronomist/decisions
+  visibility: private
+  purpose: Historial de decisiones agronomicas.
+  primary_roles:
+  - agronomist
+  shared: false
+- id: technician.devices
+  route: /app/technician/devices
+  visibility: private
+  purpose: Instalacion, mantenimiento y conectividad de dispositivos.
+  primary_roles:
+  - technician
+  shared: false
+- id: owner.executive_dashboard
+  route: /app/owner/dashboard
+  visibility: private
+  purpose: Vista ejecutiva de operacion y adopcion.
+  primary_roles:
+  - owner
+  shared: false
+
+permission_groups:
+- id: tenant_management
+  permissions:
+  - tenant.read
+  - tenant.read_all
+  - tenant.update
+- id: greenhouse_management
+  permissions:
+  - greenhouse.create
+  - greenhouse.read
+  - greenhouse.read_all
+  - greenhouse.read_assigned
+  - greenhouse.update
+- id: user_management
+  permissions:
+  - user.invite
+  - user.assign_role
+- id: telemetry
+  permissions:
+  - telemetry.read
+  - telemetry.read_device_health
+- id: alerts
+  permissions:
+  - alert.read
+  - alert.read_device
+  - alert.read_summary
+- id: decisions
+  permissions:
+  - decision.read
+  - decision.read_own
+  - decision.read_summary
+  - decision.create
+  - agronomic_recommendation.approve
+  - agronomic_recommendation.reject
+- id: devices
+  permissions:
+  - device.read
+  - device.register
+  - device.update
+  - device.installation_update
+  - device.maintenance_create
+- id: evidence
+  permissions:
+  - evidence.read
+  - evidence.create
+- id: reports
+  permissions:
+  - report.read
+  - operational_metrics.read
+  - commercial_metrics.read
+
+route_guard_rules:
+- Toda ruta `/app/**` requiere usuario autenticado.
+- Toda consulta privada debe validar `tenant_id` en backend.
+- Las rutas compartidas deben adaptar widgets y acciones al rol activo.
+- Permisos `restricted_permissions` no deben mostrarse como acciones disponibles.
+- Acciones `approval_required_for` deben crear solicitud o decision pendiente, no ejecucion directa.
+
+cognito_mapping_candidate:
+  groups:
+  - admin
+  - farmer
+  - agronomist
+  - technician
+  - owner
+  token_claims:
+  - sub
+  - email
+  - 'custom:tenant_id'
+  - 'custom:role'
+  - 'custom:greenhouse_ids'
+  open_questions:
+  - Si un usuario puede tener multiples roles en el mismo tenant.
+  - Si un agronomo puede atender multiples tenants.
+  - Si owner es rol interno de empresa o tambien cliente enterprise.
+
+next_story_recommendation:
+  id: HU-WEB-IA-001
+  reason: La arquitectura de informacion depende directamente de esta matriz.

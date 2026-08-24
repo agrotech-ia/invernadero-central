@@ -259,12 +259,19 @@ items:
   priority: P0
   target: MVP
   owner_role: Product Manager
-  status: READY
+  status: VALIDATION
   reviewer_role: Solution / IoT Architect
   effort: S
   risk: MEDIUM
   dependencies: []
   source: EP-WEB-PLATFORM-001
+  progress:
+  - task_id: T-WEB-ROLE-001
+    title: Crear matriz rol-permiso-pantalla-accion para plataforma SaaS
+    status: DONE
+    evidence:
+    - project/product/web-role-screen-matrix.yaml
+  next_action: Revisar matriz y aprobar HU-WEB-IA-001 como siguiente trabajo.
 - id: HU-WEB-IA-001
   title: Definir arquitectura de informacion y navegacion privada
   type: STORY

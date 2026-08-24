@@ -64,13 +64,13 @@ lanes:
   - HU-SOIL-001
   - HU-SOIL-LAB-001
   - EN-AWS-ARCH-001
-  - HU-WEB-ROLE-001
   - EN-EDGE-001
   - EN-MKT-001
   - EN-GROW-001
   IN_PROGRESS:
   - EN-AGENT-001
-  VALIDATION: []
+  VALIDATION:
+  - HU-WEB-ROLE-001
   DONE: []
 cards:
   EN-AGENT-001:
@@ -260,7 +260,7 @@ cards:
     priority: P0
     expert_role: Product Manager
     reviewer_role: Solution / IoT Architect
-    status: READY
+    status: VALIDATION
     effort: S
     mode_fit:
     - docs_governance
@@ -268,7 +268,14 @@ cards:
     granularity: executable
     evidence:
     - project/backlog/web/EP-WEB-PLATFORM-001-roadmap.yaml
-    next_action: Crear matriz rol -> permisos -> pantallas -> acciones para Admin, Agricultor, Agronomo, Tecnico y Owner.
+    - project/product/web-role-screen-matrix.yaml
+    progress:
+    - task_id: T-WEB-ROLE-001
+      title: Crear matriz rol-permiso-pantalla-accion para plataforma SaaS
+      status: DONE
+      evidence:
+      - project/product/web-role-screen-matrix.yaml
+    next_action: Revisar matriz y aprobar HU-WEB-IA-001 como siguiente trabajo.
   HU-WEB-IA-001:
     title: Definir arquitectura de informacion y navegacion privada
     type: STORY
