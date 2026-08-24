@@ -1,0 +1,136 @@
+version: '1.0'
+status: ACTIVE
+purpose: >
+  Definir compuertas obligatorias para que agentes, chat, n8n y Mini Jira no
+  traten una HU, enabler, spike o experimento como ejecutable sin refinamiento
+  verificable.
+
+applies_to:
+- STORY
+- ENABLER
+- SPIKE
+- EXPERIMENT
+- TASK
+
+core_required_fields:
+- id
+- title
+- type
+- status
+- priority
+- expert_role
+- reviewer_role
+- problem
+- outcome
+- scope
+- acceptance_criteria
+- definition_of_ready
+- definition_of_done
+- evidence_expected
+- next_action
+
+gherkin_policy:
+  executable_ready_required: true
+  required_for_statuses:
+  - READY
+  - IN_PROGRESS
+  - VALIDATION
+  - DONE
+  accepted_forms:
+  - gherkin_scenarios
+  - acceptance_criteria written with Dado/Cuando/Entonces or Given/When/Then
+  exception:
+    allowed: true
+    required_fields:
+    - gherkin_exception_reason
+    - reviewer_role
+    - human_approval_ref
+
+parent_policy:
+  parent_items_are_not_executable: true
+  parent_ready_means_children_are_defined: true
+  required_fields:
+  - child_story_ids
+  - parent_note
+  - next_child_action
+  forbidden:
+  - direct_execution_without_child
+
+state_gates:
+  BACKLOG:
+    required:
+    - id
+    - title
+    - type
+    - priority
+    - expert_role
+    - reviewer_role
+    - problem_or_outcome
+    - next_action
+    allows_missing:
+    - acceptance_criteria
+    - definition_of_ready
+    - definition_of_done
+    - gherkin_scenarios
+  REFINEMENT:
+    required:
+    - discovery_or_context_refs
+    - draft_acceptance_criteria
+    - draft_definition_of_ready
+    - draft_definition_of_done
+    - evidence_expected
+    - open_questions_or_none
+  READY:
+    required:
+    - acceptance_criteria
+    - definition_of_ready
+    - definition_of_done
+    - evidence_expected
+    - tasks_or_execution_plan
+    - reviewer_role
+    - gherkin_scenarios_or_exception
+    - dependencies_clear_or_explicit_blockers
+    - granularity_executable_or_parent_with_children
+    forbidden:
+    - granularity_needs_task_breakdown
+    - unknown_scope
+    - missing_evidence_expected
+  IN_PROGRESS:
+    inherits: READY
+    required:
+    - human_approval_ref
+    - current_owner_or_agent
+    - started_at_or_work_log
+    - evidence_capture_plan
+  VALIDATION:
+    inherits: READY
+    required:
+    - completed_work_summary
+    - evidence
+    - validation_plan_or_test_cases
+    - qa_reviewer
+    - pass_fail_pending_decision
+  DONE:
+    inherits: VALIDATION
+    required:
+    - qa_decision
+    - reviewer_decision
+    - acceptance_criteria_results
+    - evidence
+    - status_update_approval_ref
+
+agent_enforcement:
+  orchestrator:
+  - Before routing execution, check current status against this file.
+  - If gate fails, route to AGENT-REF-001 or AGENT-QA-001 instead of execution.
+  backlog:
+  - Do not recommend execution for items that fail READY gate.
+  - Label invalid READY/IN_PROGRESS/VALIDATION items as gate_violation.
+  refinement:
+  - Output acceptance_criteria, gherkin_scenarios, DoR, DoD, evidence_expected and tasks before recommending READY.
+  qa:
+  - Validate gates before recommending VALIDATION or DONE.
+  reviewer:
+  - Reject status movement when required gate fields are missing.
+  engineering:
+  - Refuse implementation unless READY/IN_PROGRESS gate passes or the task is explicitly a reversible discovery/refinement task.

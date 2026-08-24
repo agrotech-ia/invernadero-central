@@ -16,6 +16,42 @@ acceptance_criteria:
 - Refinement Agent genera V&V y procurement para suelo
 - Market/Growth respetan política de claims
 - Toda persistencia final pasa por revisión humana cuando corresponde
+gherkin_scenarios:
+- name: Orquestacion enruta al agente competente
+  given:
+  - El chat recibe una solicitud del proyecto.
+  - Existe un registry de agentes versionado.
+  when:
+  - El Orchestrator clasifica la intencion.
+  then:
+  - La solicitud queda asociada a un agente primario.
+  - La respuesta incluye restricciones, fuentes y siguiente accion.
+- name: Ejecucion bloqueada sin refinamiento
+  given:
+  - Un item esta en READY o posterior.
+  - El item no tiene criterios, DoR, DoD o evidencia esperada.
+  when:
+  - Un agente intenta recomendar ejecucion.
+  then:
+  - El agente devuelve gate_violation.
+  - La siguiente accion se enruta a Refinement o QA.
+definition_of_ready:
+- Repos central, sensores y web identificados.
+- Registro de agentes y contratos compartidos versionados.
+- Riesgos de autoridad y aprobacion humana definidos.
+- Evidencia esperada por agente definida.
+definition_of_done:
+- Workflows/agentes principales responden desde n8n o runner.
+- Chat gateway enruta al agente correcto.
+- Reglas compartidas de autoridad y gates estan versionadas.
+- Evidencia de pruebas live o dry-run queda referenciada.
+- QA recomienda pasar a VALIDATION o cerrar pendientes explicitos.
+evidence_expected:
+- agents/registry.yaml actualizado
+- agents/shared/project-rules.yaml actualizado
+- agents/shared/contracts.yaml actualizado
+- workflows n8n exportados o evidencia de endpoint
+- evidencia de pruebas de agentes
 implementation_progress:
 - task_id: T-AGT-KNOW-001
   title: Operacionalizar Knowledge Agent en Kiro, n8n y chat gateway

@@ -13,8 +13,10 @@ capabilities:
 - evidence
 always_read:
 - agents/shared/project-rules.yaml
+- agents/shared/contracts.yaml
 - project/agents-operating-model.md
 - project/kanban/board.yaml
+- project/validation/state-gates.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
@@ -23,5 +25,6 @@ prohibited:
 - No comprar
 - No desplegar criticamente sin aprobacion
 - No modificar HU congeladas
+- No implementar una HU si no pasa READY/IN_PROGRESS gate, salvo discovery/refinamiento reversible aprobado
 review_required: true
 kiro_agent: project-engineering

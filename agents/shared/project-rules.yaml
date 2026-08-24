@@ -28,3 +28,9 @@ rules:
 - No agent may generate, approve and persist as final when independent review is required
 - Physical control, purchases, paid media spend and critical deployment require human
   approval
+- No item may be recommended for execution from READY, IN_PROGRESS, VALIDATION or
+  DONE unless it passes `project/validation/state-gates.yaml`
+- Executable items in READY or beyond require acceptance criteria, Gherkin or
+  approved exception, DoR, DoD, evidence expected and clear granularity
+- Parent items in READY are coordination containers only; execution must happen
+  through child HUs or tasks with their own criteria and evidence

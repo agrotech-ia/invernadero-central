@@ -63,13 +63,13 @@ lanes:
   - HU-WATER-005
   - EN-PWR-001
   - EN-QA-001
+  - EN-EDGE-001
+  - EN-MKT-001
+  - EN-GROW-001
   READY:
   - HU-SOIL-001
   - HU-SOIL-LAB-001
   - EN-AWS-ARCH-001
-  - EN-EDGE-001
-  - EN-MKT-001
-  - EN-GROW-001
   IN_PROGRESS:
   - EN-AGENT-001
   VALIDATION:
@@ -236,13 +236,13 @@ cards:
     priority: P0
     expert_role: DevOps / Platform Engineer
     reviewer_role: QA Engineer
-    status: READY
+    status: REFINEMENT
     effort: M
     mode_fit:
     - coding
     - deep_work
     granularity: needs_task_breakdown
-    next_action: Definir ingesta minima MQTT a PostgreSQL/TimescaleDB con contratos V1.
+    next_action: Refinar ingesta minima MQTT a PostgreSQL/TimescaleDB con contratos V1 antes de ejecucion.
   EN-AWS-ARCH-001:
     title: Formalizar arquitectura AWS SaaS piloto
     type: ENABLER
@@ -420,25 +420,25 @@ cards:
     priority: P0
     expert_role: Product Manager
     reviewer_role: QA Engineer
-    status: READY
+    status: REFINEMENT
     effort: M
     mode_fit:
     - market_growth
     - docs_governance
     granularity: needs_task_breakdown
-    next_action: Definir sistema de investigacion de mercado con politica de claims.
+    next_action: Refinar sistema de investigacion de mercado con criterios, DoR, DoD y evidencia.
   EN-GROW-001:
     title: Bootstrap Growth, Content & Education
     type: ENABLER
     priority: P0
     expert_role: Product Manager
     reviewer_role: QA Engineer
-    status: READY
+    status: REFINEMENT
     effort: M
     mode_fit:
     - market_growth
     granularity: needs_task_breakdown
-    next_action: Crear calendario y reglas de contenido educativo basado en evidencia.
+    next_action: Refinar calendario y reglas de contenido educativo con criterios, DoR, DoD y evidencia.
   HU-WATER-001:
     title: Implementar nodo de pH de agua
     type: STORY

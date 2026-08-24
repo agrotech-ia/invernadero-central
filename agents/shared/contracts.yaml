@@ -29,3 +29,12 @@ output:
   open_questions:
   - string
   recommended_next_action: string
+  state_gate_check:
+    item_id: string
+    current_status: string
+    gate_result: PASS|FAIL|NOT_APPLICABLE
+    missing_required_fields:
+    - string
+    violations:
+    - string
+    recommended_status: IDEA|BACKLOG|REFINEMENT|READY|IN_PROGRESS|VALIDATION|DONE

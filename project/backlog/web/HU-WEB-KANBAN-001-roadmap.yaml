@@ -49,6 +49,34 @@ stories:
   - El usuario puede resetear al snapshot versionado.
   - El usuario puede abrir el detalle de una tarjeta.
   - La vista muestra WIP actual y limites para IN_PROGRESS y VALIDATION.
+  gherkin_scenarios:
+  - name: Consultar tablero del proyecto
+    given:
+    - Existe un snapshot versionado del Kanban.
+    when:
+    - El usuario abre `/project/kanban`.
+    then:
+    - La vista muestra columnas por estado.
+    - Las tarjetas muestran prioridad, tipo, esfuerzo, rol y siguiente accion.
+  - name: Revisar readiness de una tarjeta
+    given:
+    - El usuario selecciona una tarjeta.
+    when:
+    - La tarjeta tiene criterios, DoR o DoD versionados.
+    then:
+    - El panel de detalle muestra esa informacion.
+    - Si falta algun campo, el panel lo marca como pendiente.
+  definition_of_ready:
+  - Ruta objetivo definida.
+  - Fuente del tablero versionado identificada.
+  - Alcance limitado a snapshot local sin escritura directa a Git.
+  - Evidencia esperada definida.
+  definition_of_done:
+  - Ruta `/project/kanban` responde 200 OK.
+  - Build web pasa.
+  - Drag and drop local funciona.
+  - Panel de detalle muestra readiness y criterios cuando existen.
+  - Cambios quedan versionados.
   evidence_expected:
   - diff web
   - npm run build

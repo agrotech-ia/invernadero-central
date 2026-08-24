@@ -73,6 +73,25 @@ Reglas:
 - `VALIDATION`: requiere prueba, revision, evidencia o aprobacion.
 - `DONE`: terminado con evidencia suficiente y decision persistida cuando aplique.
 
+## Gates obligatorios de estado
+
+La fuente operativa de compuertas es `project/validation/state-gates.yaml`.
+
+Regla fuerte:
+
+- Ningun item ejecutable puede estar en `READY`, `IN_PROGRESS`, `VALIDATION` o `DONE`
+  sin criterios de aceptacion, escenarios Gherkin o excepcion aprobada, DoR, DoD,
+  evidencia esperada y granularidad clara.
+- Una HU parent puede estar en `READY` solo como contenedor de coordinacion. No se
+  ejecuta directamente; debe listar HUs hijas y la siguiente accion debe apuntar a
+  una HU hija ejecutable.
+- Si una tarjeta ya esta en `IN_PROGRESS` o `VALIDATION` y falla el gate, el siguiente
+  trabajo no es seguir ejecutando: es corregir refinamiento/evidencia con
+  `AGENT-REF-001` o `AGENT-QA-001`.
+- `granularity=needs_task_breakdown` es incompatible con `READY`, `IN_PROGRESS`,
+  `VALIDATION` y `DONE`, salvo que el item sea marcado explicitamente como parent y
+  tenga HUs hijas ejecutables.
+
 ## Seleccion de trabajo
 
 El agente de backlog debe recomendar trabajo considerando:
@@ -247,6 +266,9 @@ story_lifecycle:
   refinement:
     owner: AGENT-REF-001
     output: criterios, tareas, DoR, DoD, riesgos, evidencia esperada
+  state_gate_check:
+    owner: AGENT-QA-001
+    output: PASS/FAIL del estado objetivo contra `project/validation/state-gates.yaml`
   architecture_review:
     owner: AGENT-ARCH-001
     output: impacto y decisiones requeridas

@@ -21,6 +21,7 @@ always_read:
 - project/kanban/board.yaml
 - project/roles/expert-role-catalog.yaml
 - project/agents-operating-model.md
+- project/validation/state-gates.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
@@ -28,5 +29,6 @@ prohibited:
 - No desplegar produccion sin aprobacion humana.
 - No cambiar claims comerciales sin revision.
 - No marcar DONE.
+- No implementar pantallas o flujos desde HUs sin criterios, DoR, DoD y evidencia esperada.
 review_required: true
 kiro_agent: project-web

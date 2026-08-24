@@ -16,11 +16,17 @@ always_read:
 - project/validation/master-vv-matrix.yaml
 - project/validation/sensor-test-rigor.yaml
 - project/validation/templates/test-case.yaml
+- project/validation/state-gates.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
 - No marcar DONE sin evidencia
 - No asumir calibracion o validacion no demostrada
 - No aceptar pruebas de sensor como calibracion si solo demuestran respuesta funcional
+- No recomendar VALIDATION o DONE si faltan criterios, Gherkin/exception, DoR, DoD o evidencia esperada
 review_required: true
 kiro_agent: project-qa-evidence
+gate_responsibilities:
+- Auditar READY, IN_PROGRESS y VALIDATION antes de recomendar avance.
+- Devolver CHANGES_REQUIRED cuando un item este en un estado mas avanzado que su refinamiento real.
+- Exigir evidencia verificable por criterio de aceptacion.

@@ -215,7 +215,7 @@ items:
   priority: P0
   target: MVP
   owner_role: DevOps / Platform Engineer
-  status: READY
+  status: REFINEMENT
   reviewer_role: QA Engineer
   effort: M
   risk: MEDIUM
@@ -488,7 +488,7 @@ items:
   priority: P0
   target: FOUNDATION
   owner_role: Product Manager
-  status: READY
+  status: REFINEMENT
   reviewer_role: QA Engineer
   effort: M
   risk: MEDIUM
@@ -500,7 +500,7 @@ items:
   priority: P0
   target: FOUNDATION
   owner_role: Product Manager
-  status: READY
+  status: REFINEMENT
   reviewer_role: QA Engineer
   effort: M
   risk: MEDIUM

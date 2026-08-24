@@ -79,6 +79,11 @@ children:
   - Evidencia guardada o referenciada.
   - Riesgos abiertos registrados.
   - Reviewer decide PASS, PARTIAL o FAIL.
+  evidence_expected:
+  - checklist_safety
+  - materials_status
+  - setup_description
+  - evidence_index_update
   tasks:
   - id: T-SOIL-LAB-001
     title: Preparar inventario y seguridad del banco de pruebas

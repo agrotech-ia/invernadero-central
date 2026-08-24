@@ -102,7 +102,48 @@ stories:
   reviewer_role: Solution / IoT Architect
   effort: S
   dependencies: []
+  problem: La web necesita separar usuarios, permisos y pantallas antes de implementar navegacion privada o dashboards por rol.
   outcome: Matriz versionada rol -> permisos -> pantallas -> acciones.
+  scope:
+    in:
+    - Roles iniciales: admin, agricultor, agronomo, tecnico/instalador y owner/empresa.
+    - Permisos por rol.
+    - Pantallas comunes y especificas.
+    - Acciones permitidas por rol.
+    out:
+    - Implementacion de autenticacion.
+    - Persistencia real de permisos.
+    - Pantallas finales con datos reales.
+  acceptance_criteria:
+  - La matriz define roles iniciales y responsabilidades.
+  - Cada rol tiene pantallas permitidas y acciones principales.
+  - La matriz distingue pantallas comunes de pantallas especificas.
+  - La matriz identifica dependencias para navegacion, autenticacion y dashboard.
+  gherkin_scenarios:
+  - name: Admin consulta capacidades por rol
+    given:
+    - Existe una matriz versionada de roles y pantallas.
+    when:
+    - Se revisa el rol Admin.
+    then:
+    - Se listan pantallas y acciones permitidas para administrar invernaderos.
+    - Se identifican dependencias para autenticacion y permisos.
+  - name: Agronomo consulta decisiones pendientes
+    given:
+    - Existe una matriz versionada de roles y pantallas.
+    when:
+    - Se revisa el rol Agronomo.
+    then:
+    - Se listan pantallas de alertas, recomendaciones pendientes e historial de decisiones.
+    - Se diferencian acciones de consulta, aprobacion o recomendacion.
+  definition_of_ready:
+  - Requerimiento de tipos de usuario definido.
+  - Roles experto y revisor asignados.
+  - Evidencia esperada identificada.
+  definition_of_done:
+  - Matriz versionada en project/product/web-role-screen-matrix.yaml.
+  - Criterios de aceptacion cubiertos.
+  - Revisor confirma que desbloquea HU-WEB-IA-001.
   evidence_expected:
   - project/product/web-role-screen-matrix.yaml
   - revision de arquitectura
@@ -212,7 +253,43 @@ stories:
   reviewer_role: DevOps / Platform Engineer
   effort: S
   dependencies: []
+  problem: El proyecto necesita una arquitectura AWS piloto que permita evolucionar a SaaS sin sobredimensionar el primer despliegue.
   outcome: Decisiones AWS iniciales listas para implementar sin sobreingenieria.
+  scope:
+    in:
+    - Principios de multi-tenant by design y piloto simple.
+    - Servicios AWS candidatos por capa.
+    - Decisiones pendientes antes de implementar.
+    - Criterios para extraer microservicios mas adelante.
+    out:
+    - Provisionamiento real de infraestructura.
+    - Deploy critico a produccion.
+    - Implementacion de autenticacion o backend.
+  acceptance_criteria:
+  - Existe arquitectura objetivo versionada.
+  - La arquitectura distingue piloto simple de SaaS multi-tenant futuro.
+  - Se documentan servicios AWS ya confirmados y servicios candidatos.
+  - Se explicitan decisiones pendientes antes de implementacion.
+  - Se evita microservicios fisicos prematuros sin perder limites de dominio.
+  gherkin_scenarios:
+  - name: Evaluar arquitectura sin sobreingenieria
+    given:
+    - El proyecto ya tiene S3, CloudFront, Route53 y ACM.
+    when:
+    - Se revisa la arquitectura AWS piloto.
+    then:
+    - La arquitectura separa diseño SaaS de complejidad operativa inicial.
+    - Las decisiones pendientes quedan visibles antes de implementar.
+  definition_of_ready:
+  - Estado AWS confirmado por humano.
+  - Objetivo SaaS piloto definido.
+  - Rol experto y revisor asignados.
+  - Evidencia esperada definida.
+  definition_of_done:
+  - Documento de arquitectura versionado.
+  - Decisiones pendientes listadas.
+  - Revisor valida que no hay implementacion critica sin aprobacion.
+  - Siguiente HU tecnica puede derivarse con contratos claros.
   evidence_expected:
   - project/architecture/aws-saas-target-architecture.md
   - decision register actualizado

@@ -19,6 +19,7 @@ always_read:
 - agents/shared/project-rules.yaml
 - project/agents-operating-model.md
 - project/validation/sensor-test-rigor.yaml
+- project/validation/state-gates.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
@@ -27,4 +28,19 @@ prohibited:
 - No crear HU tecnica READY sin Discovery cuando toque codigo, API, MQTT, DB, eventos, frontend/backend o infraestructura
 - No modificar Shared Contract dentro del refinamiento
 - No mezclar prueba funcional, caracterizacion y calibracion de sensores en una sola HU
+- No entregar refinamiento sin acceptance_criteria, gherkin_scenarios, definition_of_ready, definition_of_done, evidence_expected y tareas o plan de ejecucion
 review_required: true
+output_must_include:
+- problem
+- outcome
+- scope
+- acceptance_criteria
+- gherkin_scenarios
+- definition_of_ready
+- definition_of_done
+- evidence_expected
+- tasks
+- validation
+- risks
+- open_questions
+- state_gate_check

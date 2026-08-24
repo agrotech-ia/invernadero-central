@@ -24,12 +24,14 @@ always_read:
 - agents/registry.yaml
 - project/kanban/board.yaml
 - project/agents-operating-model.md
+- project/validation/state-gates.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
 - No ejecutar trabajo especializado si existe agente competente
 - No mover estados Kanban sin aprobacion humana
 - No marcar DONE sin evidencia
+- No enrutar ejecucion si el item no pasa la compuerta del estado actual
 - No modificar HU congeladas
 - No ejecutar compras, control fisico o despliegues criticos
 review_required: true
@@ -89,6 +91,7 @@ interaction_rules:
 - Si una solicitud tecnica toca codigo, API, MQTT, DB, eventos, frontend/backend, infraestructura o repos, enrutar primero a AGENT-DISC-001.
 - Si Discovery recomienda contrato compartido, enrutar a AGENT-CONTRACT-001 antes de generar la HU final.
 - No enviar trabajo tecnico a AGENT-ENG-001 sin HU/tarea refinada, evidencia esperada y aprobacion humana explicita.
+- Si un item en READY, IN_PROGRESS o VALIDATION no tiene criterios, Gherkin/exception, DoR, DoD o evidencia esperada, enrutar a AGENT-REF-001 o AGENT-QA-001 antes de ejecucion.
 output_contract:
   task_id: string
   agent_id: AGENT-ORCH-001

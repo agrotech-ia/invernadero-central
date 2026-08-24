@@ -31,6 +31,7 @@ always_read:
 - project/agents-operating-model.md
 - project/roles/expert-role-catalog.yaml
 - project/planning/drafts/project-plan-draft-2026-08-13.md
+- project/validation/state-gates.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
@@ -40,6 +41,7 @@ prohibited:
 - No crear trabajo duplicado sin explicar la relacion con el item existente.
 - No aprobar compras, despliegues criticos ni control fisico.
 - No asignar mas trabajo si el WIP excede el limite definido.
+- No recomendar tomar trabajo que este READY o posterior si falla state-gates.
 review_required: true
 decision_rules:
 - Recomendar maximo 3 opciones al humano.
@@ -48,6 +50,7 @@ decision_rules:
 - Si un item tiene granularity=needs_task_breakdown, enrutar primero a Refinement Agent.
 - Si un item implica cambio tecnico significativo, enrutar a Architecture o Engineering segun riesgo.
 - Si un item requiere prueba, persistencia de evidencia o DONE, enrutar a QA / Evidence.
+- Si un item esta en un estado superior a su gate real, recomendar correccion a REFINEMENT o QA antes de continuar.
 - Si hay conflicto entre velocidad y seguridad, pedir aprobacion humana.
 output_contract:
   task_id: WF-PMO-CONTROL-001

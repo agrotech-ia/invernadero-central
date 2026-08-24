@@ -28,6 +28,7 @@ always_read:
 - project/kanban/board.yaml
 - project/agents-operating-model.md
 - project/roles/expert-role-catalog.yaml
+- project/validation/state-gates.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
 prohibited:
@@ -36,6 +37,7 @@ prohibited:
 - No crear backlog que reimplemente trabajo existente sin justificarlo como reemplazo.
 - No aprobar compras, despliegues criticos ni control fisico.
 - No editar HU congeladas.
+- No crear items nuevos directamente en READY salvo que incluya todos los campos exigidos por state-gates.
 review_required: true
 output_contract:
   task_id: WF-PLAN-PROJECT-001

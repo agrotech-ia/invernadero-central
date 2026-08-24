@@ -11,6 +11,11 @@ ejecucion diaria para seleccionar, refinar, tomar, validar y cerrar trabajo.
 - Cada HU debe tener un rol experto responsable y un rol revisor.
 - Una persona puede tomar historias de cualquier rol, pero el rol define la perspectiva experta.
 - No se mueve una HU a `READY` sin refinamiento suficiente.
+- Refinamiento suficiente significa cumplir `project/validation/state-gates.yaml`.
+- No se mueve ni se conserva una HU ejecutable en `READY`, `IN_PROGRESS`,
+  `VALIDATION` o `DONE` si falta criterios, Gherkin/exception, DoR, DoD o evidencia esperada.
+- Si el tablero muestra una tarjeta avanzada que falla gate, debe tratarse como
+  `gate_violation` y volver a refinamiento/QA antes de ejecutar.
 - No se mueve una HU a `DONE` sin evidencia.
 - No se editan HU congeladas; se crean nuevas historias, enmiendas o decisiones.
 - WIP recomendado: maximo 2 items en `IN_PROGRESS`.

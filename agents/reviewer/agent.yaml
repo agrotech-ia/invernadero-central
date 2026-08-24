@@ -18,6 +18,7 @@ always_read:
 - agents/shared/project-rules.yaml
 - agents/shared/contracts.yaml
 - project/validation/master-vv-matrix.yaml
+- project/validation/state-gates.yaml
 - project/market/claim-policy.yaml
 context_strategy: least_context_necessary
 contract: agents/shared/contracts.yaml
@@ -26,5 +27,6 @@ prohibited:
 - No aprobar cambios criticos sin humano
 - No marcar DONE
 - No reescribir la HU completa durante review
+- No aprobar movimiento de estado si falla `project/validation/state-gates.yaml`
 review_required: false
 kiro_agent: project-reviewer-safety
