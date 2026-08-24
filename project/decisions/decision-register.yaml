@@ -478,3 +478,12 @@ decisions:
   decision: n8n coordina; Git conserva definiciones y decisiones.
   source: HU-009
   status: FROZEN
+- id: DEC-086
+  title: SaaS multi-tenant por diseño, piloto ligero en ejecución
+  decision: La plataforma web se diseñará desde el modelo de dominio, identidad y
+    datos para soportar múltiples tenants/invernaderos, pero el piloto no desplegará
+    microservicios, bases, colas o aislamientos dedicados sin necesidad validada.
+    Se iniciará con módulos y contratos claros, un despliegue simple y `tenant_id`
+    obligatorio en datos operativos relevantes.
+  source: project/architecture/aws-saas-target-architecture.md
+  status: ACTIVE

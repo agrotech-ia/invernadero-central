@@ -233,6 +233,89 @@ items:
   risk: MEDIUM
   dependencies: []
   source: HU-009
+  progress:
+  - task_id: T-WEB-PLAN-001
+    title: Segregar plataforma web SaaS en roles, fases y HUs granulares
+    status: DONE
+    evidence:
+    - project/backlog/web/EP-WEB-PLATFORM-001-roadmap.yaml
+    - project/architecture/aws-saas-target-architecture.md
+  next_action: Tomar HU-WEB-ROLE-001 antes de implementar pantallas privadas.
+- id: EN-AWS-ARCH-001
+  title: Formalizar arquitectura AWS SaaS piloto
+  type: ENABLER
+  priority: P0
+  target: MVP
+  owner_role: Solution / IoT Architect
+  status: READY
+  reviewer_role: DevOps / Platform Engineer
+  effort: S
+  risk: MEDIUM
+  dependencies: []
+  source: EP-WEB-PLATFORM-001
+- id: HU-WEB-ROLE-001
+  title: Definir roles, permisos y matriz de pantallas
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: Product Manager
+  status: READY
+  reviewer_role: Solution / IoT Architect
+  effort: S
+  risk: MEDIUM
+  dependencies: []
+  source: EP-WEB-PLATFORM-001
+- id: HU-WEB-IA-001
+  title: Definir arquitectura de informacion y navegacion privada
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: UX/UI Product Designer
+  status: BACKLOG
+  reviewer_role: Product Manager
+  effort: S
+  risk: MEDIUM
+  dependencies:
+  - HU-WEB-ROLE-001
+  source: EP-WEB-PLATFORM-001
+- id: HU-WEB-LANDING-001
+  title: Refinar landing comercial para propuesta SaaS agricola
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: UX/UI Product Designer
+  status: BACKLOG
+  reviewer_role: Product Manager
+  effort: M
+  risk: MEDIUM
+  dependencies:
+  - HU-WEB-ROLE-001
+  source: EP-WEB-PLATFORM-001
+- id: HU-WEB-SHELL-001
+  title: Crear shell privado de aplicacion por rol
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: Frontend Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies:
+  - HU-WEB-IA-001
+  source: EP-WEB-PLATFORM-001
+- id: EN-AGRO-KNOW-001
+  title: Crear base de conocimiento agricola con fuentes cientificas
+  type: ENABLER
+  priority: P0
+  target: MVP
+  owner_role: Agronomist
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: EP-WEB-PLATFORM-001
 - id: EN-PWR-001
   title: Diseñar arquitectura de potencia y protecciones
   type: ENABLER

@@ -1,0 +1,353 @@
+epic:
+  id: EP-WEB-PLATFORM-001
+  title: Plataforma web comercial y SaaS operativa
+  status: DRAFT
+  priority: P0
+  target: MVP
+  source_refs:
+  - project/architecture/aws-saas-target-architecture.md
+  - project/backlog/epic-map.yaml
+  - project/kanban/board.yaml
+
+principles:
+- La landing publica vende la solucion y genera interes comercial.
+- La aplicacion privada opera por roles y permisos.
+- El piloto puede iniciar con un tenant, pero el modelo debe soportar multiples tenants.
+- Separar chat interno de proyecto y chat agricola para usuarios finales.
+- Usar datos mock contractuales antes de conectar telemetria real.
+- No crear microservicios fisicos sin contrato, dominio y necesidad operativa.
+
+roles:
+- id: admin
+  name: Admin / Operador
+  goals:
+  - crear y administrar tenants/invernaderos
+  - gestionar usuarios y permisos
+  - registrar dispositivos/sensores
+  - revisar estado global
+- id: farmer
+  name: Agricultor
+  goals:
+  - ver estado actual del cultivo
+  - recibir alertas accionables
+  - revisar tableros y estadisticas para decidir
+  - consultar historial simple de acciones
+- id: agronomist
+  name: Agronomo
+  goals:
+  - analizar datos por cultivo e invernadero
+  - aprobar/rechazar recomendaciones
+  - dejar observaciones tecnicas
+  - consultar historial de decisiones
+- id: technician
+  name: Tecnico / Instalador
+  goals:
+  - registrar instalacion y mantenimiento
+  - validar conectividad de sensores
+  - reportar fallas
+- id: owner
+  name: Owner / Empresa
+  goals:
+  - ver metricas globales
+  - revisar clientes/invernaderos activos
+  - entender salud operativa y pipeline comercial
+
+phases:
+- id: WEB-PHASE-001
+  title: Producto, roles y navegacion
+  objective: Definir experiencia SaaS sin implementar backend complejo.
+  stories:
+  - HU-WEB-ROLE-001
+  - HU-WEB-IA-001
+  - HU-WEB-LANDING-001
+- id: WEB-PHASE-002
+  title: App privada mock contractual
+  objective: Crear pantallas privadas por rol usando datos mock compatibles con contratos futuros.
+  stories:
+  - HU-WEB-SHELL-001
+  - HU-WEB-GREENHOUSE-001
+  - HU-WEB-DASH-FARMER-001
+  - HU-WEB-DASH-AGRONOMIST-001
+- id: WEB-PHASE-003
+  title: AWS/backend foundation
+  objective: Diseñar y preparar API, auth, tenant y persistencia minima.
+  stories:
+  - EN-AWS-ARCH-001
+  - HU-AUTH-001
+  - HU-API-TENANT-001
+  - HU-API-GREENHOUSE-001
+- id: WEB-PHASE-004
+  title: Telemetria, alertas y decisiones
+  objective: Conectar datos reales o simulados contractualmente.
+  stories:
+  - HU-WEB-TELEM-001
+  - HU-WEB-ALERT-001
+  - HU-WEB-DECISION-001
+- id: WEB-PHASE-005
+  title: Agro Expert Chat
+  objective: Crear chat agricola para usuarios finales con fuentes cientificas y contexto del cultivo.
+  stories:
+  - EN-AGRO-KNOW-001
+  - HU-AGRO-CHAT-001
+  - HU-AGRO-CHAT-RAG-001
+
+stories:
+- id: HU-WEB-ROLE-001
+  title: Definir roles, permisos y matriz de pantallas
+  type: STORY
+  status: READY
+  priority: P0
+  target: MVP
+  expert_role: Product Manager
+  reviewer_role: Solution / IoT Architect
+  effort: S
+  dependencies: []
+  outcome: Matriz versionada rol -> permisos -> pantallas -> acciones.
+  evidence_expected:
+  - project/product/web-role-screen-matrix.yaml
+  - revision de arquitectura
+- id: HU-WEB-IA-001
+  title: Definir arquitectura de informacion y navegacion privada
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: UX/UI Product Designer
+  reviewer_role: Product Manager
+  effort: S
+  dependencies:
+  - HU-WEB-ROLE-001
+  outcome: Mapa de navegacion por rol y rutas candidatas.
+  evidence_expected:
+  - project/product/web-navigation-map.yaml
+- id: HU-WEB-LANDING-001
+  title: Refinar landing comercial para propuesta SaaS agricola
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: UX/UI Product Designer
+  reviewer_role: Product Manager
+  effort: M
+  dependencies:
+  - HU-WEB-ROLE-001
+  outcome: Landing alinea problema, oferta, usuarios, beneficios y CTA de demo.
+  evidence_expected:
+  - diff web
+  - npm run build
+  - revision de claims
+- id: HU-WEB-SHELL-001
+  title: Crear shell privado de aplicacion por rol
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Frontend Engineer
+  reviewer_role: QA Engineer
+  effort: M
+  dependencies:
+  - HU-WEB-IA-001
+  outcome: Layout privado con navegacion, selector de rol mock y rutas base.
+  evidence_expected:
+  - diff web
+  - npm run build
+  - captura o descripcion de rutas
+- id: HU-WEB-GREENHOUSE-001
+  title: Crear pantalla de gestion basica de invernaderos
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Frontend Engineer
+  reviewer_role: Product Manager
+  effort: M
+  dependencies:
+  - HU-WEB-SHELL-001
+  outcome: Admin puede ver/crear invernadero mock contractual.
+  evidence_expected:
+  - contrato mock
+  - build web
+- id: HU-WEB-DASH-FARMER-001
+  title: Crear dashboard agricultor con alertas y estado de cultivo
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Frontend Engineer
+  reviewer_role: Agronomist
+  effort: M
+  dependencies:
+  - HU-WEB-SHELL-001
+  outcome: Agricultor ve estado, alertas, metricas clave y siguiente accion.
+  evidence_expected:
+  - datos mock contractuales
+  - build web
+  - revision UX/agronomia
+- id: HU-WEB-DASH-AGRONOMIST-001
+  title: Crear dashboard agronomo con aprobaciones e historial
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Frontend Engineer
+  reviewer_role: Agronomist
+  effort: M
+  dependencies:
+  - HU-WEB-SHELL-001
+  outcome: Agronomo ve alertas, recomendaciones pendientes e historial de decisiones.
+  evidence_expected:
+  - datos mock contractuales
+  - build web
+  - revision UX/agronomia
+- id: EN-AWS-ARCH-001
+  title: Formalizar arquitectura AWS SaaS piloto
+  type: ENABLER
+  status: READY
+  priority: P0
+  target: MVP
+  expert_role: Solution / IoT Architect
+  reviewer_role: DevOps / Platform Engineer
+  effort: S
+  dependencies: []
+  outcome: Decisiones AWS iniciales listas para implementar sin sobreingenieria.
+  evidence_expected:
+  - project/architecture/aws-saas-target-architecture.md
+  - decision register actualizado
+- id: HU-AUTH-001
+  title: Decidir e implementar autenticacion inicial
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Backend Engineer
+  reviewer_role: Security / Solution Architect
+  effort: M
+  dependencies:
+  - EN-AWS-ARCH-001
+  - HU-WEB-ROLE-001
+  outcome: Estrategia Cognito o mock auth temporal con ruta de migracion clara.
+  evidence_expected:
+  - decision documentada
+  - contrato de claims
+- id: HU-API-TENANT-001
+  title: Definir API y modelo tenant/organization
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Backend Engineer
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  dependencies:
+  - EN-AWS-ARCH-001
+  outcome: Contrato tenant_id, organization, user profile y permisos base.
+  evidence_expected:
+  - shared contract draft
+  - modelo de datos
+- id: HU-API-GREENHOUSE-001
+  title: Definir API y modelo de invernadero
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Backend Engineer
+  reviewer_role: Frontend Engineer
+  effort: M
+  dependencies:
+  - HU-API-TENANT-001
+  outcome: Contrato para crear/listar/actualizar invernaderos.
+  evidence_expected:
+  - shared contract draft
+  - ejemplo payload
+- id: HU-WEB-TELEM-001
+  title: Preparar contrato visual de telemetria
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Frontend Engineer
+  reviewer_role: Backend / IoT Engineer
+  effort: S
+  dependencies:
+  - HU-SOIL-DATA-001
+  outcome: Dashboard sabe que campos de telemetria espera antes de conectar API real.
+  evidence_expected:
+  - data contract UI
+  - mock data actualizado
+- id: HU-WEB-ALERT-001
+  title: Crear modelo visual de alertas por cultivo
+  type: STORY
+  status: BACKLOG
+  priority: P1
+  target: MVP
+  expert_role: UX/UI Product Designer
+  reviewer_role: Agronomist
+  effort: M
+  dependencies:
+  - HU-WEB-DASH-FARMER-001
+  outcome: Alertas accionables con severidad, causa probable y evidencia.
+  evidence_expected:
+  - UI mock contractual
+  - criterios de alerta documentados
+- id: HU-WEB-DECISION-001
+  title: Crear historial de decisiones agronomicas
+  type: STORY
+  status: BACKLOG
+  priority: P1
+  target: MVP
+  expert_role: Frontend Engineer
+  reviewer_role: Agronomist
+  effort: M
+  dependencies:
+  - HU-WEB-DASH-AGRONOMIST-001
+  outcome: Historial muestra recomendacion, aprobacion, actor, fecha y resultado.
+  evidence_expected:
+  - contrato mock
+  - build web
+- id: EN-AGRO-KNOW-001
+  title: Crear base de conocimiento agricola con fuentes cientificas
+  type: ENABLER
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: Agronomist
+  reviewer_role: QA Engineer
+  effort: M
+  dependencies: []
+  outcome: Fuentes curadas para chat agricola experto.
+  evidence_expected:
+  - source register
+  - claim policy aplicada
+- id: HU-AGRO-CHAT-001
+  title: Separar chat agricola de chat interno de proyecto
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: MVP
+  expert_role: AI / ML Engineer
+  reviewer_role: Agronomist
+  effort: M
+  dependencies:
+  - EN-AGRO-KNOW-001
+  - HU-WEB-SHELL-001
+  outcome: Usuarios finales tienen chat limitado a cultivo, datos y fuentes agronomicas.
+  evidence_expected:
+  - guardrails
+  - mock conversation tests
+- id: HU-AGRO-CHAT-RAG-001
+  title: Integrar RAG agricola con contexto de invernadero
+  type: STORY
+  status: BACKLOG
+  priority: P1
+  target: MVP
+  expert_role: AI / ML Engineer
+  reviewer_role: QA Engineer
+  effort: L
+  dependencies:
+  - HU-AGRO-CHAT-001
+  - HU-API-GREENHOUSE-001
+  outcome: Chat responde con fuentes y contexto del tenant/invernadero.
+  evidence_expected:
+  - eval set
+  - source citations
+  - safety review

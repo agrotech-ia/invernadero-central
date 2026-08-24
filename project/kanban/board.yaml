@@ -37,6 +37,10 @@ lanes:
   - HU-SOIL-LAB-002
   - HU-SOIL-LAB-003
   - HU-SOIL-DATA-001
+  - HU-WEB-IA-001
+  - HU-WEB-LANDING-001
+  - HU-WEB-SHELL-001
+  - EN-AGRO-KNOW-001
   - HU-WATER-002
   - HU-WATER-004
   - HU-WEB-001
@@ -59,6 +63,8 @@ lanes:
   READY:
   - HU-SOIL-001
   - HU-SOIL-LAB-001
+  - EN-AWS-ARCH-001
+  - HU-WEB-ROLE-001
   - EN-EDGE-001
   - EN-MKT-001
   - EN-GROW-001
@@ -233,6 +239,94 @@ cards:
     - deep_work
     granularity: needs_task_breakdown
     next_action: Definir ingesta minima MQTT a PostgreSQL/TimescaleDB con contratos V1.
+  EN-AWS-ARCH-001:
+    title: Formalizar arquitectura AWS SaaS piloto
+    type: ENABLER
+    priority: P0
+    expert_role: Solution / IoT Architect
+    reviewer_role: DevOps / Platform Engineer
+    status: READY
+    effort: S
+    mode_fit:
+    - docs_governance
+    - deep_work
+    granularity: executable
+    evidence:
+    - project/architecture/aws-saas-target-architecture.md
+    next_action: Confirmar decisiones pendientes Cognito/Lambda/ECS/Aurora antes de implementacion.
+  HU-WEB-ROLE-001:
+    title: Definir roles, permisos y matriz de pantallas
+    type: STORY
+    priority: P0
+    expert_role: Product Manager
+    reviewer_role: Solution / IoT Architect
+    status: READY
+    effort: S
+    mode_fit:
+    - docs_governance
+    - quick_win
+    granularity: executable
+    evidence:
+    - project/backlog/web/EP-WEB-PLATFORM-001-roadmap.yaml
+    next_action: Crear matriz rol -> permisos -> pantallas -> acciones para Admin, Agricultor, Agronomo, Tecnico y Owner.
+  HU-WEB-IA-001:
+    title: Definir arquitectura de informacion y navegacion privada
+    type: STORY
+    priority: P0
+    expert_role: UX/UI Product Designer
+    reviewer_role: Product Manager
+    status: BACKLOG
+    effort: S
+    mode_fit:
+    - docs_governance
+    - quick_win
+    granularity: executable_after_dependency
+    dependencies:
+    - HU-WEB-ROLE-001
+    next_action: Crear mapa de rutas privadas por rol.
+  HU-WEB-LANDING-001:
+    title: Refinar landing comercial para propuesta SaaS agricola
+    type: STORY
+    priority: P0
+    expert_role: UX/UI Product Designer
+    reviewer_role: Product Manager
+    status: BACKLOG
+    effort: M
+    mode_fit:
+    - market_growth
+    - coding
+    granularity: executable_after_dependency
+    dependencies:
+    - HU-WEB-ROLE-001
+    next_action: Ajustar propuesta publica, CTA demo y claims trazables.
+  HU-WEB-SHELL-001:
+    title: Crear shell privado de aplicacion por rol
+    type: STORY
+    priority: P0
+    expert_role: Frontend Engineer
+    reviewer_role: QA Engineer
+    status: BACKLOG
+    effort: M
+    mode_fit:
+    - coding
+    - deep_work
+    granularity: executable_after_dependency
+    dependencies:
+    - HU-WEB-IA-001
+    next_action: Implementar layout privado con selector de rol mock y rutas base.
+  EN-AGRO-KNOW-001:
+    title: Crear base de conocimiento agricola con fuentes cientificas
+    type: ENABLER
+    priority: P0
+    expert_role: Agronomist
+    reviewer_role: QA Engineer
+    status: BACKLOG
+    effort: M
+    mode_fit:
+    - docs_governance
+    - deep_work
+    granularity: needs_source_curation
+    next_action: Crear registro de fuentes cientificas y politica de uso para Agro Expert Chat.
   EN-MKT-001:
     title: Bootstrap Market Intelligence & Demand
     type: ENABLER
