@@ -40,6 +40,9 @@ lanes:
   - HU-WEB-IA-001
   - HU-WEB-LANDING-001
   - HU-WEB-SHELL-001
+  - HU-WEB-KANBAN-002
+  - HU-WEB-KANBAN-003
+  - HU-WEB-KANBAN-004
   - EN-AGRO-KNOW-001
   - HU-WATER-002
   - HU-WATER-004
@@ -71,6 +74,7 @@ lanes:
   - EN-AGENT-001
   VALIDATION:
   - HU-WEB-ROLE-001
+  - HU-WEB-KANBAN-001
   DONE: []
 cards:
   EN-AGENT-001:
@@ -321,6 +325,82 @@ cards:
     dependencies:
     - HU-WEB-IA-001
     next_action: Implementar layout privado con selector de rol mock y rutas base.
+  HU-WEB-KANBAN-001:
+    title: Crear tablero Mini Jira interactivo con snapshot Kanban
+    type: STORY
+    priority: P0
+    expert_role: Frontend Engineer
+    reviewer_role: QA Engineer
+    status: VALIDATION
+    effort: M
+    mode_fit:
+    - coding
+    - docs_governance
+    granularity: executable
+    evidence:
+    - project/backlog/web/HU-WEB-KANBAN-001-roadmap.yaml
+    - web:src/pages/ProjectKanbanPage.jsx
+    - web:src/data/projectBoard.js
+    - web:src/App.jsx
+    - npm run build
+    - route:http://localhost:5174/project/kanban
+    progress:
+    - task_id: T-WEB-KANBAN-001
+      title: Implementar ruta Mini Jira con snapshot Kanban y drag and drop local
+      status: DONE
+      evidence:
+      - project/backlog/web/HU-WEB-KANBAN-001-roadmap.yaml
+      - web:src/pages/ProjectKanbanPage.jsx
+      - web:src/data/projectBoard.js
+      - web:src/App.jsx
+      - npm run build
+      - route:http://localhost:5174/project/kanban
+    next_action: Revisar tablero y aprobar workflow de propuesta de cambio de estado.
+  HU-WEB-KANBAN-002:
+    title: Agregar workflow de propuesta de cambio de estado
+    type: STORY
+    priority: P0
+    expert_role: Frontend Engineer
+    reviewer_role: Project Manager
+    status: BACKLOG
+    effort: M
+    mode_fit:
+    - coding
+    - docs_governance
+    granularity: executable_after_dependency
+    dependencies:
+    - HU-WEB-KANBAN-001
+    next_action: Registrar movimientos locales como propuestas revisables.
+  HU-WEB-KANBAN-003:
+    title: Conectar tablero a Backlog Agent para recomendaciones
+    type: STORY
+    priority: P1
+    expert_role: Frontend Engineer
+    reviewer_role: Project Manager
+    status: BACKLOG
+    effort: M
+    mode_fit:
+    - coding
+    - docs_governance
+    granularity: executable_after_dependency
+    dependencies:
+    - HU-WEB-KANBAN-001
+    next_action: Pedir recomendaciones al agente y resaltar opciones.
+  HU-WEB-KANBAN-004:
+    title: Crear editor de HU DRAFT desde el tablero
+    type: STORY
+    priority: P1
+    expert_role: Frontend Engineer
+    reviewer_role: QA Engineer
+    status: BACKLOG
+    effort: L
+    mode_fit:
+    - coding
+    - deep_work
+    granularity: executable_after_dependency
+    dependencies:
+    - HU-WEB-KANBAN-002
+    next_action: Crear formulario de HU DRAFT exportable a YAML.
   EN-AGRO-KNOW-001:
     title: Crear base de conocimiento agricola con fuentes cientificas
     type: ENABLER

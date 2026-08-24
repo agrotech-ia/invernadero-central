@@ -311,6 +311,69 @@ items:
   dependencies:
   - HU-WEB-IA-001
   source: EP-WEB-PLATFORM-001
+- id: HU-WEB-KANBAN-001
+  title: Crear tablero Mini Jira interactivo con snapshot Kanban
+  type: STORY
+  priority: P0
+  target: FOUNDATION
+  owner_role: Frontend Engineer
+  status: VALIDATION
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies: []
+  source: EP-WEB-KANBAN-001
+  progress:
+  - task_id: T-WEB-KANBAN-001
+    title: Implementar ruta Mini Jira con snapshot Kanban y drag and drop local
+    status: DONE
+    evidence:
+    - project/backlog/web/HU-WEB-KANBAN-001-roadmap.yaml
+    - web:src/pages/ProjectKanbanPage.jsx
+    - web:src/data/projectBoard.js
+    - web:src/App.jsx
+    - npm run build
+    - route:http://localhost:5174/project/kanban
+  next_action: Revisar tablero y aprobar workflow de propuesta de cambio de estado.
+- id: HU-WEB-KANBAN-002
+  title: Agregar workflow de propuesta de cambio de estado
+  type: STORY
+  priority: P0
+  target: FOUNDATION
+  owner_role: Frontend Engineer
+  status: BACKLOG
+  reviewer_role: Project Manager
+  effort: M
+  risk: MEDIUM
+  dependencies:
+  - HU-WEB-KANBAN-001
+  source: EP-WEB-KANBAN-001
+- id: HU-WEB-KANBAN-003
+  title: Conectar tablero a Backlog Agent para recomendaciones
+  type: STORY
+  priority: P1
+  target: FOUNDATION
+  owner_role: Frontend Engineer
+  status: BACKLOG
+  reviewer_role: Project Manager
+  effort: M
+  risk: MEDIUM
+  dependencies:
+  - HU-WEB-KANBAN-001
+  source: EP-WEB-KANBAN-001
+- id: HU-WEB-KANBAN-004
+  title: Crear editor de HU DRAFT desde el tablero
+  type: STORY
+  priority: P1
+  target: FOUNDATION
+  owner_role: Frontend Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: L
+  risk: MEDIUM
+  dependencies:
+  - HU-WEB-KANBAN-002
+  source: EP-WEB-KANBAN-001
 - id: EN-AGRO-KNOW-001
   title: Crear base de conocimiento agricola con fuentes cientificas
   type: ENABLER

@@ -1,0 +1,141 @@
+epic:
+  id: EP-WEB-KANBAN-001
+  title: Mini Jira del proyecto en la web
+  status: DRAFT
+  priority: P0
+  target: FOUNDATION
+  source_refs:
+  - project/kanban/board.yaml
+  - project/backlog/master-backlog.yaml
+  - project/agents-operating-model.md
+
+principles:
+- El tablero web debe consultar el backlog y Kanban versionados.
+- La primera version puede operar con snapshot estatico y cambios locales.
+- Mover estados persistentes en Git requiere aprobacion humana.
+- La UI debe mostrar estado, prioridad, rol experto, revisor, dependencias, evidencia y siguiente accion.
+- La UI debe distinguir items en BACKLOG, REFINEMENT, READY, IN_PROGRESS, VALIDATION y DONE.
+- La UI debe ayudar a ver si una HU tiene lo necesario para comenzar: rol, revisor, alcance, evidencia, dependencias y criterios.
+
+stories:
+- id: HU-WEB-KANBAN-001
+  title: Crear tablero Mini Jira interactivo con snapshot Kanban
+  type: STORY
+  status: VALIDATION
+  priority: P0
+  target: FOUNDATION
+  expert_role: Frontend Engineer
+  reviewer_role: QA Engineer
+  effort: M
+  dependencies: []
+  problem: El proyecto necesita consultar y manipular visualmente el backlog sin abrir YAML manualmente.
+  outcome: Ruta web con columnas Kanban, tarjetas arrastrables, filtros y panel de detalle.
+  scope:
+    in:
+    - Ruta `/project/kanban`.
+    - Snapshot de `project/kanban/board.yaml` convertido a datos frontend.
+    - Drag & drop local entre columnas.
+    - Persistencia local del orden/estado en navegador.
+    - Panel de detalle por item.
+    - Filtros por texto, prioridad, tipo, rol y modo.
+    out:
+    - Persistir cambios de estado en Git.
+    - Sincronizar con n8n.
+    - Crear/editar HU desde la UI.
+  acceptance_criteria:
+  - El usuario puede abrir `/project/kanban`.
+  - El usuario puede ver columnas por estado.
+  - El usuario puede arrastrar una tarjeta entre estados de forma local.
+  - El usuario puede resetear al snapshot versionado.
+  - El usuario puede abrir el detalle de una tarjeta.
+  - La vista muestra WIP actual y limites para IN_PROGRESS y VALIDATION.
+  evidence_expected:
+  - diff web
+  - npm run build
+  - ruta web 200 OK
+  evidence:
+  - web:src/pages/ProjectKanbanPage.jsx
+  - web:src/data/projectBoard.js
+  - web:src/App.jsx
+  - npm run build
+  - route:http://localhost:5174/project/kanban
+  next_action: Revisar interaccion drag and drop y aprobar siguiente HU-WEB-KANBAN-002.
+
+- id: HU-WEB-KANBAN-002
+  title: Agregar workflow de propuesta de cambio de estado
+  type: STORY
+  status: BACKLOG
+  priority: P0
+  target: FOUNDATION
+  expert_role: Frontend Engineer
+  reviewer_role: Project Manager
+  effort: M
+  dependencies:
+  - HU-WEB-KANBAN-001
+  problem: Los cambios locales del tablero no quedan trazables ni aprobables.
+  outcome: La UI genera una propuesta de cambio que el humano/agente puede revisar antes de persistir.
+  scope:
+    in:
+    - Generar payload de cambio de estado.
+    - Mostrar resumen de cambios locales.
+    - Enviar propuesta al chat/agente o copiar payload.
+    out:
+    - Escritura directa a Git.
+  acceptance_criteria:
+  - Cada movimiento local queda registrado como propuesta.
+  - La propuesta incluye item, estado anterior, estado nuevo, actor local y timestamp.
+  evidence_expected:
+  - diff web
+  - payload ejemplo
+
+- id: HU-WEB-KANBAN-003
+  title: Conectar tablero a Backlog Agent para recomendaciones
+  type: STORY
+  status: BACKLOG
+  priority: P1
+  target: FOUNDATION
+  expert_role: Frontend Engineer
+  reviewer_role: Project Manager
+  effort: M
+  dependencies:
+  - HU-WEB-KANBAN-001
+  problem: El usuario necesita saber que tomar despues segun prioridad, WIP, dependencias y tiempo.
+  outcome: El tablero puede pedir recomendacion al agente y resaltar hasta 3 opciones.
+  scope:
+    in:
+    - Accion recomendar siguiente trabajo.
+    - Mostrar respuesta del agente.
+    - Resaltar tarjetas recomendadas.
+  acceptance_criteria:
+  - El tablero llama al flujo de recomendacion o al chat gateway.
+  - La respuesta muestra maximo 3 opciones.
+  evidence_expected:
+  - diff web
+  - respuesta de webhook
+
+- id: HU-WEB-KANBAN-004
+  title: Crear editor de HU DRAFT desde el tablero
+  type: STORY
+  status: BACKLOG
+  priority: P1
+  target: FOUNDATION
+  expert_role: Frontend Engineer
+  reviewer_role: QA Engineer
+  effort: L
+  dependencies:
+  - HU-WEB-KANBAN-002
+  problem: Crear o refinar HU desde YAML manual es lento.
+  outcome: La UI permite crear borradores de HU con plantilla, sin persistir sin aprobacion.
+  scope:
+    in:
+    - Formulario de HU DRAFT.
+    - Criterios, DoR, DoD, evidencia, tareas y riesgos.
+    - Exportar YAML o enviar a agente.
+    out:
+    - Guardado directo en Git sin revision.
+  acceptance_criteria:
+  - El usuario puede generar YAML DRAFT valido.
+  - La HU creada queda marcada como propuesta local.
+  evidence_expected:
+  - diff web
+  - YAML ejemplo
