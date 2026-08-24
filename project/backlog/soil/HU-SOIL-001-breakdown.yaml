@@ -43,6 +43,33 @@ children:
   - Existe checklist de seguridad antes de energizar.
   - Existe evidencia inicial en project/evidence/soil-moisture/.
   - Se confirma modelo, voltaje y protocolo real o queda blocker explicito.
+  gherkin_scenarios:
+  - name: Materiales clasificados antes de iniciar laboratorio
+    given:
+    - La guia DRAFT de pruebas de suelo esta disponible.
+    - La HU HU-SOIL-LAB-001 esta seleccionada para preparacion.
+    when:
+    - El responsable revisa sensores, cables, fuente, interfaz y herramientas de medicion.
+    then:
+    - Cada material queda marcado como disponible, faltante o pendiente.
+    - Los faltantes quedan registrados como blocker o compra requerida.
+  - name: Seguridad validada antes de energizar
+    given:
+    - El banco de pruebas aun no ha sido energizado.
+    - El modelo, voltaje o protocolo del sensor pueden requerir confirmacion.
+    when:
+    - El responsable completa el checklist de seguridad.
+    then:
+    - El voltaje y la conexion quedan confirmados antes de conectar datos.
+    - Si no se puede confirmar, la HU queda bloqueada y no se energiza el sensor.
+  - name: Evidencia inicial trazable
+    given:
+    - El proyecto exige evidencia verificable para cerrar HUs.
+    when:
+    - Se prepara el banco de pruebas del sensor de suelo.
+    then:
+    - Existe evidencia inicial en project/evidence/soil-moisture/.
+    - La evidencia referencia materiales, seguridad, setup y riesgos abiertos.
   definition_of_ready:
   - Guia DRAFT creada.
   - Rol experto y revisor asignados.

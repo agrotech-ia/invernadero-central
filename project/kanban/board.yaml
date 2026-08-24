@@ -498,4 +498,6 @@ board_rules:
 - Si una HU requiere mas de 1 o 2 sesiones de trabajo, debe dividirse.
 - Si una HU mezcla firmware, hardware, web, QA y mercado, debe dividirse por rol experto.
 - Si una HU no tiene evidencia esperada clara, no puede pasar a READY.
+- Una HU ejecutable en READY debe tener criterios de aceptacion versionados y escenarios Gherkin o una excepcion explicita aprobada.
+- Una HU parent en READY no es ejecutable directamente; debe listar HUs hijas y dirigir la ejecucion a la siguiente HU hija.
 - Los agentes pueden generar borradores y avances reversibles, pero no aprobar cambios criticos.
