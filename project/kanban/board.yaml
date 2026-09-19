@@ -34,13 +34,9 @@ selection_modes:
 lanes:
   IDEA: []
   BACKLOG:
-  - HU-SOIL-LAB-002
-  - HU-SOIL-LAB-003
-  - HU-SOIL-DATA-001
   - HU-WEB-IA-001
   - HU-WEB-LANDING-001
   - HU-WEB-SHELL-001
-  - HU-WEB-KANBAN-002
   - HU-WEB-KANBAN-003
   - HU-WEB-KANBAN-004
   - EN-AGRO-KNOW-001
@@ -58,24 +54,40 @@ lanes:
   - EXP-CONTENT-001
   - EXP-VISION-001
   REFINEMENT:
+  - HU-WEB-KANBAN-002
   - HU-WATER-001
   - HU-WATER-003
   - HU-WATER-005
+  - HU-OPS-SENSOR-LIVENESS-001
   - EN-PWR-001
   - EN-QA-001
-  - EN-EDGE-001
   - EN-MKT-001
   - EN-GROW-001
   READY:
-  - HU-SOIL-001
-  - HU-SOIL-LAB-001
   - EN-AWS-ARCH-001
   IN_PROGRESS:
   - EN-AGENT-001
+  - EN-EDGE-001
   VALIDATION:
+  - HU-SOIL-001
+  - HU-SOIL-DATA-001
+  - HU-EDGE-OFFLINE-RECOVERY-001
+  - HU-FW-MQTT-RESILIENCE-ALL-001
+  - HU-FW-MQTT-MEMORY-001
+  - HU-FW-OFFLINE-RETENTION-001
+  - HU-FW-CONFIG-001
+  - HU-FW-OTA-001
+  - HU-FW-MQTT-RESILIENCE-001
   - HU-WEB-ROLE-001
   - HU-WEB-KANBAN-001
-  DONE: []
+  DONE:
+  - HU-SOIL-LAB-001
+  - HU-SOIL-LAB-002
+  - HU-SOIL-LAB-003
+  - HU-FW-WATCHDOG-001
+  - HU-FW-CONFIG-PORTAL-001
+  - HU-FW-OFFLINE-RECOVERY-PROTOCOL-001
+  - HU-WEB-KANBAN-005
 cards:
   EN-AGENT-001:
     title: Bootstrap plataforma multiagente local
@@ -83,7 +95,7 @@ cards:
     priority: P0
     expert_role: Solution / IoT Architect
     reviewer_role: QA Engineer
-    status: IN_PROGRESS
+    status: VALIDATION
     effort: M
     mode_fit:
     - docs_governance
@@ -123,7 +135,7 @@ cards:
     priority: P0
     expert_role: QA Engineer
     reviewer_role: Solution / IoT Architect
-    status: REFINEMENT
+    status: VALIDATION
     effort: M
     mode_fit:
     - docs_governance
@@ -149,7 +161,7 @@ cards:
     priority: P0
     expert_role: QA Engineer
     reviewer_role: Solution / IoT Architect
-    status: READY
+    status: VALIDATION
     effort: M
     mode_fit:
     - physical_lab
@@ -163,14 +175,14 @@ cards:
       - project/backlog/soil/HU-SOIL-001-breakdown.yaml
       - project/guides/sensors/soil-moisture-test-plan.md
       - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
-    next_action: Tomar HU-SOIL-LAB-001 para preparar banco de pruebas y materiales.
+    next_action: Revisar evidencia cerrada del laboratorio y habilitar contrato MQTT V1 de suelo.
   HU-SOIL-LAB-001:
     title: Preparar banco de pruebas y materiales del sensor de suelo
     type: STORY
     priority: P0
     expert_role: QA Engineer
     reviewer_role: Solution / IoT Architect
-    status: READY
+    status: DONE
     effort: S
     mode_fit:
     - physical_lab
@@ -178,14 +190,16 @@ cards:
     granularity: executable
     guide_path: project/guides/sensors/soil-moisture-test-plan.md
     web_path: /project/guides/sensors/soil-moisture-test-plan
-    next_action: Completar checklist de materiales, seguridad, modelo y protocolo antes de energizar.
+    evidence:
+    - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
+    next_action: Cerrada como parte del laboratorio inicial; pendientes tecnicos quedan como follow-ups.
   HU-SOIL-LAB-002:
     title: Capturar lectura cruda estable del sensor de suelo
     type: STORY
     priority: P0
     expert_role: Firmware Engineer
     reviewer_role: QA Engineer
-    status: BACKLOG
+    status: DONE
     effort: S
     mode_fit:
     - physical_lab
@@ -195,14 +209,17 @@ cards:
     - HU-SOIL-LAB-001
     guide_path: project/guides/sensors/soil-moisture-test-plan.md
     web_path: /project/guides/sensors/soil-moisture-test-plan
-    next_action: Ejecutar lectura local y guardar al menos 5 muestras crudas.
+    evidence:
+    - project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl
+    - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
+    next_action: Cerrada con 55 telemetrias y status asociados; continuar con contrato de datos.
   HU-SOIL-LAB-003:
     title: Caracterizar lecturas en seco, humedo y saturado
     type: STORY
     priority: P0
     expert_role: QA Engineer
     reviewer_role: Solution / IoT Architect
-    status: BACKLOG
+    status: DONE
     effort: M
     mode_fit:
     - physical_lab
@@ -212,14 +229,17 @@ cards:
     - HU-SOIL-LAB-002
     guide_path: project/guides/sensors/soil-moisture-test-plan.md
     web_path: /project/guides/sensors/soil-moisture-test-plan
-    next_action: Medir tres condiciones y registrar tabla comparativa.
+    evidence:
+    - project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl
+    - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
+    next_action: Cerrada con condiciones seco, humedo, saturado y extension a 200 ml.
   HU-SOIL-DATA-001:
     title: Definir payload MQTT V1 para medicion de suelo
     type: STORY
     priority: P0
     expert_role: Backend / IoT Engineer
     reviewer_role: QA Engineer
-    status: BACKLOG
+    status: VALIDATION
     effort: S
     mode_fit:
     - docs_governance
@@ -229,7 +249,241 @@ cards:
     - HU-SOIL-LAB-003
     guide_path: project/guides/sensors/soil-moisture-test-plan.md
     web_path: /project/guides/sensors/soil-moisture-test-plan
-    next_action: Crear contrato DRAFT soil.telemetry.v1 con ejemplo JSON.
+    evidence:
+    - project/contracts/mqtt/soil-telemetry-v1.md
+    - project/contracts/mqtt/soil-telemetry-v1.schema.json
+    next_action: Revisar contrato DRAFT contra payload real y usarlo en ingesta edge.
+  HU-FW-CONFIG-001:
+    title: Configurar WiFi/MQTT del dispositivo sin reflashear
+    type: STORY
+    priority: P0
+    expert_role: Firmware Engineer
+    reviewer_role: Solution / IoT Architect
+    status: VALIDATION
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: needs_refinement
+    dependencies:
+    - HU-SOIL-LAB-002
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/guides/firmware/wifi-mqtt-config-portal-standard.md
+    next_action: Validar manana cambio de WiFi y broker MQTT por Serial/NVS y portal AP temporal sin recompilar.
+  HU-FW-MQTT-MEMORY-001:
+    title: Endurecer cola MQTT con buffers fijos para evitar fragmentacion de memoria
+    type: STORY
+    priority: P0
+    expert_role: Firmware / Edge Engineer
+    reviewer_role: Solution / IoT Architect
+    status: VALIDATION
+    effort: S
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: executable
+    dependencies:
+    - HU-FW-MQTT-RESILIENCE-001
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/guides/firmware/mqtt-delivery-resilience-standard.md
+    - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-lab-2026-09-04.md
+    next_action: Validar que la cola MQTT drena, reutiliza slots y no fragmenta memoria durante reconexiones repetidas.
+  HU-FW-WATCHDOG-001:
+    title: Watchdog, reset reason y diagnostico de memoria del nodo
+    type: STORY
+    priority: P0
+    expert_role: Firmware / IoT Engineer
+    reviewer_role: QA Engineer
+    status: DONE
+    effort: S
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: executable
+    dependencies:
+    - HU-FW-MQTT-MEMORY-001
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/guides/firmware/watchdog-reset-diagnostics-lab.md
+    - project/evidence/firmware/HU-FW-WATCHDOG-001-lab-2026-09-09.md
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    next_action: Cerrada como PASS_WITH_LIMITATIONS; revisar mejora menor para reset_reason=unknown.
+  HU-FW-CONFIG-PORTAL-001:
+    title: Validar portal WiFi/AP para reconfigurar red y broker en campo
+    type: STORY
+    priority: P0
+    expert_role: Firmware Engineer
+    reviewer_role: QA Engineer
+    status: DONE
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: executable
+    dependencies:
+    - HU-FW-CONFIG-001
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/guides/firmware/wifi-mqtt-config-portal-lab.md
+    - project/guides/firmware/wifi-mqtt-config-portal-standard.md
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/evidence/firmware/HU-FW-CONFIG-PORTAL-001-lab-2026-09-09.md
+    next_action: Cerrada como PASS; portar patron validado a `esp32-sht40` y `esp32d-outside`.
+  HU-FW-MQTT-RESILIENCE-ALL-001:
+    title: Estandarizar resiliencia MQTT en todos los sensores
+    type: STORY
+    priority: P0
+    expert_role: Firmware / Edge Engineer
+    reviewer_role: QA Engineer
+    status: VALIDATION
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: executable
+    dependencies:
+    - HU-FW-MQTT-RESILIENCE-001
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/guides/firmware/mqtt-delivery-resilience-standard.md
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    next_action: Validar manana resiliencia MQTT en suelo, SHT40 interior y nodo exterior.
+  HU-FW-OFFLINE-RETENTION-001:
+    title: Retencion offline adaptativa para desconexiones largas
+    type: STORY
+    priority: P0
+    expert_role: Firmware / Data IoT Architect
+    reviewer_role: QA Engineer
+    status: VALIDATION
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: executable
+    dependencies:
+    - HU-FW-CONFIG-PORTAL-001
+    - HU-FW-MQTT-MEMORY-001
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/guides/firmware/offline-retention-adaptive-standard.md
+    - project/guides/firmware/mqtt-delivery-resilience-standard.md
+    - project/evidence/firmware/HU-FW-OFFLINE-RETENTION-001-build-2026-09-09.md
+    next_action: Validar en monitor/MQTT que status publique intervalos activos y ejecutar desconexion larga.
+  HU-FW-OFFLINE-RECOVERY-PROTOCOL-001:
+    title: Emitir paquetes MQTT de recuperacion offline compacta
+    type: STORY
+    priority: P0
+    expert_role: Firmware / Data IoT Architect
+    reviewer_role: QA Engineer
+    status: DONE
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: executable
+    dependencies:
+    - HU-FW-OFFLINE-RETENTION-001
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/contracts/mqtt/offline-recovery-v1.md
+    - project/contracts/mqtt/offline-recovery-v1.schema.json
+    - project/evidence/firmware/HU-FW-OFFLINE-RECOVERY-PROTOCOL-001-build-2026-09-09.md
+    next_action: Cerrada como PASS; continuar con HU-EDGE-OFFLINE-RECOVERY-001 para persistir/reconstruir en Raspberry.
+  HU-EDGE-OFFLINE-RECOVERY-001:
+    title: Ingerir y reconstruir recuperacion offline en Raspberry
+    type: STORY
+    priority: P0
+    expert_role: Edge / Data Engineer
+    reviewer_role: QA Engineer
+    status: VALIDATION
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: executable
+    dependencies:
+    - HU-FW-OFFLINE-RECOVERY-PROTOCOL-001
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/contracts/mqtt/offline-recovery-v1.md
+    - tools/mqtt_gap_logger.py
+    - edge/ingestor/main.py
+    - edge/ingestor/storage.py
+    - edge/storage/migrations/sqlite/001_init.sql
+    - project/guides/edge/sqlite-mqtt-ingestor-runbook.md
+    next_action: Ejecutar prueba en Raspberry con Mosquitto off/on y validar tablas SQLite.
+  HU-OPS-SENSOR-LIVENESS-001:
+    title: Alertar sensores o gateway sin datos recientes
+    type: STORY
+    priority: P0
+    expert_role: IoT Operations Engineer
+    reviewer_role: QA Engineer
+    status: IN_PROGRESS
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: executable
+    dependencies:
+    - HU-EDGE-OFFLINE-RECOVERY-001
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/contracts/mqtt/offline-recovery-v1.md
+    - project/guides/sensors/mqtt-gap-logger-runbook.md
+    next_action: Definir e implementar eventos warning/critical/offline por `last_seen`.
+  HU-FW-OTA-001:
+    title: Actualizar firmware remotamente por WiFi OTA
+    type: STORY
+    priority: P0
+    expert_role: Firmware / IoT Engineer
+    reviewer_role: Solution / IoT Architect
+    status: VALIDATION
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: needs_refinement
+    dependencies:
+    - HU-FW-CONFIG-001
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    next_action: Validar manana OTA controlado por password y ventana temporal.
+  HU-FW-MQTT-RESILIENCE-001:
+    title: Evitar perdida silenciosa de telemetria cuando MQTT se desconecta
+    type: STORY
+    priority: P0
+    expert_role: Firmware / Edge Engineer
+    reviewer_role: QA Engineer
+    status: VALIDATION
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    - docs_governance
+    granularity: needs_refinement
+    dependencies:
+    - HU-SOIL-LAB-002
+    evidence:
+    - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
+    - project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl
+    - project/evidence/soil-moisture/HU-FW-MQTT-RESILIENCE-001-mqtt-received-analysis-2026-09-01.md
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/guides/sensors/mqtt-gap-logger-runbook.md
+    next_action: Validar manana broker off/on con contadores, cola de reintento y logger de gaps.
   EN-EDGE-001:
     title: Validar runtime Raspberry MQTT->DB
     type: ENABLER
@@ -241,8 +495,16 @@ cards:
     mode_fit:
     - coding
     - deep_work
-    granularity: needs_task_breakdown
-    next_action: Refinar ingesta minima MQTT a PostgreSQL/TimescaleDB con contratos V1 antes de ejecucion.
+    granularity: executable
+    evidence:
+    - project/backlog/edge/EN-EDGE-001-breakdown.yaml
+    - edge/storage/migrations/sqlite/001_init.sql
+    - edge/storage/migrations/postgres/001_init.sql
+    - edge/ingestor/main.py
+    - deploy/systemd/greenhouse-edge-ingestor.service
+    - tools/edge_sqlite_status.py
+    - project/guides/edge/sqlite-mqtt-ingestor-runbook.md
+    next_action: Validar ingestor SQLite en Raspberry con payloads reales y preparar adaptador PostgreSQL.
   EN-AWS-ARCH-001:
     title: Formalizar arquitectura AWS SaaS piloto
     type: ENABLER
@@ -362,15 +624,15 @@ cards:
     priority: P0
     expert_role: Frontend Engineer
     reviewer_role: Project Manager
-    status: BACKLOG
+    status: REFINEMENT
     effort: M
     mode_fit:
     - coding
     - docs_governance
-    granularity: executable_after_dependency
+    granularity: needs_refinement
     dependencies:
     - HU-WEB-KANBAN-001
-    next_action: Registrar movimientos locales como propuestas revisables.
+    next_action: Definir payload, UX de aprobacion y validacion antes de codificar la propuesta.
   HU-WEB-KANBAN-003:
     title: Conectar tablero a Backlog Agent para recomendaciones
     type: STORY
@@ -401,6 +663,43 @@ cards:
     dependencies:
     - HU-WEB-KANBAN-002
     next_action: Crear formulario de HU DRAFT exportable a YAML.
+  HU-WEB-KANBAN-005:
+    title: Agregar accesos directos desde home a Kanban y Laboratorios
+    type: STORY
+    priority: P1
+    expert_role: Frontend Engineer
+    reviewer_role: QA Engineer
+    status: DONE
+    effort: S
+    mode_fit:
+    - coding
+    - docs_governance
+    granularity: executable
+    evidence:
+    - project/backlog/web/HU-WEB-KANBAN-005-home-nav.yaml
+    - web:src/sections/Hero.jsx
+    - web:src/sections/Navbar.jsx
+    - web:src/App.jsx
+    - web:src/pages/ProjectLabOverviewPage.jsx
+    - npm run build
+    - route:http://localhost:5174/
+    - route:http://localhost:5174/project/kanban
+    - route:http://localhost:5174/project/laboratorios
+    progress:
+    - task_id: T-WEB-KANBAN-005
+      title: Agregar accesos desde home a Kanban y laboratorios
+      status: DONE
+      evidence:
+      - project/backlog/web/HU-WEB-KANBAN-005-home-nav.yaml
+      - web:src/sections/Hero.jsx
+      - web:src/sections/Navbar.jsx
+      - web:src/App.jsx
+      - web:src/pages/ProjectLabOverviewPage.jsx
+      - npm run build
+      - route:http://localhost:5174/
+      - route:http://localhost:5174/project/kanban
+      - route:http://localhost:5174/project/laboratorios
+    next_action: Mantener navegacion central estable para futuras vistas operativas del proyecto.
   EN-AGRO-KNOW-001:
     title: Crear base de conocimiento agricola con fuentes cientificas
     type: ENABLER

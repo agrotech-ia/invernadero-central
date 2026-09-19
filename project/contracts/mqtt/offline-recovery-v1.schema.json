@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "offline.recovery.v1",
+  "title": "Offline recovery MQTT payload V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "message_type",
+    "greenhouse_id",
+    "zone_id",
+    "device_id",
+    "recovery_id",
+    "replayed_at_device_time",
+    "offline_reason",
+    "retention_policy",
+    "records"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "message_type": { "const": "offline_recovery" },
+    "greenhouse_id": { "type": "string", "minLength": 1 },
+    "zone_id": { "type": "string", "minLength": 1 },
+    "device_id": { "type": "string", "minLength": 1 },
+    "recovery_id": { "type": "string", "minLength": 1 },
+    "boot_count": { "type": "integer", "minimum": 0 },
+    "replayed_at_device_time": { "type": "string", "minLength": 1 },
+    "offline_reason": {
+      "type": "string",
+      "enum": ["wifi_disconnected", "mqtt_disconnected", "publish_failed", "unknown"]
+    },
+    "retention_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lab_mode", "raw_until_s", "summary_until_s", "raw_interval_s", "summary_interval_s", "long_summary_interval_s"],
+      "properties": {
+        "lab_mode": { "type": "boolean" },
+        "raw_until_s": { "type": "integer", "minimum": 0 },
+        "summary_until_s": { "type": "integer", "minimum": 0 },
+        "raw_interval_s": { "type": "integer", "minimum": 1 },
+        "summary_interval_s": { "type": "integer", "minimum": 1 },
+        "long_summary_interval_s": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          { "$ref": "#/$defs/raw_record" },
+          { "$ref": "#/$defs/summary_record" }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "raw_reading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sensor_id", "metric", "value", "unit"],
+      "properties": {
+        "sensor_id": { "type": "string", "minLength": 1 },
+        "metric": { "type": "string", "minLength": 1 },
+        "value": { "type": "number" },
+        "unit": { "type": "string", "minLength": 1 }
+      }
+    },
+    "summary_reading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sensor_id", "metric", "unit", "avg", "min", "max", "first", "last"],
+      "properties": {
+        "sensor_id": { "type": "string", "minLength": 1 },
+        "metric": { "type": "string", "minLength": 1 },
+        "unit": { "type": "string", "minLength": 1 },
+        "avg": { "type": "number" },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "first": { "type": "number" },
+        "last": { "type": "number" }
+      }
+    },
+    "raw_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_type", "sequence", "device_time", "quality", "readings"],
+      "properties": {
+        "record_type": { "const": "raw" },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "device_time": { "type": "string", "minLength": 1 },
+        "quality": { "const": "raw_replayed" },
+        "readings": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/raw_reading" }
+        }
+      }
+    },
+    "summary_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_type", "sequence_start", "sequence_end", "device_time_start", "device_time_end", "window_s", "sample_count", "quality", "readings"],
+      "properties": {
+        "record_type": { "const": "summary" },
+        "sequence_start": { "type": "integer", "minimum": 0 },
+        "sequence_end": { "type": "integer", "minimum": 0 },
+        "device_time_start": { "type": "string", "minLength": 1 },
+        "device_time_end": { "type": "string", "minLength": 1 },
+        "window_s": { "type": "integer", "minimum": 1 },
+        "sample_count": { "type": "integer", "minimum": 1 },
+        "quality": { "const": "summary_replayed" },
+        "readings": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/summary_reading" }
+        }
+      }
+    }
+  }
+}

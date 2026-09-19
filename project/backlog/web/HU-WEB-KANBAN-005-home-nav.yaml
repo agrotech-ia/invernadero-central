@@ -1,0 +1,54 @@
+id: HU-WEB-KANBAN-005
+title: Agregar accesos directos desde home a Kanban y Laboratorios
+type: STORY
+status: DONE
+priority: P1
+target: FOUNDATION
+owner_role: Frontend Engineer
+reviewer_role: QA Engineer
+effort: S
+risk: LOW
+source: EP-WEB-KANBAN-001
+dependencies:
+- HU-WEB-KANBAN-001
+problem: El usuario no tiene una forma directa y visible desde el home para entrar al tablero del proyecto ni a la vista de laboratorios, lo que frena la navegacion entre las vistas operativas clave.
+outcome: Desde la landing se pueden abrir rutas de proyecto como /project/kanban y /project/laboratorios, con navegacion consistente en el navbar y una vista de resumen de laboratorios.
+scope:
+  in:
+  - Botones principales del home que llevan a Kanban y laboratorios.
+  - Enlaces del navbar hacia Kanban y Laboratorios.
+  - Ruta interna /project/laboratorios con vista resumen.
+  - Mantenimiento de la ruta /project/kanban existente.
+  out:
+  - Persistencia directa de cambios de Kanban en Git desde la UI.
+  - Cambios de estado no aprobados por el humano.
+acceptance_criteria:
+- El usuario puede hacer click en Ver Kanban desde el hero y abrir /project/kanban.
+- El usuario puede hacer click en Ir a laboratorios desde el hero y abrir /project/laboratorios.
+- El navbar muestra acceso directo a Kanban y Laboratorios.
+- La ruta /project/laboratorios renderiza una vista de resumen con guias de laboratorio.
+- El build final de la app pasa sin errores.
+definition_of_ready:
+- Ruta objetivo definida desde la landing.
+- Repositorio web identificado.
+- Alcance limitado a navegacion e informacion del proyecto.
+- Evidencia esperada definida.
+definition_of_done:
+- Critarios de aceptacion cumplidos.
+- Build ejecutado y correcto.
+- Ruta /project/kanban funciona.
+- Ruta /project/laboratorios funciona.
+- Cambios documentados en backlog y Kanban.
+validation:
+  test_cases:
+  - id: TC-WEB-KANBAN-005-001
+    title: Acceso desde home a Kanban
+    expected_evidence: Boton del hero lleva a /project/kanban.
+  - id: TC-WEB-KANBAN-005-002
+    title: Acceso desde home a Laboratorios
+    expected_evidence: Boton del hero lleva a /project/laboratorios.
+  - id: TC-WEB-KANBAN-005-003
+    title: Build validado
+    expected_evidence: npm run build final con exito.
+next_action: Dejar esta HU en DONE y conservar la navegacion central como base para futuras vistas operativas.
+notes: Esta HU fue implementada en el frontend web del proyecto AgroTechIA y validada con compilacion local.

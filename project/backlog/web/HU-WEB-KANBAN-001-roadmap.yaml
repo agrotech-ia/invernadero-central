@@ -167,3 +167,36 @@ stories:
   evidence_expected:
   - diff web
   - YAML ejemplo
+
+- id: HU-WEB-KANBAN-005
+  title: Agregar accesos directos desde home a Kanban y Laboratorios
+  type: STORY
+  status: DONE
+  priority: P1
+  target: FOUNDATION
+  expert_role: Frontend Engineer
+  reviewer_role: QA Engineer
+  effort: S
+  dependencies:
+  - HU-WEB-KANBAN-001
+  problem: El flujo principal no guiaba al usuario desde la landing hacia las vistas operativas del proyecto.
+  outcome: La landing presenta accesos directos a Kanban y Laboratorios y la navegacion del navbar soporta ambas rutas.
+  scope:
+    in:
+    - Botones del hero para Ver Kanban e Ir a laboratorios.
+    - Enlaces del navbar hacia /project/kanban y /project/laboratorios.
+    - Vista resumen de laboratorios con guias del proyecto.
+    out:
+    - Persistencia de estados en Git desde la UI.
+  acceptance_criteria:
+  - El usuario entra desde el home a /project/kanban.
+  - El usuario entra desde el home a /project/laboratorios.
+  - El navbar renderiza los enlaces.
+  - El usuario puede abrir una guia de laboratorio desde la vista resumen.
+  evidence_expected:
+  - web:src/sections/Hero.jsx
+  - web:src/sections/Navbar.jsx
+  - web:src/App.jsx
+  - web:src/pages/ProjectLabOverviewPage.jsx
+  - npm run build
+  next_action: Mantener esta navegacion como base para futuras vistas de operacion del proyecto.

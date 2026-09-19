@@ -1,0 +1,15 @@
+[Unit]
+Description=Greenhouse edge MQTT to SQLite ingestor
+After=network-online.target mosquitto.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=chuchosam
+WorkingDirectory=/home/chuchosam/Documentos/github/invernadero-central
+ExecStart=/bin/bash -lc '/usr/bin/mosquitto_sub -h localhost -t "greenhouse/#" -v | /usr/bin/python3 -m edge.ingestor.main --db var/edge/greenhouse.db --print-stats-every 25'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,14 +1,14 @@
 parent:
   id: HU-SOIL-001
   title: Validar y caracterizar sensor de suelo 7-en-1
-  status: READY
-  note: Historia parent mantiene la intencion general; la ejecucion debe tomarse desde las HUs hijas.
+  status: VALIDATION
+  note: Laboratorio inicial cerrado el 2026-09-01; quedan follow-ups para calibracion, resiliencia MQTT y contrato de datos.
 
 children:
 - id: HU-SOIL-LAB-001
   title: Preparar banco de pruebas y materiales del sensor de suelo
   type: STORY
-  status: READY
+  status: DONE
   priority: P0
   target: MVP
   expert_role: QA Engineer
@@ -112,11 +112,16 @@ children:
   open_questions:
   - Cual es el modelo/protocolo exacto del sensor de suelo 7-en-1?
   notes: Primera HU recomendada para comenzar pruebas del sensor de suelo.
+  closure:
+    date: 2026-09-01
+    result: PASS_WITH_LIMITATIONS
+    evidence:
+    - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
 
 - id: HU-SOIL-LAB-002
   title: Capturar lectura cruda estable del sensor de suelo
   type: STORY
-  status: BACKLOG
+  status: DONE
   priority: P0
   target: MVP
   expert_role: Firmware Engineer
@@ -181,11 +186,17 @@ children:
   - control fisico
   open_questions: []
   notes: No transformar valores todavia; primero conservar dato crudo.
+  closure:
+    date: 2026-09-01
+    result: PASS_WITH_LIMITATIONS
+    evidence:
+    - project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl
+    - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
 
 - id: HU-SOIL-LAB-003
   title: Caracterizar lecturas en seco, humedo y saturado
   type: STORY
-  status: BACKLOG
+  status: DONE
   priority: P0
   target: MVP
   expert_role: QA Engineer
@@ -248,6 +259,13 @@ children:
   - control fisico
   open_questions: []
   notes: Esta HU decide si se habilita contrato de telemetria.
+  closure:
+    date: 2026-09-01
+    result: PASS_WITH_LIMITATIONS
+    evidence:
+    - project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl
+    - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
+    summary: Caracterizacion cerrada con puntos seco, humedo, saturado y extension a 200 ml; NPK responde claramente en humedad/EC alta.
 
 - id: HU-SOIL-DATA-001
   title: Definir payload MQTT V1 para medicion de suelo

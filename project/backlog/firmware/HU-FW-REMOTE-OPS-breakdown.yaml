@@ -1,0 +1,602 @@
+parent:
+  id: EP-FW-REMOTE-OPS-001
+  title: Operacion remota de firmware y configuracion de dispositivos de campo
+  status: DONE
+  note: Surge de laboratorio de sensor de suelo; MQTT cambia de IP y los nodos en campo no deben requerir desmontaje para reconfigurar o actualizar.
+
+children:
+- id: HU-FW-MQTT-RESILIENCE-ALL-001
+  title: Estandarizar resiliencia MQTT en todos los sensores
+  type: STORY
+  status: VALIDATION
+  priority: P0
+  target: MVP
+  expert_role: Firmware / Edge Engineer
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-QA-001
+  problem: La perdida silenciosa de telemetria no es exclusiva del sensor de suelo; cualquier nodo que publique MQTT puede perder lecturas cuando el broker, WiFi o subscriber falla.
+  outcome: "Todos los firmwares MQTT del invernadero comparten el mismo contrato minimo de entrega: `sequence`, contadores, cola corta, reintento y deteccion edge."
+  scope:
+    in:
+    - Aplicar contadores MQTT y cola corta a firmwares existentes con PubSubClient.
+    - Documentar estandar transversal de entrega MQTT.
+    - Validar compilacion de cada firmware afectado.
+    - Mantener compatibilidad con payloads actuales.
+    out:
+    - Persistencia offline larga en flash/SD.
+    - Garantia exact-once.
+    - Refactor a libreria compartida comun.
+  dependencies:
+  - id: HU-FW-MQTT-RESILIENCE-001
+    reason: Reusa el patron probado primero en el sensor de suelo.
+  acceptance_criteria:
+  - "`xiao-esp32c3-soil`, `esp32-sht40` y `esp32d-outside` compilan con el patron de resiliencia."
+  - Cada firmware MQTT expone contadores de publish en status.
+  - Cada firmware MQTT reintenta telemetria con `replayed=true`.
+  - Existe guia transversal para nuevos sensores.
+  definition_of_done:
+  - Codigo portado a firmwares actuales.
+  - Guia transversal versionada.
+  - Evidencia de compilacion.
+  implementation:
+    status: PASS
+    evidence:
+    - project/guides/firmware/mqtt-delivery-resilience-standard.md
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    firmware_files:
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
+    - /home/chuchosam/Documentos/github/invernadero/green-house/esp32-sht40/src/main.cpp
+    - /home/chuchosam/Documentos/github/invernadero/green-house/esp32d-outside/src/main.cpp
+  risks:
+  - risk: Duplicar logica MQTT en varios firmwares puede generar divergencia.
+    mitigation: Mantener estandar documentado ahora y crear libreria compartida cuando haya mas de tres nodos activos.
+
+- id: HU-FW-MQTT-MEMORY-001
+  title: Endurecer cola MQTT con buffers fijos para evitar fragmentacion de memoria
+  type: STORY
+  status: VALIDATION
+  priority: P0
+  target: MVP
+  expert_role: Firmware / Edge Engineer
+  reviewer_role: Solution / IoT Architect
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-REV-001
+  problem: Una cola basada en `String` puede fragmentar heap si el nodo queda desconectado muchas veces o retiene payloads de tamanos variables.
+  outcome: La cola MQTT usa memoria fija y predecible para topic/payload, drena al reconectar y reutiliza slots sin crecimiento dinamico sostenido.
+  scope:
+    in:
+    - Reemplazar almacenamiento retenido de `String` por buffers `char` fijos.
+    - Limitar topic y payload con `MQTT_TOPIC_BUFFER_SIZE` y `MQTT_PAYLOAD_BUFFER_SIZE`.
+    - Descartar explicitamente payloads que excedan buffer y reportarlo en contadores.
+    - Exponer tamanos de buffer en `status`.
+    out:
+    - Persistencia offline en flash/SD.
+    - Allocator custom o telemetria binaria.
+  dependencies:
+  - id: HU-FW-MQTT-RESILIENCE-001
+    reason: Endurece la cola de reintento ya implementada.
+  acceptance_criteria:
+  - El firmware compila con cola MQTT de buffers fijos.
+  - Al reintentar, los slots drenados quedan disponibles para reutilizacion.
+  - "Si payload/topic excede el limite, se incrementa `dropped_telemetry_count` y se registra `last_mqtt_error`."
+  - "`status` reporta `mqtt_topic_buffer_size` y `mqtt_payload_buffer_size`."
+  definition_of_done:
+  - Codigo compilado.
+  - Guia MQTT actualizada.
+  - Evidencia de laboratorio actualizada.
+  implementation:
+    status: READY_FOR_LAB_VALIDATION
+    evidence:
+    - project/guides/firmware/mqtt-delivery-resilience-standard.md
+    - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-lab-2026-09-04.md
+    firmware_files:
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/platformio.ini
+  risks:
+  - risk: Payload futuro supera `MQTT_PAYLOAD_BUFFER_SIZE`.
+    mitigation: Mantener contador de descarte y revisar tamano al cambiar contrato de payload.
+  - risk: Duplicar buffers grandes aumenta RAM estatica.
+    mitigation: Cola corta para MVP y seguimiento de `free_heap_bytes`.
+
+- id: HU-FW-OFFLINE-RETENTION-001
+  title: Retencion offline adaptativa para desconexiones largas
+  type: STORY
+  status: VALIDATION
+  priority: P0
+  target: MVP
+  expert_role: Firmware / Data IoT Architect
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-QA-001
+  problem: Con telemetria cada 5s y cola volatil corta, una desconexion de varios minutos produce descartes. Aumentar cola sin politica puede saturar RAM.
+  outcome: Los nodos usan cadencia de campo configurable y una politica offline que conserva trazas utiles mediante muestras crudas recientes y resumenes por ventana.
+  scope:
+    in:
+    - Cambiar defaults de campo a `LAB_MODE=0`, telemetria 60s y status 300s.
+    - Exponer `lab_mode` e intervalos activos en payload `status`.
+    - Documentar modo laboratorio a 5s con `LAB_MODE=1`.
+    - Definir politica adaptativa offline por ventanas de 10min, 60min y larga duracion.
+    out:
+    - Persistencia durable en flash/SD.
+    - Sincronizacion exact-once.
+    - Compresion binaria.
+  dependencies:
+  - id: HU-FW-CONFIG-PORTAL-001
+    reason: La reconfiguracion remota ya permite recuperar conectividad sin reflashear.
+  - id: HU-FW-MQTT-MEMORY-001
+    reason: La cola fija actual define el limite de RAM y los descartes.
+  acceptance_criteria:
+  - Firmwares MQTT actuales compilan con defaults de campo.
+  - "El laboratorio puede mantener telemetria a 5s mediante `LAB_MODE=1` en `secrets.h`."
+  - "`status` reporta `lab_mode`, `telemetry_interval_ms` y `status_interval_ms`."
+  - Existe estandar de retencion offline adaptativa con payload de resumen.
+  - Los descartes se interpretan como perdida de granularidad y quedan visibles en contadores.
+  definition_of_done:
+  - Codigo compilado en firmwares afectados.
+  - Guia de retencion offline versionada.
+  - Evidencia de build y validacion de status.
+  implementation:
+    status: READY_FOR_LAB_VALIDATION
+    evidence:
+    - project/guides/firmware/offline-retention-adaptive-standard.md
+    - project/guides/firmware/mqtt-delivery-resilience-standard.md
+    - project/evidence/firmware/HU-FW-OFFLINE-RETENTION-001-build-2026-09-09.md
+    firmware_files:
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
+    - /home/chuchosam/Documentos/github/invernadero/green-house/esp32-sht40/src/main.cpp
+    - /home/chuchosam/Documentos/github/invernadero/green-house/esp32d-outside/src/main.cpp
+  risks:
+  - risk: Bajar granularidad oculta eventos rapidos.
+    mitigation: Mantener perfil de laboratorio y permitir overrides por firmware.
+  - risk: Resumen offline pierde detalle fino.
+    mitigation: Guardar muestras crudas recientes antes de compactar por ventanas.
+
+- id: HU-FW-OFFLINE-RECOVERY-PROTOCOL-001
+  title: Emitir paquetes MQTT de recuperacion offline compacta
+  type: STORY
+  status: VALIDATION
+  priority: P0
+  target: MVP
+  expert_role: Firmware / Data IoT Architect
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-QA-001
+  problem: El downsampling offline evita saturar RAM, pero el broker/backend necesita un contrato explicito para distinguir lecturas reales retenidas de resumenes reconstruibles.
+  outcome: El firmware de suelo envia paquetes `offline_recovery` con registros `raw` y `summary`, permitiendo reconstruccion visual y trazabilidad de calidad de dato.
+  scope:
+    in:
+    - Implementar topic `/telemetry/recovery`.
+    - Reenviar registros `raw` recientes por `/telemetry` con `replayed=true`.
+    - Acumular ventanas `summary` con `avg`, `min`, `max`, `first`, `last`, `sample_count`.
+    - Publicar `recovery_id`, politica de retencion y causa offline.
+    - Exponer capacidad/ocupacion offline en `status`.
+    out:
+    - Escritura persistente en SD/flash.
+    - Reconstruccion exacta de lecturas no guardadas como `raw`.
+    - Port inmediato a todos los nodos antes de validar suelo.
+  dependencies:
+  - id: HU-FW-OFFLINE-RETENTION-001
+    reason: Usa la politica de ventanas y downsampling ya definida.
+  acceptance_criteria:
+  - El firmware compila y publica `offline_recovery` al reconectar.
+  - Los records `raw` conservan `sequence` y `device_time` originales.
+  - Los records `summary` incluyen rango de secuencias, rango de tiempo y estadisticos por metrica.
+  - El payload valida contra `offline-recovery-v1.schema.json`.
+  - El status reporta capacidad y ocupacion de retencion offline.
+  definition_of_done:
+  - Codigo implementado en `xiao-esp32c3-soil`.
+  - Contrato MQTT versionado.
+  - Laboratorio broker off/on de al menos 15 min.
+  - Evidencia de payload recibido en Raspberry.
+  implementation:
+    status: READY_FOR_LAB_VALIDATION
+    evidence:
+    - project/contracts/mqtt/offline-recovery-v1.md
+    - project/contracts/mqtt/offline-recovery-v1.schema.json
+    - project/guides/firmware/offline-retention-adaptive-standard.md
+    - project/evidence/firmware/HU-FW-OFFLINE-RECOVERY-PROTOCOL-001-build-2026-09-09.md
+    notes:
+    - Laboratorio cerrado como PASS: 7 paquetes `/telemetry/recovery`, 5 telemetrias replayed, colas drenadas y sin reset watchdog en status posterior.
+    firmware_files:
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
+  risks:
+  - risk: Payload de recuperacion supera `MQTT_MAX_PACKET_SIZE`.
+    mitigation: Publicar lotes pequenos y exponer contador de lotes pendientes.
+
+- id: HU-EDGE-OFFLINE-RECOVERY-001
+  title: Ingerir y reconstruir recuperacion offline en Raspberry
+  type: STORY
+  status: REFINEMENT
+  priority: P0
+  target: MVP
+  expert_role: Edge / Data Engineer
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-QA-001
+  problem: Si Raspberry recibe paquetes compactos offline pero solo guarda JSON crudo, el dashboard no podra mostrar continuidad ni distinguir dato real de dato reconstruido.
+  outcome: El edge ingiere `offline_recovery`, guarda payload original, inserta lecturas raw replayed y crea puntos derivados desde summary con calidad explicita.
+  scope:
+    in:
+    - Actualizar logger/ingesta MQTT para topic `/telemetry/recovery`.
+    - Validar payload contra schema.
+    - Crear eventos `gap_covered_by_summary` cuando un gap queda cubierto por resumen.
+    - Marcar calidad `raw_replayed`, `summary_replayed` y `reconstructed_from_summary`.
+    out:
+    - Optimizacion de base de datos historica.
+    - UI final de graficas.
+  dependencies:
+  - id: HU-FW-OFFLINE-RECOVERY-PROTOCOL-001
+    reason: Requiere contrato emitido por firmware.
+  acceptance_criteria:
+  - El edge persiste payload original con `received_at`.
+  - El edge inserta lecturas raw replayed sin duplicar por `device_id + sequence`.
+  - El edge persiste resumenes y genera puntos visuales derivados.
+  - Los gaps cubiertos por resumen no quedan como perdida total.
+  definition_of_done:
+  - Script/servicio edge actualizado.
+  - Prueba con fixtures JSON.
+  - Evidencia de reconstruccion local.
+  implementation:
+    status: READY_FOR_IMPLEMENTATION
+    evidence:
+    - project/contracts/mqtt/offline-recovery-v1.md
+    - tools/mqtt_gap_logger.py
+  risks:
+  - risk: Confundir puntos reconstruidos con lecturas exactas.
+    mitigation: Campo obligatorio `quality` y conservacion del payload original.
+
+- id: HU-OPS-SENSOR-LIVENESS-001
+  title: Alertar sensores o gateway sin datos recientes
+  type: STORY
+  status: REFINEMENT
+  priority: P0
+  target: MVP
+  expert_role: IoT Operations Engineer
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-QA-001
+  problem: Si se quema un sensor, se apaga el gateway, falla energia o cae la red, el firmware no puede recuperar lecturas porque no estuvo midiendo o no pudo transmitir.
+  outcome: El edge/backend alerta por `last_seen` y diferencia sensor offline, gateway offline y broker sin datos.
+  scope:
+    in:
+    - Definir warning/critical/offline por ausencia de telemetria/status.
+    - Alertar por dispositivo y por gateway.
+    - Registrar eventos operativos para intervencion humana.
+    out:
+    - Integracion SMS/WhatsApp productiva.
+    - Gestion de inventario de repuestos.
+  dependencies:
+  - id: HU-EDGE-OFFLINE-RECOVERY-001
+    reason: Usa la misma ingesta para distinguir gaps recuperables de ausencia real.
+  acceptance_criteria:
+  - Warning tras 3 intervalos esperados sin datos.
+  - Critical tras 10 min sin datos en MVP de laboratorio/campo inicial.
+  - Offline tras 30 min sin datos.
+  - El evento incluye `device_id`, ultimo `received_at`, ultimo `sequence` y posible causa.
+  definition_of_done:
+  - Reglas documentadas.
+  - Script/servicio edge genera eventos de liveness.
+  - Evidencia con sensor desconectado.
+  implementation:
+    status: READY_FOR_IMPLEMENTATION
+    evidence:
+    - project/contracts/mqtt/offline-recovery-v1.md
+    - project/guides/sensors/mqtt-gap-logger-runbook.md
+  risks:
+  - risk: Falsos positivos durante mantenimiento.
+    mitigation: Permitir ventana de mantenimiento o silenciar alerta por dispositivo.
+
+- id: HU-FW-WATCHDOG-001
+  title: Watchdog, reset reason y diagnostico de memoria del nodo
+  type: STORY
+  status: DONE
+  priority: P0
+  target: MVP
+  expert_role: Firmware / IoT Engineer
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-QA-001
+  problem: En campo un nodo debe recuperarse solo ante bloqueo de WiFi, MQTT, Modbus o heap bajo, y el backend necesita saber si reinicio por energia, software, watchdog o brownout.
+  outcome: El firmware activa watchdog de aplicacion, reporta causa de reinicio, contador de arranques y memoria minima observada para diagnostico remoto.
+  scope:
+    in:
+    - "Habilitar watchdog de aplicacion con `WATCHDOG_TIMEOUT_S`."
+    - Alimentar watchdog durante loop normal y esperas WiFi controladas.
+    - "Publicar `reset_reason`, `boot_count`, `watchdog_enabled`, `watchdog_ready`, `free_heap_bytes`, `min_free_heap_bytes` y `heap_warn`."
+    - "Agregar comando Serial `diag show`."
+    - Documentar laboratorio de validacion no destructiva.
+    out:
+    - Reset forzado automatico por heap bajo.
+    - Persistencia historica de diagnosticos.
+    - Prueba destructiva de bloqueo intencional en campo.
+  dependencies:
+  - id: HU-FW-MQTT-MEMORY-001
+    reason: Se apoya en diagnostico de heap para vigilar la cola con buffers fijos.
+  acceptance_criteria:
+  - El firmware compila con watchdog habilitado.
+  - "El arranque imprime `boot_count`, `reset_reason` y estado del watchdog."
+  - "`diag show` imprime diagnostico sin exponer secretos."
+  - El status MQTT incluye campos de watchdog/reset/memoria.
+  - "Durante prueba MQTT normal, `watchdog_ready=true` y `heap_warn=false`."
+  definition_of_done:
+  - Codigo compilado.
+  - README actualizado.
+  - Guia de laboratorio versionada.
+  - Evidencia de status MQTT con diagnostico.
+  implementation:
+    status: PASS_WITH_LIMITATIONS
+    evidence:
+    - project/guides/firmware/watchdog-reset-diagnostics-lab.md
+    - project/evidence/firmware/HU-FW-WATCHDOG-001-lab-2026-09-09.md
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    firmware_files:
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/README.md
+  risks:
+  - risk: Timeout demasiado corto causa reinicios durante escaneos o reconexiones WiFi.
+    mitigation: "Usar `WATCHDOG_TIMEOUT_S=30` y alimentar watchdog dentro de esperas controladas."
+  - risk: Escrituras NVS frecuentes desgastan flash.
+    mitigation: Solo actualizar `boot_count` al arrancar; no persistir metricas cada status.
+
+- id: HU-FW-CONFIG-001
+  title: Configurar WiFi/MQTT del dispositivo sin reflashear
+  type: STORY
+  status: VALIDATION
+  priority: P0
+  target: MVP
+  expert_role: Firmware Engineer
+  reviewer_role: Solution / IoT Architect
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-REV-001
+  problem: El firmware actual depende de configuracion fija para WiFi/MQTT; si cambia el router, proveedor, SSID, clave o IP de Mosquitto, un sensor instalado podria requerir bajarse y reflashearse.
+  outcome: El dispositivo permite cambiar host/puerto MQTT y credenciales operativas desde campo, guardando la configuracion en memoria persistente.
+  scope:
+    in:
+    - Persistir `wifi_ssid`, `wifi_password`, `mqtt_host` y `mqtt_port` en NVS/Preferences.
+    - Levantar portal WiFi/AP de configuracion cuando WiFi falle de forma repetida o por accion local.
+    - Permitir usar hostname estable como `mqtt.local` cuando la red lo soporte.
+    - Registrar version/configuracion activa en payload status sin exponer secretos.
+    - Definir el mismo patron de recuperacion para todos los sensores WiFi/MQTT.
+    out:
+    - OTA de firmware completo.
+    - Provisioning BLE obligatorio.
+    - Gestion centralizada multi-tenant.
+  dependencies:
+  - id: HU-SOIL-LAB-002
+    reason: Requiere firmware de sensor validado y telemetria basica funcionando.
+  acceptance_criteria:
+  - El dispositivo arranca con configuracion guardada sin recompilar.
+  - Se puede cambiar `wifi_ssid`, `wifi_password`, `mqtt_host` y `mqtt_port` desde Serial o portal local de configuracion.
+  - Si WiFi falla por cambio de router/clave o MQTT falla por IP incorrecta, el dispositivo expone una ruta de recuperacion documentada.
+  - El status publica configuracion activa no sensible y estado de conectividad.
+  definition_of_done:
+  - Codigo firmware versionado.
+  - Guia de uso de configuracion en campo.
+  - Evidencia de cambio de broker sin reflashear.
+  implementation:
+    status: READY_FOR_LAB_VALIDATION
+    evidence:
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/evidence/firmware/INC-FW-CONFIG-NVS-001-mqtt-host-corrupt-2026-09-16.md
+    - project/guides/firmware/wifi-mqtt-config-portal-standard.md
+    firmware_files:
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/README.md
+    notes:
+    - Laboratorio cerrado como `PASS_WITH_LIMITATIONS`; `reset_reason=unknown` queda como mejora menor de diagnostico.
+    - Primera iteracion implementa configuracion persistente por Serial/NVS y portal AP temporal en sensor de suelo.
+    - Pendiente portar el portal de configuracion a `esp32-sht40` y `esp32d-outside`; resiliencia MQTT ya esta portada a esos firmwares.
+  risks:
+  - risk: Portal de configuracion expone credenciales o queda abierto permanentemente.
+    mitigation: Activar portal solo por ventana temporal y no imprimir secretos.
+  - risk: Un valor invalido persistido en NVS puede dejar el nodo conectado a WiFi pero sin MQTT.
+    mitigation: Validar `mqtt_host` antes de guardar y al arrancar; si NVS esta corrupto, borrar solo `mqtt_host` y volver a build defaults.
+
+- id: HU-FW-CONFIG-PORTAL-001
+  title: Validar portal WiFi/AP para reconfigurar red y broker en campo
+  type: STORY
+  status: DONE
+  priority: P0
+  target: MVP
+  expert_role: Firmware Engineer
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-QA-001
+  problem: Si un nodo queda instalado y cambia el router, proveedor, SSID, clave WiFi o IP del broker, Serial puede no ser suficiente porque aun requiere acceso fisico USB.
+  outcome: El nodo levanta un AP temporal seguro para configurar `wifi_ssid`, `wifi_password`, `mqtt_host` y `mqtt_port` desde celular/laptop, sin reflashear ni desmontar el sensor.
+  scope:
+    in:
+    - Portal AP temporal en firmware de suelo `xiao-esp32c3-soil`.
+    - Activacion por comando `config portal start`.
+    - Activacion automatica tras fallos WiFi repetidos.
+    - Formulario local para guardar WiFi y MQTT en NVS.
+    - Status con estado del portal sin exponer secretos.
+    - Guia de laboratorio para prueba controlada.
+    out:
+    - Provisioning BLE.
+    - Portal expuesto en internet.
+    - Gestion centralizada de flota.
+    - Port inmediato a todos los sensores.
+  dependencies:
+  - id: HU-FW-CONFIG-001
+    reason: Reusa persistencia NVS y comandos de configuracion base.
+  acceptance_criteria:
+  - El firmware compila con portal disponible y apagado por defecto.
+  - Con `CONFIG_PORTAL_ENABLED=1` y clave valida, `config portal start` levanta AP temporal.
+  - Desde celular/laptop se puede guardar nueva red WiFi y broker MQTT.
+  - Tras guardar, el portal se cierra y el nodo reintenta conexion con la nueva configuracion.
+  - El status reporta `config_source=nvs`, estado WiFi/MQTT y estado del portal sin publicar la clave WiFi.
+  - El patron queda documentado para portarlo a `esp32-sht40` y `esp32d-outside`.
+  definition_of_done:
+  - Codigo compilado.
+  - Guia de laboratorio versionada.
+  - Evidencia de prueba fisica con cambio de red y broker.
+  - Pendientes de portabilidad registrados.
+  implementation:
+    status: READY_FOR_LAB_VALIDATION
+    evidence:
+    - project/guides/firmware/wifi-mqtt-config-portal-lab.md
+    - project/guides/firmware/wifi-mqtt-config-portal-standard.md
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/evidence/firmware/HU-FW-CONFIG-PORTAL-001-lab-2026-09-09.md
+    firmware_files:
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/include/secrets.example.h
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/README.md
+    notes:
+    - Portal queda protegido por build flag y clave AP de minimo 8 caracteres.
+    - Laboratorio fisico cerrado como PASS en sensor de suelo: cambio de red, cambio de broker, persistencia NVS y replay MQTT validados.
+    - Pendiente portar el patron a `esp32-sht40` y `esp32d-outside`.
+  risks:
+  - risk: El portal queda abierto mas tiempo del necesario.
+    mitigation: Usar ventana temporal `CONFIG_PORTAL_WINDOW_MS`, comando `config portal stop` y cierre automatico al guardar.
+  - risk: El AP queda sin clave o con clave debil.
+    mitigation: El firmware rechaza iniciar si `CONFIG_PORTAL_AP_PASSWORD` tiene menos de 8 caracteres.
+  - risk: El usuario configura una red 5 GHz incompatible.
+    mitigation: Documentar que ESP32-C3 requiere WiFi 2.4 GHz y revisar `wifi_status`/scan serial.
+
+- id: HU-FW-OTA-001
+  title: Actualizar firmware remotamente por WiFi OTA
+  type: STORY
+  status: VALIDATION
+  priority: P0
+  target: MVP
+  expert_role: Firmware / IoT Engineer
+  reviewer_role: Solution / IoT Architect
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-REV-001
+  problem: Los nodos instalados en campo no deben depender de conexion USB fisica para recibir correcciones de firmware.
+  outcome: El dispositivo puede recibir una actualizacion OTA por WiFi de forma controlada, con version visible y recuperacion segura ante fallo.
+  scope:
+    in:
+    - Habilitar OTA local por WiFi para banco de pruebas.
+    - Mostrar `firmware_version` y resultado de actualizacion en status.
+    - Definir procedimiento de actualizacion y rollback operativo.
+    - Registrar evidencia de actualizacion exitosa sin desmontar el sensor.
+    out:
+    - Plataforma cloud completa de fleet management.
+    - Actualizacion OTA por BLE.
+    - Firma criptografica obligatoria en primera iteracion.
+  dependencies:
+  - id: HU-FW-CONFIG-001
+    reason: La conectividad/configuracion estable reduce riesgo antes de OTA.
+  acceptance_criteria:
+  - Se puede subir una nueva version de firmware por WiFi en la misma red.
+  - El dispositivo reinicia y reporta la nueva `firmware_version`.
+  - Si falla OTA, queda documentada la recuperacion por USB o version anterior.
+  - No se ejecuta OTA si la alimentacion o conectividad son inestables.
+  definition_of_done:
+  - Codigo firmware OTA versionado.
+  - Runbook de actualizacion remota.
+  - Evidencia de antes/despues con version y status online.
+  implementation:
+    status: READY_FOR_LAB_VALIDATION
+    evidence:
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    notes:
+    - OTA queda apagado por defecto, requiere password y solo abre ventana temporal por comando Serial.
+  risks:
+  - risk: Un corte de energia durante OTA deja el nodo fuera de servicio.
+    mitigation: Exigir prueba en banco, versionado y plan de recuperacion antes de campo.
+
+- id: HU-FW-MQTT-RESILIENCE-001
+  title: Evitar perdida silenciosa de telemetria cuando MQTT se desconecta
+  type: STORY
+  status: VALIDATION
+  priority: P0
+  target: MVP
+  expert_role: Firmware / Edge Engineer
+  reviewer_role: QA Engineer
+  agent_owner: AGENT-ENG-001
+  review_agent: AGENT-QA-001
+  problem: En laboratorio se observaron `rc=-2`, `publish failed` y `Connection reset by peer`; el firmware imprime por serial pero no reencola payloads no publicados.
+  outcome: El dispositivo detecta y evidencia perdida de entrega MQTT, y reduce perdida con cola local corta o contador de mensajes no publicados.
+  evidence_refs:
+  - project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl
+  - project/evidence/soil-moisture/HU-FW-MQTT-RESILIENCE-001-mqtt-received-analysis-2026-09-01.md
+  scope:
+    in:
+    - Agregar contadores `mqtt_publish_attempt_count`, `mqtt_publish_success_count`, `mqtt_publish_failed_count`, `dropped_telemetry_count` y ultima razon de fallo al status.
+    - Marcar cada payload con `sequence` monotono para detectar huecos en backend.
+    - Implementar cola volatil corta para reintentar ultimos payloads cuando reconecta, conservando `sequence` original y marcando `replayed=true`.
+    - Detectar huecos por `device_id + sequence` en Raspberry/edge y registrar rangos faltantes.
+    - Guardar timestamp local de recepcion en el edge para distinguir pausa de captura, perdida de MQTT y reinicios.
+    - Documentar limitaciones de entrega QoS/cola.
+    out:
+    - Persistencia offline larga en flash/SD.
+    - Garantia exact-once.
+    - Broker HA.
+  dependencies:
+  - id: HU-SOIL-LAB-002
+    reason: La evidencia de laboratorio ya muestra fallos de MQTT con lecturas validas por serial.
+  acceptance_criteria:
+  - El status reporta intentos, exitos, publishes fallidos, descartes por overflow y estado MQTT.
+  - Las secuencias permiten detectar si faltan mensajes en broker/storage por cada dispositivo.
+  - Tras reconexion se reintenta al menos el ultimo payload pendiente con su `sequence` original o se declara explicitamente perdido.
+  - El edge registra `telemetry_gap_detected` cuando observa saltos de secuencia en mensajes recibidos.
+  - El logger MQTT en Raspberry guarda timestamp local de recepcion junto al payload original.
+  - Existe evidencia de prueba con broker apagado/encendido.
+  definition_of_done:
+  - Firmware instrumentado.
+  - Ingesta/edge con deteccion de gaps documentada.
+  - Prueba de desconexion/reconexion documentada.
+  - Limitaciones de entrega declaradas para MVP.
+  implementation:
+    status: READY_FOR_LAB_VALIDATION
+    evidence:
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/guides/sensors/mqtt-gap-logger-runbook.md
+    files:
+    - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
+    - tools/mqtt_gap_logger.py
+  risks:
+  - risk: Reintentos bloquean lectura del sensor o consumen demasiada memoria.
+    mitigation: Usar cola corta, no bloqueante y con descarte explicito.
+  - risk: Un dump manual de `mosquitto_sub` puede parecer perdida aunque el subscriber no haya estado activo todo el tiempo.
+    mitigation: Usar logger persistente en Raspberry con timestamp local y reconciliacion por `sequence`.
+  mitigation_plan:
+  - phase: Firmware instrumentation
+    tasks:
+    - Exponer contadores de publish, ultimo error y ultima secuencia publicada/fallida en status.
+    - Mantener `sequence` monotono aunque MQTT este desconectado.
+  - phase: Short retry queue
+    tasks:
+    - Guardar los ultimos payloads no publicados en una cola volatil de tamano fijo.
+    - Reintentar al reconectar sin bloquear la lectura Modbus.
+    - Declarar descartes cuando la cola se llene.
+  - phase: Edge reconciliation
+    tasks:
+    - Persistir payload MQTT con timestamp local de Raspberry.
+    - Detectar saltos por `device_id + sequence`.
+    - Registrar evento de gap con `from_sequence`, `to_sequence` y `missing_count`.
+  - phase: Controlled QA
+    tasks:
+    - Ejecutar prueba broker off/on y comparar serial contra broker/storage.
+    - Verificar que el dashboard o reporte muestre mensajes recibidos, reintentados y perdidos.
+
+architecture_followups:
+- id: HU-HW-FIELD-POWER-001
+  title: Validar alimentacion, proteccion y caja para operacion de campo
+  priority: P0
+  reason: Los fallos de fuente, humedad, tierra comun y cable RS485 largo pueden parecer errores de firmware/MQTT.
+  scope_hint:
+  - Verificar regulador, margen de corriente y caida de voltaje.
+  - Definir fusible/proteccion, TVS o supresion para cableado largo.
+  - Especificar caja, prensaestopas, alivio mecanico y manejo de condensacion.
+- id: HU-FW-MQTT-QOS-001
+  title: Definir politica MQTT QoS, retain, LWT y session para nodos
+  priority: P1
+  reason: La entrega y presencia del dispositivo deben ser coherentes entre firmware, broker y backend.
+  scope_hint:
+  - Definir Last Will and Testament por dispositivo.
+  - Revisar QoS 0 vs QoS 1 segun costo/beneficio.
+  - Definir retain solo para status si aplica, no para telemetria historica.
+- id: HU-FW-TIME-001
+  title: Sincronizacion de tiempo y timestamps reales en payloads
+  priority: P1
+  reason: "`device_time` basado en uptime sirve para orden local, pero no reemplaza timestamp real para analisis historico."
+  scope_hint:
+  - Agregar NTP cuando WiFi este disponible.
+  - "Mantener `device_time` y sumar `observed_at`/`sampled_at` ISO8601."
+  - Registrar timestamp local en edge como respaldo.

@@ -1,0 +1,85 @@
+id: HU-WEB-KANBAN-002
+title: Agregar workflow de propuesta de cambio de estado
+type: STORY
+status: REFINEMENT
+priority: P0
+target: FOUNDATION
+owner_role: Frontend Engineer
+reviewer_role: Project Manager
+effort: M
+risk: MEDIUM
+source: EP-WEB-KANBAN-001
+dependencies:
+- HU-WEB-KANBAN-001
+problem: El tablero local permite arrastrar tarjetas, pero no deja dejar trazabilidad ni aprobacion humana antes de considerar un cambio de estado real.
+outcome: La UI genera y muestra una propuesta de cambio de estado con contexto, estado anterior, estado nuevo, actor local y timestamp, para que pueda revisarse antes de persistir.
+scope:
+  in:
+  - Registrar movimiento local como propuesta.
+  - Mostrar resumen claro del cambio solicitado.
+  - Incluir metadata de usuario, tarjeta, estados origen y destino.
+  - Facilitar copia o envio a agente/reviewer.
+  out:
+  - Escritura directa a Git sin aprobacion.
+  - Persistencia silenciosa del cambio sin revisar.
+granularity:
+  size: M
+  rule: Debe poder completarse con una historia tecnica concreta y validacion de UX.
+  split_if:
+  - Requiere cambiar la logica del tablero y la experiencia de revision a la vez.
+  - Se necesitan decisiones humanas sobre el almacenamiento final.
+dependencies:
+- id: HU-WEB-KANBAN-001
+  reason: La base del tablero ya existe y necesita un flujo de propuesta sobre el movimiento local.
+acceptance_criteria:
+- Cada movimiento de tarjeta genera una propuesta de cambio con item, estado anterior y nuevo.
+- El usuario puede revisar la propuesta antes de confirmar.
+- La propuesta incluye actor local y hora aproximada del cambio.
+- La vista no persiste el cambio real en Git sin una confirmacion explicita.
+definition_of_ready:
+- La ruta del tablero y el modelo de estado ya existen.
+- Se definio el tipo de propuesta y la aprobacion requerida.
+- Se identificaron los campos minimos para la trazabilidad.
+definition_of_done:
+- El cambio queda representado como propuesta revisable.
+- La UX permite identificar estado previo y nuevo.
+- La visualizacion y el payload quedan claros para revisores.
+- La historia se valida con el equipo antes de seguir.
+tasks:
+- id: T-WEB-KANBAN-002-001
+  title: Definir estructura del payload de propuesta de cambio
+  role: Frontend Engineer
+  can_agent_execute: true
+  evidence_expected:
+  - payload de ejemplo
+- id: T-WEB-KANBAN-002-002
+  title: Integrar propuesta con el drag and drop del tablero
+  role: Frontend Engineer
+  can_agent_execute: true
+  evidence_expected:
+  - flujo local funcional
+- id: T-WEB-KANBAN-002-003
+  title: Revisar UX y aprobacion humana del cambio
+  role: Project Manager
+  can_agent_execute: false
+  evidence_expected:
+  - confirmacion de reviewer
+validation:
+  vv_matrix_refs:
+  - HU-WEB-KANBAN-001
+  test_cases:
+  - id: TC-WEB-KANBAN-002-001
+    title: Propuesta de cambio al mover tarjeta
+    expected_evidence: Se visualiza el resumen del cambio antes de confirmar.
+  - id: TC-WEB-KANBAN-002-002
+    title: Cambio no persistido sin aprobacion
+    expected_evidence: El estado real no se graba en Git hasta que exista confirmacion.
+risks:
+- risk: El usuario confunda propuesta local con cambio real.
+  mitigation: Mostrar un estado visual de propuesta y una confirmacion clara.
+human_approval_required_for:
+- cambios de estado reales en Git
+- cambios de backlog o persistencia documentada
+open_questions:
+- Se requiere un flujo de confirmacion por chat o modal en UI.
+notes: Esta HU sigue la ruta de la vista Kanban y prepara la base para recomendaciones y editor de HU DRAFT.
