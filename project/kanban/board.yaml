@@ -58,7 +58,6 @@ lanes:
   - HU-WATER-001
   - HU-WATER-003
   - HU-WATER-005
-  - HU-OPS-SENSOR-LIVENESS-001
   - EN-PWR-001
   - EN-QA-001
   - EN-MKT-001
@@ -72,6 +71,7 @@ lanes:
   - HU-SOIL-001
   - HU-SOIL-DATA-001
   - HU-EDGE-OFFLINE-RECOVERY-001
+  - HU-OPS-SENSOR-LIVENESS-001
   - HU-FW-MQTT-RESILIENCE-ALL-001
   - HU-FW-MQTT-MEMORY-001
   - HU-FW-OFFLINE-RETENTION-001
@@ -429,7 +429,7 @@ cards:
     priority: P0
     expert_role: IoT Operations Engineer
     reviewer_role: QA Engineer
-    status: IN_PROGRESS
+    status: VALIDATION
     effort: M
     mode_fit:
     - coding
@@ -442,7 +442,11 @@ cards:
     - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
     - project/contracts/mqtt/offline-recovery-v1.md
     - project/guides/sensors/mqtt-gap-logger-runbook.md
-    next_action: Definir e implementar eventos warning/critical/offline por `last_seen`.
+    - tools/edge_liveness_check.py
+    - edge/storage/migrations/sqlite/002_device_health.sql
+    - project/guides/edge/device-liveness-runbook.md
+    - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-local-validation-2026-09-22.md
+    next_action: Validar timer systemd y transiciones warning/critical/offline en Raspberry.
   HU-FW-OTA-001:
     title: Actualizar firmware remotamente por WiFi OTA
     type: STORY

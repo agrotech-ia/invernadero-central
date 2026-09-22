@@ -1,0 +1,9 @@
+[Unit]
+Description=Greenhouse edge liveness check
+After=greenhouse-edge-ingestor.service
+
+[Service]
+Type=oneshot
+User=chuchosam
+WorkingDirectory=/home/chuchosam/Documentos/github/invernadero-central
+ExecStart=/usr/bin/python3 tools/edge_liveness_check.py --db var/edge/greenhouse.db

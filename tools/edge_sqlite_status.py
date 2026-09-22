@@ -12,11 +12,15 @@ TABLES = [
     "reconstructed_readings",
     "edge_events",
     "device_liveness",
+    "device_health",
 ]
 
 
 def table_count(connection, table):
-    return connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
+    try:
+        return connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
+    except sqlite3.OperationalError:
+        return "missing"
 
 
 def print_counts(connection):
@@ -92,6 +96,37 @@ def print_recent_events(connection):
         )
 
 
+def print_device_health(connection):
+    try:
+        rows = connection.execute(
+            """
+            SELECT device_id, state, age_seconds, last_received_at, last_sequence,
+                   mqtt_connected, checked_at, changed_at
+            FROM device_health
+            ORDER BY checked_at DESC
+            LIMIT 10
+            """
+        ).fetchall()
+    except sqlite3.OperationalError:
+        print("device_health")
+        print("  table missing; run tools/edge_liveness_check.py once")
+        return
+
+    print("device_health")
+    if not rows:
+        print("  no health checks")
+        return
+    for row in rows:
+        values = dict(row)
+        mqtt_connected = "unknown" if row["mqtt_connected"] is None else bool(row["mqtt_connected"])
+        values["mqtt_connected_label"] = mqtt_connected
+        print(
+            "  device={device_id} state={state} age={age_seconds}s "
+            "last_received={last_received_at} last_sequence={last_sequence} "
+            "mqtt_connected={mqtt_connected_label} checked_at={checked_at}".format(**values)
+        )
+
+
 def main():
     parser = argparse.ArgumentParser(description="Show greenhouse edge SQLite ingestion status.")
     parser.add_argument("--db", default="var/edge/greenhouse.db", help="SQLite database path.")
@@ -106,6 +141,7 @@ def main():
     try:
         print_counts(connection)
         print_liveness(connection)
+        print_device_health(connection)
         print_recent_recovery(connection)
         print_recent_events(connection)
     finally:

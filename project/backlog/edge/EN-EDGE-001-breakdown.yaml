@@ -74,16 +74,25 @@ stories:
 - id: HU-OPS-SENSOR-LIVENESS-001
   title: Registrar ultimo visto por sensor
   type: STORY
-  status: READY
+  status: VALIDATION
   priority: P0
-  outcome: La base permite detectar sensores/gateway sin datos recientes.
+  outcome: La base permite detectar sensores/gateway sin datos recientes y registrar transiciones operativas.
   acceptance_criteria:
   - "`device_liveness` contiene ultimo mensaje recibido."
   - Distingue ultima telemetria y ultimo status.
   - Conserva ultimo sequence conocido.
+  - Calcula estado `online`, `warning`, `critical` u `offline`.
+  - Persiste estado actual en `device_health`.
+  - Registra eventos de transicion en `edge_events`.
   evidence:
   - edge/storage/migrations/sqlite/001_init.sql
+  - edge/storage/migrations/sqlite/002_device_health.sql
+  - tools/edge_liveness_check.py
+  - deploy/systemd/greenhouse-edge-liveness.service
+  - deploy/systemd/greenhouse-edge-liveness.timer
   - project/guides/edge/sqlite-mqtt-ingestor-runbook.md
+  - project/guides/edge/device-liveness-runbook.md
+  - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-local-validation-2026-09-22.md
 risks:
 - risk: SQLite resuelve laboratorio pero no concurrencia productiva multiusuario.
   mitigation: Mantener adaptador y migracion PostgreSQL equivalente desde el inicio.

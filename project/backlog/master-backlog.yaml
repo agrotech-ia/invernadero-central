@@ -352,7 +352,11 @@ items:
   - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
   - project/contracts/mqtt/offline-recovery-v1.md
   - project/guides/sensors/mqtt-gap-logger-runbook.md
-  next_action: Definir e implementar eventos warning/critical/offline por `last_seen`.
+  - tools/edge_liveness_check.py
+  - edge/storage/migrations/sqlite/002_device_health.sql
+  - project/guides/edge/device-liveness-runbook.md
+  - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-local-validation-2026-09-22.md
+  next_action: Validar eventos warning/critical/offline por `last_seen` en Raspberry.
 - id: HU-FW-MQTT-RESILIENCE-001
   title: Evitar perdida silenciosa de telemetria cuando MQTT se desconecta
   type: STORY
