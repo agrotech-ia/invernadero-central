@@ -6,4 +6,4 @@ After=greenhouse-edge-liveness.service
 Type=oneshot
 User=chuchosam
 WorkingDirectory=/home/chuchosam/greenhouse/invernadero-central
-ExecStart=/usr/bin/python3 tools/edge_export_device_health.py --db var/edge/greenhouse.db --out /home/chuchosam/greenhouse/agrotechia-web-ui/public/edge/device-health.json
+ExecStart=/usr/bin/python3 tools/edge_export_device_health.py --db var/edge/greenhouse.db --out /home/chuchosam/greenhouse/edge-public/device-health.json

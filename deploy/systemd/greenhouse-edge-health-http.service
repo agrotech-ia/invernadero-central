@@ -1,0 +1,15 @@
+[Unit]
+Description=Greenhouse edge health HTTP snapshot server
+After=network-online.target greenhouse-edge-health-export.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=chuchosam
+WorkingDirectory=/home/chuchosam/greenhouse/invernadero-central
+ExecStart=/usr/bin/python3 tools/edge_health_http_server.py --directory /home/chuchosam/greenhouse/edge-public --host 0.0.0.0 --port 8088
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
