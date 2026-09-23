@@ -1,0 +1,10 @@
+[Unit]
+Description=Export greenhouse edge device health for web UI every minute
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1min
+Unit=greenhouse-edge-health-export.service
+
+[Install]
+WantedBy=timers.target

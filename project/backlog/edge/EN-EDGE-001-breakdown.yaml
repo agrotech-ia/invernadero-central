@@ -93,6 +93,7 @@ stories:
   - project/guides/edge/sqlite-mqtt-ingestor-runbook.md
   - project/guides/edge/device-liveness-runbook.md
   - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-local-validation-2026-09-22.md
+  - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-raspberry-validation-2026-09-22.md
 risks:
 - risk: SQLite resuelve laboratorio pero no concurrencia productiva multiusuario.
   mitigation: Mantener adaptador y migracion PostgreSQL equivalente desde el inicio.

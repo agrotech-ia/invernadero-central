@@ -72,6 +72,7 @@ lanes:
   - HU-SOIL-DATA-001
   - HU-EDGE-OFFLINE-RECOVERY-001
   - HU-OPS-SENSOR-LIVENESS-001
+  - HU-WEB-DEVICE-STATUS-001
   - HU-FW-MQTT-RESILIENCE-ALL-001
   - HU-FW-MQTT-MEMORY-001
   - HU-FW-OFFLINE-RETENTION-001
@@ -446,6 +447,7 @@ cards:
     - edge/storage/migrations/sqlite/002_device_health.sql
     - project/guides/edge/device-liveness-runbook.md
     - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-local-validation-2026-09-22.md
+    - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-raspberry-validation-2026-09-22.md
     next_action: Validar timer systemd y transiciones warning/critical/offline en Raspberry.
   HU-FW-OTA-001:
     title: Actualizar firmware remotamente por WiFi OTA
@@ -509,6 +511,27 @@ cards:
     - tools/edge_sqlite_status.py
     - project/guides/edge/sqlite-mqtt-ingestor-runbook.md
     next_action: Validar ingestor SQLite en Raspberry con payloads reales y preparar adaptador PostgreSQL.
+  HU-WEB-DEVICE-STATUS-001:
+    title: Mostrar estado real de dispositivos desde Raspberry
+    type: STORY
+    priority: P0
+    expert_role: Frontend Engineer
+    reviewer_role: QA Engineer
+    status: VALIDATION
+    effort: M
+    mode_fit:
+    - coding
+    - physical_lab
+    granularity: executable
+    dependencies:
+    - HU-OPS-SENSOR-LIVENESS-001
+    - HU-EDGE-INGESTOR-001
+    evidence:
+    - project/backlog/web/HU-WEB-DEVICE-STATUS-001.yaml
+    - project/evidence/web/HU-WEB-DEVICE-STATUS-001-implementation-2026-09-22.md
+    - tools/edge_export_device_health.py
+    - project/guides/edge/device-health-web-export-runbook.md
+    next_action: Validar en Raspberry export JSON y ruta web `/project/dispositivos`.
   EN-AWS-ARCH-001:
     title: Formalizar arquitectura AWS SaaS piloto
     type: ENABLER

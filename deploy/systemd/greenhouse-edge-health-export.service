@@ -1,0 +1,9 @@
+[Unit]
+Description=Export greenhouse edge device health for web UI
+After=greenhouse-edge-liveness.service
+
+[Service]
+Type=oneshot
+User=chuchosam
+WorkingDirectory=/home/chuchosam/greenhouse/invernadero-central
+ExecStart=/usr/bin/python3 tools/edge_export_device_health.py --db var/edge/greenhouse.db --out /home/chuchosam/greenhouse/agrotechia-web-ui/public/edge/device-health.json

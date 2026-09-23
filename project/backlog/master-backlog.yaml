@@ -356,6 +356,7 @@ items:
   - edge/storage/migrations/sqlite/002_device_health.sql
   - project/guides/edge/device-liveness-runbook.md
   - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-local-validation-2026-09-22.md
+  - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-raspberry-validation-2026-09-22.md
   next_action: Validar eventos warning/critical/offline por `last_seen` en Raspberry.
 - id: HU-FW-MQTT-RESILIENCE-001
   title: Evitar perdida silenciosa de telemetria cuando MQTT se desconecta
@@ -469,6 +470,26 @@ items:
   risk: MEDIUM
   dependencies: []
   source: HU-009
+- id: HU-WEB-DEVICE-STATUS-001
+  title: Mostrar estado real de dispositivos desde Raspberry
+  type: STORY
+  priority: P0
+  target: MVP
+  owner_role: Frontend Engineer
+  status: VALIDATION
+  reviewer_role: QA Engineer
+  effort: M
+  risk: MEDIUM
+  dependencies:
+  - HU-OPS-SENSOR-LIVENESS-001
+  - HU-EDGE-INGESTOR-001
+  source: EP-WEB
+  evidence:
+  - project/backlog/web/HU-WEB-DEVICE-STATUS-001.yaml
+  - project/evidence/web/HU-WEB-DEVICE-STATUS-001-implementation-2026-09-22.md
+  - tools/edge_export_device_health.py
+  - project/guides/edge/device-health-web-export-runbook.md
+  next_action: Validar en Raspberry export JSON y ruta web `/project/dispositivos`.
   progress:
   - task_id: T-WEB-PLAN-001
     title: Segregar plataforma web SaaS en roles, fases y HUs granulares

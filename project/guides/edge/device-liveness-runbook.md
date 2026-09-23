@@ -31,7 +31,11 @@ python3 tools/edge_sqlite_status.py --db var/edge/greenhouse.db
 
 ## Simular alerta
 
-Para validar transiciones sin esperar 30 minutos se pueden usar umbrales cortos:
+Para validar transiciones sin esperar 30 minutos se pueden usar umbrales cortos. Durante esta prueba conviene detener temporalmente el timer para que no mezcle umbrales normales con umbrales de laboratorio rapido:
+
+```bash
+sudo systemctl stop greenhouse-edge-liveness.timer
+```
 
 ```bash
 python3 tools/edge_liveness_check.py \
@@ -40,6 +44,14 @@ python3 tools/edge_liveness_check.py \
   --critical-after-s 20 \
   --offline-after-s 30
 ```
+
+Al terminar, restaurar el timer normal:
+
+```bash
+sudo systemctl start greenhouse-edge-liveness.timer
+```
+
+Si no se detiene el timer, puede aparecer una transicion como `offline -> warning` porque el timer normal usa umbrales mas largos.
 
 ## Ejecutar como timer systemd
 
