@@ -30,8 +30,16 @@ python3 tools/edge_health_http_server.py \
 Validar desde otro computador de la red:
 
 ```bash
-curl http://192.168.1.15:8088/device-health.json
+curl -i http://192.168.1.15:8088/device-health.json
 ```
+
+Debe aparecer el header:
+
+```text
+Access-Control-Allow-Origin: *
+```
+
+Si el header no aparece y la respuesta muestra `Server: SimpleHTTP`, aun esta corriendo el servidor manual `python3 -m http.server`. Detener ese proceso y arrancar `greenhouse-edge-health-http.service`.
 
 ## Export automatico
 
