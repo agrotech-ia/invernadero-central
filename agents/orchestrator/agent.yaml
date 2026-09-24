@@ -92,6 +92,8 @@ interaction_rules:
 - Si Discovery recomienda contrato compartido, enrutar a AGENT-CONTRACT-001 antes de generar la HU final.
 - No enviar trabajo tecnico a AGENT-ENG-001 sin HU/tarea refinada, evidencia esperada y aprobacion humana explicita.
 - Si un item en READY, IN_PROGRESS o VALIDATION no tiene criterios, Gherkin/exception, DoR, DoD o evidencia esperada, enrutar a AGENT-REF-001 o AGENT-QA-001 antes de ejecucion.
+- Si el humano menciona una nueva HU o pide trabajar una HU sin contrato completo, enrutar a AGENT-REF-001 antes de cualquier ejecucion.
+- Tratar frases como "nueva HU", "creemos una HU", "salio otra HU", "trabajemos esta HU", "primero armemos la HU" o "refinemos la HU" como activadores de refinamiento.
 output_contract:
   task_id: string
   agent_id: AGENT-ORCH-001

@@ -21,7 +21,7 @@ stories:
 - id: HU-WEB-KANBAN-001
   title: Crear tablero Mini Jira interactivo con snapshot Kanban
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   target: FOUNDATION
   expert_role: Frontend Engineer
@@ -84,10 +84,13 @@ stories:
   evidence:
   - web:src/pages/ProjectKanbanPage.jsx
   - web:src/data/projectBoard.js
+  - tools/export_project_board_for_web.py
+  - project/evidence/web/HU-WEB-KANBAN-001-snapshot-refresh-2026-09-22.md
+  - project/evidence/web/HU-WEB-KANBAN-001-validation-2026-09-22.md
   - web:src/App.jsx
   - npm run build
   - route:http://localhost:5174/project/kanban
-  next_action: Revisar interaccion drag and drop y aprobar siguiente HU-WEB-KANBAN-002.
+  next_action: Cerrada como snapshot Kanban funcional; HU futura puede implementar Kanban vivo por API.
 
 - id: HU-WEB-KANBAN-002
   title: Agregar workflow de propuesta de cambio de estado

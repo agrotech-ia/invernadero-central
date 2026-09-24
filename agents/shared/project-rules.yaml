@@ -34,3 +34,12 @@ rules:
   approved exception, DoR, DoD, evidence expected and clear granularity
 - Parent items in READY are coordination containers only; execution must happen
   through child HUs or tasks with their own criteria and evidence
+- When the human says "nueva HU", "creemos una HU", "salio otra HU",
+  "trabajemos esta HU", "antes de seguir refinemos" or equivalent, agents must
+  route to refinement first and produce/update the HU contract before execution
+- A HU contract is complete only when it has problem, outcome, scope, expert_role,
+  reviewer_role, acceptance_criteria, gherkin_scenarios or approved exception,
+  definition_of_ready, definition_of_done, evidence_expected, risks,
+  dependencies/open blockers and next_action
+- Engineering agents must refuse implementation when the selected HU lacks the HU
+  contract, except for reversible discovery/refinement work explicitly requested

@@ -28,5 +28,6 @@ prohibited:
 - No marcar DONE
 - No reescribir la HU completa durante review
 - No aprobar movimiento de estado si falla `project/validation/state-gates.yaml`
+- No aprobar ejecucion ni cierre de una HU nueva si fue trabajada sin contrato de HU completo
 review_required: false
 kiro_agent: project-reviewer-safety

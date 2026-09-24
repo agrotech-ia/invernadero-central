@@ -5,6 +5,23 @@ purpose: >
   traten una HU, enabler, spike o experimento como ejecutable sin refinamiento
   verificable.
 
+human_trigger_policy:
+  refinement_first_triggers:
+  - nueva HU
+  - creemos una HU
+  - crear HU
+  - salio otra HU
+  - trabajemos esta HU
+  - refinemos la HU
+  - antes de seguir refinemos
+  - primero armemos la HU
+  required_route: AGENT-REF-001
+  rule: >
+    Si el humano identifica una HU nueva o decide trabajar una HU sin contrato
+    completo, el siguiente paso obligatorio es refinamiento. No se debe ejecutar
+    codigo, laboratorio ni cambios de estado hasta producir o actualizar criterios,
+    Gherkin, DoR, DoD, evidencia esperada, riesgos y siguiente accion.
+
 applies_to:
 - STORY
 - ENABLER
@@ -123,14 +140,19 @@ agent_enforcement:
   orchestrator:
   - Before routing execution, check current status against this file.
   - If gate fails, route to AGENT-REF-001 or AGENT-QA-001 instead of execution.
+  - Treat human_trigger_policy.refinement_first_triggers as an explicit route to refinement.
   backlog:
   - Do not recommend execution for items that fail READY gate.
   - Label invalid READY/IN_PROGRESS/VALIDATION items as gate_violation.
+  - If a valuable new HU appears during work, recommend "crear/refinar HU" before execution.
   refinement:
   - Output acceptance_criteria, gherkin_scenarios, DoR, DoD, evidence_expected and tasks before recommending READY.
+  - If evidence or context is incomplete, keep the item in REFINEMENT with open questions instead of READY.
   qa:
   - Validate gates before recommending VALIDATION or DONE.
+  - Reject DONE if acceptance_criteria_results are missing per criterion.
   reviewer:
   - Reject status movement when required gate fields are missing.
   engineering:
   - Refuse implementation unless READY/IN_PROGRESS gate passes or the task is explicitly a reversible discovery/refinement task.
+  - When asked to start work on an unrefined HU, stop and request/refine the HU contract first.

@@ -1,6 +1,6 @@
 # MQTT Delivery Resilience Standard
 
-Estado: DRAFT  
+Estado: APPROVED_BASELINE  
 Fecha: 2026-09-02  
 Aplica a: nodos ESP32/XIAO que publiquen `greenhouse/#`
 

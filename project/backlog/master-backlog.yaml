@@ -50,13 +50,21 @@ items:
     evidence:
     - project/evidence/agents/AGENT-DOC-001-2026-08-22.md
   next_action: Ejecutar primer Discovery real para EN-EDGE-001 y generar guia DRAFT de uso Discovery/Contract.
+  acceptance_criteria:
+  - Los agentes Knowledge, Backlog, Suite, Discovery/Contract y Documentation quedan operacionalizados.
+  - Cada tarea principal tiene evidencia versionada.
+  - El enabler queda cerrado como base para QA, backlog y documentacion posteriores.
+  gherkin_scenarios:
+  - given: el proyecto requiere flujo multiagente local
+    when: se revisan las evidencias de EN-AGENT-001
+    then: la suite base queda operacional y lista para soportar backlog/QA/documentacion.
 - id: EN-QA-001
   title: Implementar framework V&V y persistencia de evidencia
   type: ENABLER
   priority: P0
   target: FOUNDATION
   owner_role: QA Engineer
-  status: VALIDATION
+  status: REFINEMENT
   reviewer_role: Solution / IoT Architect
   effort: M
   risk: MEDIUM
@@ -76,14 +84,14 @@ items:
     evidence:
     - project/validation/evidence-taxonomy.yaml
     - project/evidence/README.md
-  next_action: Ejecutar T-QA-002 para crear plantilla de evidence index por HU/enabler.
+  next_action: Continuar refinamiento ejecutando T-QA-002 para crear plantilla de evidence index por HU/enabler.
 - id: HU-SOIL-001
   title: Validar y caracterizar sensor de suelo 7-en-1
   type: STORY
   priority: P0
   target: MVP
   owner_role: QA Engineer
-  status: VALIDATION
+  status: DONE
   reviewer_role: Solution / IoT Architect
   effort: M
   risk: MEDIUM
@@ -97,7 +105,17 @@ items:
     - project/backlog/soil/HU-SOIL-001-breakdown.yaml
     - project/guides/sensors/soil-moisture-test-plan.md
     - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
-  next_action: Revisar evidencia cerrada del laboratorio y habilitar contrato MQTT V1 de suelo.
+    - project/evidence/soil-moisture/HU-SOIL-001-parent-closure-2026-09-22.md
+    - project/evidence/soil-moisture/HU-SOIL-DATA-001-contract-validation-2026-09-22.md
+  next_action: Cerrada con limitaciones; continuar con bloque firmware MQTT/config/OTA.
+  acceptance_criteria:
+  - Las HUs hijas de laboratorio y contrato de datos quedan cerradas para MVP.
+  - La evidencia cubre banco, lectura cruda, caracterizacion y payload MQTT.
+  - Las limitaciones de calibracion, modelo exacto y verificacion electrica quedan como follow-ups.
+  gherkin_scenarios:
+  - given: la evidencia de laboratorio de suelo esta consolidada
+    when: se evalua el parent HU-SOIL-001
+    then: queda cerrado para MVP con limitaciones y follow-ups explicitos.
 - id: HU-SOIL-LAB-001
   title: Preparar banco de pruebas y materiales del sensor de suelo
   type: STORY
@@ -113,6 +131,14 @@ items:
   evidence:
   - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
   next_action: Cerrada como parte del laboratorio inicial; pendientes tecnicos quedan como follow-ups.
+  acceptance_criteria:
+  - El banco de prueba queda preparado con materiales, muestra, sensor y condiciones iniciales registradas.
+  - El sensor 7-en-1 queda identificado como operativo para lecturas Modbus iniciales.
+  - Las limitaciones de modelo exacto, voltaje/cableado formal y calibracion quedan declaradas como follow-ups.
+  gherkin_scenarios:
+  - given: un sensor de suelo y una muestra preparada
+    when: se completa el checklist de banco
+    then: se registra evidencia suficiente para iniciar lecturas crudas sin bloquear el laboratorio.
 - id: HU-SOIL-LAB-002
   title: Capturar lectura cruda estable del sensor de suelo
   type: STORY
@@ -130,6 +156,14 @@ items:
   - project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl
   - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
   next_action: Cerrada con 55 telemetrias y status asociados; continuar con caracterizacion y contrato de datos.
+  acceptance_criteria:
+  - Se capturan al menos 5 lecturas crudas del sensor de suelo.
+  - Cada lectura incluye humedad, temperatura, pH, EC y N/P/K cuando el sensor los reporte.
+  - La evidencia permite correlacionar registros Modbus con payload MQTT.
+  gherkin_scenarios:
+  - given: el sensor esta conectado por Modbus
+    when: se ejecutan lecturas repetidas
+    then: se obtiene una serie cruda estable con metricas de suelo publicables.
 - id: HU-SOIL-LAB-003
   title: Caracterizar lecturas en seco, humedo y saturado
   type: STORY
@@ -147,13 +181,21 @@ items:
   - project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl
   - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
   next_action: Cerrada con condiciones seco, humedo, saturado y extension a 200 ml.
+  acceptance_criteria:
+  - Se registran lecturas en condiciones seca, humeda y saturada/extrema.
+  - La respuesta de humedad, EC y NPK cambia de forma coherente con los aportes de agua.
+  - Se documenta la extension a 200 ml y sus efectos sobre N/P/K.
+  gherkin_scenarios:
+  - given: una muestra de suelo con aportes controlados de agua
+    when: se comparan lecturas por etapa
+    then: la evidencia muestra variacion trazable de humedad, EC y NPK.
 - id: HU-SOIL-DATA-001
   title: Definir payload MQTT V1 para medicion de suelo
   type: STORY
   priority: P0
   target: MVP
   owner_role: Backend / IoT Engineer
-  status: VALIDATION
+  status: DONE
   reviewer_role: QA Engineer
   effort: S
   risk: MEDIUM
@@ -163,14 +205,24 @@ items:
   evidence:
   - project/contracts/mqtt/soil-telemetry-v1.md
   - project/contracts/mqtt/soil-telemetry-v1.schema.json
+  - project/evidence/soil-moisture/HU-SOIL-DATA-001-contract-validation-2026-09-22.md
   next_action: Revisar contrato DRAFT contra payload real y usarlo en ingesta edge.
+  acceptance_criteria:
+  - Existe contrato soil.telemetry.v1 con topic, envelope y readings esperadas.
+  - El payload real de suelo valida contra el contrato aprobado.
+  - El contrato cubre replay mediante replayed y replayed_at_device_time.
+  - La ingesta edge puede usar el contrato sin transformaciones ad hoc.
+  gherkin_scenarios:
+  - given: un payload MQTT de suelo 7-en-1
+    when: se compara contra soil.telemetry.v1
+    then: sus metricas y metadatos cumplen el contrato esperado.
 - id: HU-FW-MQTT-RESILIENCE-ALL-001
   title: Estandarizar resiliencia MQTT en todos los sensores
   type: STORY
   priority: P0
   target: MVP
   owner_role: Firmware / Edge Engineer
-  status: VALIDATION
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: HIGH
@@ -181,14 +233,27 @@ items:
   - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
   - project/guides/firmware/mqtt-delivery-resilience-standard.md
   - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
-  next_action: Validar manana resiliencia MQTT en suelo, SHT40 interior y nodo exterior.
+  - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-validation-2026-09-22.md
+  - project/evidence/firmware/HU-FW-MQTT-MEMORY-001-validation-2026-09-22.md
+  - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
+  - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-ALL-001-validation-2026-09-24.md
+  next_action: Cerrada como PASS_WITH_LIMITATIONS; hardening fisico por familia de nodo queda como follow-up.
+  acceptance_criteria:
+  - xiao-esp32c3-soil, esp32-sht40 y esp32d-outside compilan con el patron MQTT.
+  - La guia transversal MQTT queda aprobada como baseline.
+  - La prueba fisica profunda en suelo demuestra replay, contadores y edge gaps.
+  - El hardening fisico por familia queda registrado como follow-up.
+  gherkin_scenarios:
+  - given: un firmware MQTT actual del invernadero
+    when: se aplica el patron transversal
+    then: compila con sequence, contadores, cola corta y replay compatible.
 - id: HU-FW-MQTT-MEMORY-001
   title: Endurecer cola MQTT con buffers fijos para evitar fragmentacion de memoria
   type: STORY
   priority: P0
   target: MVP
   owner_role: Firmware / Edge Engineer
-  status: VALIDATION
+  status: DONE
   reviewer_role: Solution / IoT Architect
   effort: S
   risk: HIGH
@@ -199,7 +264,18 @@ items:
   - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
   - project/guides/firmware/mqtt-delivery-resilience-standard.md
   - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-lab-2026-09-04.md
-  next_action: Validar que la cola MQTT drena, reutiliza slots y no fragmenta memoria durante reconexiones repetidas.
+  - project/evidence/firmware/HU-FW-WATCHDOG-001-lab-2026-09-09.md
+  - project/evidence/firmware/HU-FW-MQTT-MEMORY-001-validation-2026-09-22.md
+  next_action: Cerrada como PASS_WITH_LIMITATIONS; continuar con HU-FW-OFFLINE-RETENTION-001 para retencion offline larga.
+  acceptance_criteria:
+  - La cola MQTT usa buffers fijos para topic y payload.
+  - El status reporta mqtt_topic_buffer_size y mqtt_payload_buffer_size.
+  - Los slots drenados se reutilizan al reconectar.
+  - Los descartes por limite quedan visibles en dropped_telemetry_count y last_mqtt_error.
+  gherkin_scenarios:
+  - given: el nodo acumula telemetria sin MQTT
+    when: la cola se drena o se llena
+    then: la memoria permanece acotada y los descartes son explicitos.
 - id: HU-FW-WATCHDOG-001
   title: Watchdog, reset reason y diagnostico de memoria del nodo
   type: STORY
@@ -219,6 +295,15 @@ items:
   - project/evidence/firmware/HU-FW-WATCHDOG-001-lab-2026-09-09.md
   - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
   next_action: Cerrada como PASS_WITH_LIMITATIONS; revisar mejora menor para reset_reason=unknown.
+  acceptance_criteria:
+  - El firmware compila con watchdog habilitado.
+  - El status publica boot_count, reset_reason, watchdog_enabled, watchdog_ready, free_heap_bytes, min_free_heap_bytes y heap_warn.
+  - Durante prueba MQTT normal watchdog_ready=true y heap_warn=false.
+  - La limitacion reset_reason=unknown queda registrada como hardening.
+  gherkin_scenarios:
+  - given: un nodo encendido con firmware watchdog
+    when: publica status durante operacion MQTT
+    then: el payload contiene diagnostico de reinicio, watchdog y memoria sin exponer secretos.
 - id: HU-FW-CONFIG-001
   title: Configurar WiFi/MQTT del dispositivo sin reflashear
   type: STORY
@@ -235,15 +320,27 @@ items:
   evidence:
   - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
   - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+  - project/evidence/firmware/HU-FW-CONFIG-PORTAL-001-lab-2026-09-09.md
+  - project/evidence/firmware/HU-FW-CONFIG-001-validation-2026-09-22.md
+  - project/evidence/firmware/INC-FW-CONFIG-NVS-001-mqtt-host-corrupt-2026-09-16.md
   - project/guides/firmware/wifi-mqtt-config-portal-standard.md
-  next_action: Validar manana cambio de WiFi y broker MQTT por Serial/NVS y portal AP temporal sin recompilar.
+  next_action: Cerrada para sensor de suelo; portar patron a otros nodos en HU-FW-MQTT-RESILIENCE-ALL-001.
+  acceptance_criteria:
+  - El nodo permite configurar WiFi y MQTT sin recompilar mediante Serial/NVS.
+  - La configuracion persistida sobrevive reinicio.
+  - El status reporta config_source y valores operativos sin exponer password.
+  - El portal AP complementario queda validado en suelo y port a otros nodos queda separado.
+  gherkin_scenarios:
+  - given: cambia la IP del broker o la red WiFi
+    when: se actualiza la configuracion por NVS/portal
+    then: el nodo reconecta y publica sin reflashear.
 - id: HU-FW-CONFIG-PORTAL-001
   title: Validar portal WiFi/AP para reconfigurar red y broker en campo
   type: STORY
   priority: P0
   target: MVP
   owner_role: Firmware Engineer
-  status: VALIDATION
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: HIGH
@@ -257,6 +354,15 @@ items:
   - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
   - project/evidence/firmware/HU-FW-CONFIG-PORTAL-001-lab-2026-09-09.md
   next_action: Cerrada como PASS; portar patron validado a `esp32-sht40` y `esp32d-outside`.
+  acceptance_criteria:
+  - El portal AP temporal se puede activar de forma controlada.
+  - Desde celular/laptop se puede cambiar WiFi y broker MQTT en NVS.
+  - Tras guardar, el nodo reconecta y publica telemetria/status con config_source=nvs.
+  - El patron queda documentado y el port a otros nodos queda como follow-up.
+  gherkin_scenarios:
+  - given: un nodo sin conectividad MQTT correcta
+    when: se abre el portal y se guarda una nueva configuracion
+    then: el nodo reconecta al broker configurado sin reflashear.
 - id: HU-FW-OTA-001
   title: Actualizar firmware remotamente por WiFi OTA
   type: STORY
@@ -273,14 +379,15 @@ items:
   evidence:
   - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
   - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
-  next_action: Validar manana OTA controlado por password y ventana temporal.
+  - project/guides/firmware/ota-update-lab.md
+  next_action: 'Ejecutar laboratorio OTA: status antes/despues, version nueva por WiFi y recuperacion documentada.'
 - id: HU-FW-OFFLINE-RETENTION-001
   title: Retencion offline adaptativa para desconexiones largas
   type: STORY
   priority: P0
   target: MVP
   owner_role: Firmware / Data IoT Architect
-  status: VALIDATION
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: HIGH
@@ -293,14 +400,26 @@ items:
   - project/guides/firmware/offline-retention-adaptive-standard.md
   - project/guides/firmware/mqtt-delivery-resilience-standard.md
   - project/evidence/firmware/HU-FW-OFFLINE-RETENTION-001-build-2026-09-09.md
-  next_action: Validar en monitor/MQTT que status publique intervalos activos y ejecutar desconexion larga.
+  - project/evidence/firmware/HU-FW-OFFLINE-RECOVERY-PROTOCOL-001-build-2026-09-09.md
+  - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
+  - project/evidence/firmware/HU-FW-OFFLINE-RETENTION-001-validation-2026-09-22.md
+  next_action: Cerrada como PASS_WITH_LIMITATIONS; prueba fisica 4-5h queda como hardening futuro.
+  acceptance_criteria:
+  - Existe LAB_MODE para alternar laboratorio y campo.
+  - El status reporta lab_mode, telemetry_interval_ms y status_interval_ms.
+  - La politica offline conserva muestras crudas recientes y resumenes por ventana.
+  - Los puntos reconstruidos quedan diferenciados de lecturas exactas.
+  gherkin_scenarios:
+  - given: una desconexion MQTT larga
+    when: el nodo no puede publicar cada muestra
+    then: retiene trazas utiles mediante downsampling y resumenes.
 - id: HU-FW-OFFLINE-RECOVERY-PROTOCOL-001
   title: Emitir paquetes MQTT de recuperacion offline compacta
   type: STORY
   priority: P0
   target: MVP
   owner_role: Firmware / Data IoT Architect
-  status: VALIDATION
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: HIGH
@@ -313,13 +432,22 @@ items:
   - project/contracts/mqtt/offline-recovery-v1.schema.json
   - project/evidence/firmware/HU-FW-OFFLINE-RECOVERY-PROTOCOL-001-build-2026-09-09.md
   next_action: Cerrada como PASS; continuar con HU-EDGE-OFFLINE-RECOVERY-001 para persistir/reconstruir en Raspberry.
+  acceptance_criteria:
+  - El firmware publica paquetes /telemetry/recovery con message_type=offline_recovery.
+  - Los records raw conservan sequence y device_time originales.
+  - Los records summary incluyen rango de secuencias, rango de tiempo y estadisticos por metrica.
+  - El status reporta capacidad, ocupacion y conteos de recuperacion offline.
+  gherkin_scenarios:
+  - given: Mosquitto estuvo detenido y el nodo acumulo datos offline
+    when: Mosquitto vuelve a estar disponible
+    then: el nodo publica telemetrias replayed y resumenes offline compactos.
 - id: HU-EDGE-OFFLINE-RECOVERY-001
   title: Ingerir y reconstruir recuperacion offline en Raspberry
   type: STORY
   priority: P0
   target: MVP
   owner_role: Edge / Data Engineer
-  status: REFINEMENT
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: HIGH
@@ -334,14 +462,24 @@ items:
   - edge/ingestor/storage.py
   - edge/storage/migrations/sqlite/001_init.sql
   - project/guides/edge/sqlite-mqtt-ingestor-runbook.md
-  next_action: Ejecutar prueba en Raspberry con Mosquitto off/on y validar tablas SQLite.
+  - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
+  next_action: Cerrada con recovery_summaries y reconstructed_readings validados en SQLite real.
+  acceptance_criteria:
+  - El edge ingiere mensajes MQTT normales y offline_recovery.
+  - SQLite persiste payload crudo, readings, recovery_summaries y reconstructed_readings.
+  - Los puntos reconstruidos quedan marcados con calidad explicita.
+  - La estructura mantiene compatibilidad conceptual con migracion futura a PostgreSQL.
+  gherkin_scenarios:
+  - given: Raspberry recibe recovery offline por MQTT
+    when: el ingestor procesa el mensaje
+    then: se guardan resumenes y puntos reconstruidos consultables en SQLite.
 - id: HU-OPS-SENSOR-LIVENESS-001
   title: Alertar sensores o gateway sin datos recientes
   type: STORY
   priority: P0
   target: MVP
   owner_role: IoT Operations Engineer
-  status: IN_PROGRESS
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: HIGH
@@ -357,14 +495,24 @@ items:
   - project/guides/edge/device-liveness-runbook.md
   - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-local-validation-2026-09-22.md
   - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-raspberry-validation-2026-09-22.md
-  next_action: Validar eventos warning/critical/offline por `last_seen` en Raspberry.
+  - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
+  next_action: Cerrada con transiciones warning/critical y recuperacion a online visibles en web.
+  acceptance_criteria:
+  - El edge clasifica sensores por ausencia de datos en online, warning, critical u offline.
+  - Se registran eventos sensor_warning, sensor_critical, sensor_offline y sensor_recovered.
+  - La web puede mostrar el estado calculado desde device_health.
+  - Los umbrales de prueba y campo quedan documentados.
+  gherkin_scenarios:
+  - given: un sensor deja de enviar datos
+    when: el liveness check evalua last_received_at
+    then: se genera el estado operativo y evento correspondiente.
 - id: HU-FW-MQTT-RESILIENCE-001
   title: Evitar perdida silenciosa de telemetria cuando MQTT se desconecta
   type: STORY
   priority: P0
   target: MVP
   owner_role: Firmware / Edge Engineer
-  status: VALIDATION
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: HIGH
@@ -375,9 +523,22 @@ items:
   - project/backlog/firmware/HU-FW-REMOTE-OPS-breakdown.yaml
   - project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl
   - project/evidence/soil-moisture/HU-FW-MQTT-RESILIENCE-001-mqtt-received-analysis-2026-09-01.md
+  - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-lab-2026-09-04.md
+  - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-validation-2026-09-22.md
+  - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
   - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+  - project/guides/firmware/mqtt-delivery-resilience-standard.md
   - project/guides/sensors/mqtt-gap-logger-runbook.md
-  next_action: Validar manana broker off/on con contadores, cola de reintento y logger de gaps.
+  next_action: Cerrada para sensor de suelo y edge; continuar con memoria, retencion offline y port a todos los sensores.
+  acceptance_criteria:
+  - Cada telemetria incluye sequence monotono.
+  - Si MQTT falla, el firmware conserva telemetria en cola corta y reintenta.
+  - Los mensajes reenviados conservan sequence original y agregan replayed=true.
+  - Raspberry puede detectar gaps por device_id y sequence.
+  gherkin_scenarios:
+  - given: Mosquitto se detiene temporalmente
+    when: el broker vuelve
+    then: el nodo reenvia telemetrias pendientes marcadas como replayed.
 - id: HU-WATER-001
   title: Implementar nodo de pH de agua
   type: STORY
@@ -434,6 +595,91 @@ items:
   risk: MEDIUM
   dependencies: []
   source: HU-009
+- id: HU-FW-HARDEN-NODE-FAMILY-LAB-001
+  title: Ejecutar hardening fisico MQTT por familia de nodo
+  type: STORY
+  priority: P0
+  target: FIELD_HARDENING
+  owner_role: QA / Firmware Engineer
+  status: BACKLOG
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: HIGH
+  dependencies:
+  - HU-FW-MQTT-RESILIENCE-ALL-001
+  source: HU-FW-MQTT-RESILIENCE-ALL-001
+  evidence:
+  - project/backlog/hardening-followups-2026-09-24.md
+  next_action: Probar broker off/on, replay y contadores en SHT40 interior y nodo exterior con hardware real.
+- id: HU-FW-CONFIG-PORTAL-ALL-001
+  title: Portar portal WiFi/MQTT a SHT40 y nodo exterior
+  type: STORY
+  priority: P0
+  target: FIELD_HARDENING
+  owner_role: Firmware Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: M
+  risk: HIGH
+  dependencies:
+  - HU-FW-CONFIG-001
+  - HU-FW-CONFIG-PORTAL-001
+  source: HU-FW-CONFIG-001
+  evidence:
+  - project/backlog/hardening-followups-2026-09-24.md
+  - project/guides/firmware/wifi-mqtt-config-portal-standard.md
+  next_action: Implementar y validar cambio de WiFi/MQTT sin reflashear en SHT40 y exterior.
+- id: HU-FW-RESET-REASON-HARDENING-001
+  title: Mejorar diagnostico de causa de reinicio firmware
+  type: STORY
+  priority: P1
+  target: FIELD_HARDENING
+  owner_role: Firmware / IoT Engineer
+  status: BACKLOG
+  reviewer_role: QA Engineer
+  effort: S
+  risk: MEDIUM
+  dependencies:
+  - HU-FW-WATCHDOG-001
+  source: HU-FW-WATCHDOG-001
+  evidence:
+  - project/backlog/hardening-followups-2026-09-24.md
+  - project/evidence/firmware/HU-FW-WATCHDOG-001-lab-2026-09-09.md
+  next_action: Mapear reset reasons reales de ESP32-C3 y validar poweron/software/watchdog/brownout.
+- id: HU-FW-DURABLE-OFFLINE-RETENTION-001
+  title: Evaluar retencion offline durable ante perdida de energia
+  type: STORY
+  priority: P1
+  target: FIELD_HARDENING
+  owner_role: Firmware / Data IoT Architect
+  status: BACKLOG
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: HIGH
+  dependencies:
+  - HU-FW-OFFLINE-RETENTION-001
+  source: HU-FW-OFFLINE-RETENTION-001
+  evidence:
+  - project/backlog/hardening-followups-2026-09-24.md
+  - project/guides/firmware/offline-retention-adaptive-standard.md
+  next_action: Decidir flash/NVS/FRAM/SD o no persistir en nodo; medir desgaste, RAM y riesgo de corrupcion.
+- id: HU-SOIL-CALIBRATION-HARDENING-001
+  title: Cerrar caracterizacion formal y calibracion del sensor de suelo
+  type: STORY
+  priority: P1
+  target: FIELD_HARDENING
+  owner_role: QA / Agronomy Engineer
+  status: BACKLOG
+  reviewer_role: Solution / IoT Architect
+  effort: M
+  risk: MEDIUM
+  dependencies:
+  - HU-SOIL-001
+  source: HU-SOIL-001
+  evidence:
+  - project/backlog/hardening-followups-2026-09-24.md
+  - project/evidence/soil-moisture/HU-SOIL-001-parent-closure-2026-09-22.md
+  next_action: Confirmar modelo/voltaje/cableado y comparar humedad/pH/EC/NPK contra referencia independiente.
 - id: HU-WATER-005
   title: Implementar y calibrar sensor de caudal
   type: STORY
@@ -452,12 +698,26 @@ items:
   priority: P0
   target: MVP
   owner_role: DevOps / Platform Engineer
-  status: REFINEMENT
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: MEDIUM
   dependencies: []
   source: HU-009
+  evidence:
+  - project/backlog/edge/EN-EDGE-001-breakdown.yaml
+  - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
+  - project/guides/edge/sqlite-mqtt-ingestor-runbook.md
+  next_action: Cerrado runtime Raspberry MQTT a SQLite; siguiente paso recomendado integrar dashboard de telemetria real.
+  acceptance_criteria:
+  - Mosquitto, ingestor y SQLite funcionan en Raspberry.
+  - La base contiene mqtt_messages, telemetry_readings, recovery_summaries, reconstructed_readings y device_liveness.
+  - El servicio systemd usa el WorkingDirectory correcto en Raspberry.
+  - La web puede consumir datos exportados desde el edge.
+  gherkin_scenarios:
+  - given: Raspberry recibe greenhouse/# desde Mosquitto
+    when: el ingestor esta activo
+    then: los mensajes quedan persistidos y disponibles para liveness y web.
 - id: HU-WEB-001
   title: Integrar dashboard con telemetría real
   type: STORY
@@ -476,7 +736,7 @@ items:
   priority: P0
   target: MVP
   owner_role: Frontend Engineer
-  status: VALIDATION
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: MEDIUM
@@ -487,9 +747,11 @@ items:
   evidence:
   - project/backlog/web/HU-WEB-DEVICE-STATUS-001.yaml
   - project/evidence/web/HU-WEB-DEVICE-STATUS-001-implementation-2026-09-22.md
+  - project/evidence/web/HU-WEB-DEVICE-STATUS-001-raspberry-validation-2026-09-22.md
   - tools/edge_export_device_health.py
+  - tools/edge_health_http_server.py
   - project/guides/edge/device-health-web-export-runbook.md
-  next_action: Validar en Raspberry export JSON y ruta web `/project/dispositivos`.
+  next_action: Tomar HU-WEB-ROLE-001 antes de implementar pantallas privadas.
   progress:
   - task_id: T-WEB-PLAN-001
     title: Segregar plataforma web SaaS en roles, fases y HUs granulares
@@ -497,7 +759,15 @@ items:
     evidence:
     - project/backlog/web/EP-WEB-PLATFORM-001-roadmap.yaml
     - project/architecture/aws-saas-target-architecture.md
-  next_action: Tomar HU-WEB-ROLE-001 antes de implementar pantallas privadas.
+  acceptance_criteria:
+  - La web consume el snapshot device-health generado desde Raspberry.
+  - La vista muestra conteos, ultimo visto, secuencia, estado MQTT y eventos recientes.
+  - La UI soporta estados online, warning, critical y offline.
+  - El build web termina correctamente.
+  gherkin_scenarios:
+  - given: Raspberry expone device-health.json
+    when: la web carga /project/dispositivos
+    then: se muestra el estado operativo real de los sensores.
 - id: EN-AWS-ARCH-001
   title: Formalizar arquitectura AWS SaaS piloto
   type: ENABLER
@@ -516,7 +786,7 @@ items:
   priority: P0
   target: MVP
   owner_role: Product Manager
-  status: VALIDATION
+  status: DONE
   reviewer_role: Solution / IoT Architect
   effort: S
   risk: MEDIUM
@@ -528,7 +798,16 @@ items:
     status: DONE
     evidence:
     - project/product/web-role-screen-matrix.yaml
-  next_action: Revisar matriz y aprobar HU-WEB-IA-001 como siguiente trabajo.
+    - project/evidence/web/HU-WEB-ROLE-001-validation-2026-09-22.md
+  next_action: Cerrada como baseline de roles; continuar con HU-WEB-IA-001.
+  acceptance_criteria:
+  - Existe matriz rol-permiso-pantalla-accion versionada.
+  - La matriz queda aprobada como baseline para futuras pantallas privadas.
+  - Las decisiones pendientes quedan declaradas para HUs posteriores.
+  gherkin_scenarios:
+  - given: se planifica una pantalla privada
+    when: se consulta la matriz de roles
+    then: se identifica que rol puede ver o ejecutar cada accion.
 - id: HU-WEB-IA-001
   title: Definir arquitectura de informacion y navegacion privada
   type: STORY
@@ -574,7 +853,7 @@ items:
   priority: P0
   target: FOUNDATION
   owner_role: Frontend Engineer
-  status: VALIDATION
+  status: DONE
   reviewer_role: QA Engineer
   effort: M
   risk: MEDIUM
@@ -588,10 +867,22 @@ items:
     - project/backlog/web/HU-WEB-KANBAN-001-roadmap.yaml
     - web:src/pages/ProjectKanbanPage.jsx
     - web:src/data/projectBoard.js
+    - tools/export_project_board_for_web.py
+    - project/evidence/web/HU-WEB-KANBAN-001-snapshot-refresh-2026-09-22.md
+    - project/evidence/web/HU-WEB-KANBAN-001-validation-2026-09-22.md
     - web:src/App.jsx
     - npm run build
     - route:http://localhost:5174/project/kanban
-  next_action: Revisar tablero y aprobar workflow de propuesta de cambio de estado.
+  next_action: Cerrada como snapshot Kanban funcional; HU futura puede implementar Kanban vivo por API.
+  acceptance_criteria:
+  - La web muestra un tablero Kanban generado desde project/kanban/board.yaml.
+  - El snapshot incluye lanes, tarjetas, estados, evidencias y next_action.
+  - La UI invalida cache local cuando cambia snapshotId.
+  - El build web termina correctamente.
+  gherkin_scenarios:
+  - given: existe un snapshot Kanban exportado
+    when: un usuario abre /project/kanban
+    then: ve las tarjetas agrupadas por estado actualizado.
 - id: HU-WEB-KANBAN-002
   title: Agregar workflow de propuesta de cambio de estado
   type: STORY
@@ -659,6 +950,14 @@ items:
     - route:http://localhost:5174/project/kanban
     - route:http://localhost:5174/project/laboratorios
   next_action: Mantener navegacion central estable para futuras vistas operativas del proyecto.
+  acceptance_criteria:
+  - La home incluye accesos directos a Kanban y Laboratorios.
+  - Las rutas /project/kanban y /project/laboratorios son navegables desde la UI.
+  - El build web termina correctamente.
+  gherkin_scenarios:
+  - given: un usuario abre la pagina principal
+    when: selecciona los accesos de proyecto
+    then: puede entrar al Kanban y a Laboratorios sin conocer la URL directa.
 - id: EN-AGRO-KNOW-001
   title: Crear base de conocimiento agricola con fuentes cientificas
   type: ENABLER

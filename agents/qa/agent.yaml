@@ -24,9 +24,11 @@ prohibited:
 - No asumir calibracion o validacion no demostrada
 - No aceptar pruebas de sensor como calibracion si solo demuestran respuesta funcional
 - No recomendar VALIDATION o DONE si faltan criterios, Gherkin/exception, DoR, DoD o evidencia esperada
+- No aceptar DONE si los resultados no estan trazados contra cada acceptance_criteria
 review_required: true
 kiro_agent: project-qa-evidence
 gate_responsibilities:
 - Auditar READY, IN_PROGRESS y VALIDATION antes de recomendar avance.
 - Devolver CHANGES_REQUIRED cuando un item este en un estado mas avanzado que su refinamiento real.
 - Exigir evidencia verificable por criterio de aceptacion.
+- Verificar que las HUs nuevas hayan pasado por refinamiento antes de ejecucion.

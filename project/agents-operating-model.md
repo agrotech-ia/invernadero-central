@@ -31,6 +31,8 @@ Objetivo aspiracional:
 - Kanban pull-based.
 - WIP recomendado: maximo 2 historias en `IN_PROGRESS`.
 - Primero refinar, luego ejecutar.
+- Si aparece una nueva HU durante una conversacion o laboratorio, primero se arma
+  la HU completa y luego se ejecuta.
 - Los agentes proponen y preparan; el humano aprueba cambios de impacto.
 - Trabajo operativo no equivale a validado.
 - No se marca `DONE` sin evidencia.
@@ -79,6 +81,11 @@ La fuente operativa de compuertas es `project/validation/state-gates.yaml`.
 
 Regla fuerte:
 
+- Frases como `nueva HU`, `creemos una HU`, `salio otra HU`, `trabajemos esta HU`,
+  `refinemos la HU` o `primero armemos la HU` obligan a enrutar a refinamiento.
+  El resultado minimo debe ser una HU con problema, resultado, alcance,
+  criterios, Gherkin, DoR, DoD, evidencia esperada, riesgos, dependencias y
+  siguiente accion.
 - Ningun item ejecutable puede estar en `READY`, `IN_PROGRESS`, `VALIDATION` o `DONE`
   sin criterios de aceptacion, escenarios Gherkin o excepcion aprobada, DoR, DoD,
   evidencia esperada y granularidad clara.
@@ -91,6 +98,19 @@ Regla fuerte:
 - `granularity=needs_task_breakdown` es incompatible con `READY`, `IN_PROGRESS`,
   `VALIDATION` y `DONE`, salvo que el item sea marcado explicitamente como parent y
   tenga HUs hijas ejecutables.
+
+## Como pedirlo en conversacion
+
+Para activar el flujo correcto, el humano puede decir cualquiera de estas frases:
+
+- "Nueva HU: ..."
+- "Creemos una HU para ..."
+- "Antes de seguir, refinemos esta HU"
+- "Trabajemos esta HU, primero criterios y Gherkin"
+- "Esto es una HU nueva, armemos el contrato"
+
+La respuesta esperada de agentes y asistentes es preparar o actualizar la HU antes
+de ejecutar codigo, laboratorio, despliegues o movimientos de estado.
 
 ## Seleccion de trabajo
 

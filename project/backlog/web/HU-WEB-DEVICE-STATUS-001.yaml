@@ -1,7 +1,7 @@
 id: HU-WEB-DEVICE-STATUS-001
 title: Mostrar estado real de dispositivos desde Raspberry
 type: STORY
-status: VALIDATION
+status: DONE
 priority: P0
 target: MVP
 expert_role: Frontend Engineer
@@ -24,10 +24,11 @@ scope:
   - Notificaciones externas.
 acceptance_criteria:
 - La ruta `/project/dispositivos` carga sin romper build.
-- La UI lee `/edge/device-health.json`.
+- La UI lee `/edge/device-health.json` por defecto o `VITE_EDGE_HEALTH_URL` cuando consume una Raspberry remota.
 - La UI muestra `online/warning/critical/offline`.
 - Raspberry puede exportar el JSON desde `var/edge/greenhouse.db`.
 - Existe timer systemd opcional para export periodico.
+- La web muestra estado `online` usando datos reales de Raspberry.
 evidence:
 - web:src/pages/ProjectDeviceStatusPage.jsx
 - web:src/App.jsx
@@ -36,10 +37,15 @@ evidence:
 - tools/edge_export_device_health.py
 - deploy/systemd/greenhouse-edge-health-export.service
 - deploy/systemd/greenhouse-edge-health-export.timer
+- deploy/systemd/greenhouse-edge-health-http.service
+- tools/edge_health_http_server.py
 - project/guides/edge/device-health-web-export-runbook.md
 - project/evidence/web/HU-WEB-DEVICE-STATUS-001-implementation-2026-09-22.md
+- project/evidence/web/HU-WEB-DEVICE-STATUS-001-raspberry-validation-2026-09-22.md
 risks:
 - risk: Snapshot estatico puede quedar viejo si el exportador no corre.
   mitigation: Timer systemd cada minuto y mostrar `generated_at` en la UI.
 - risk: La ruta del repo web puede variar entre laptop y Raspberry.
   mitigation: Documentar `--out` configurable y ajustar systemd por ambiente.
+- risk: Servicios systemd copiados desde ambiente de desarrollo pueden conservar `WorkingDirectory` incorrecto.
+  mitigation: Unit files de Raspberry usan `/home/chuchosam/greenhouse/invernadero-central` y la guia incluye verificacion con `systemctl cat`.

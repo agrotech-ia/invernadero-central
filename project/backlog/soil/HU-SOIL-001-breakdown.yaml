@@ -1,8 +1,15 @@
 parent:
   id: HU-SOIL-001
   title: Validar y caracterizar sensor de suelo 7-en-1
-  status: VALIDATION
-  note: Laboratorio inicial cerrado el 2026-09-01; quedan follow-ups para calibracion, resiliencia MQTT y contrato de datos.
+  status: DONE
+  note: Laboratorio inicial cerrado; contrato MQTT V1 aprobado. Quedan follow-ups para calibracion agronomica, resiliencia MQTT y validacion extendida de modelo/voltaje.
+  closure:
+    date: 2026-09-22
+    result: PASS_WITH_LIMITATIONS
+    evidence:
+    - project/evidence/soil-moisture/HU-SOIL-001-parent-closure-2026-09-22.md
+    - project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md
+    - project/evidence/soil-moisture/HU-SOIL-DATA-001-contract-validation-2026-09-22.md
 
 children:
 - id: HU-SOIL-LAB-001

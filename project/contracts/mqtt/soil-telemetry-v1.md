@@ -1,6 +1,6 @@
 # Soil Telemetry MQTT Contract V1
 
-Estado: DRAFT  
+Estado: APPROVED  
 HU: HU-SOIL-DATA-001  
 Fecha: 2026-09-01  
 Schema: `soil.telemetry.v1`
@@ -113,4 +113,4 @@ greenhouse/gh-lab-01/zone/z-fert-01/device/dev-zfert01-soil-01/telemetry
 - `project/evidence/soil-moisture/HU-SOIL-LAB-002-first-reading-2026-09-01.jsonl`
 - `project/evidence/soil-moisture/HU-SOIL-LAB-001-evidence-index.md`
 - `project/evidence/soil-moisture/HU-FW-MQTT-RESILIENCE-001-mqtt-received-analysis-2026-09-01.md`
-
+- `project/evidence/soil-moisture/HU-SOIL-DATA-001-contract-validation-2026-09-22.md`

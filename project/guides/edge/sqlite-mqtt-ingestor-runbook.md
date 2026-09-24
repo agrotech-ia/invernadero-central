@@ -32,6 +32,20 @@ sudo systemctl enable greenhouse-edge-ingestor
 sudo systemctl start greenhouse-edge-ingestor
 ```
 
+En Raspberry el unit file debe apuntar a la ruta real del repo:
+
+```text
+WorkingDirectory=/home/chuchosam/greenhouse/invernadero-central
+```
+
+Validar despues de instalar:
+
+```bash
+systemctl cat greenhouse-edge-ingestor.service
+```
+
+Si aparece una ruta de desarrollo como `/home/chuchosam/Documentos/github/invernadero-central`, corregir `/etc/systemd/system/greenhouse-edge-ingestor.service`, ejecutar `sudo systemctl daemon-reload` y reiniciar el servicio.
+
 Ver estado:
 
 ```bash

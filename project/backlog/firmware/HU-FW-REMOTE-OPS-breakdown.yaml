@@ -8,7 +8,7 @@ children:
 - id: HU-FW-MQTT-RESILIENCE-ALL-001
   title: Estandarizar resiliencia MQTT en todos los sensores
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   target: MVP
   expert_role: Firmware / Edge Engineer
@@ -40,10 +40,14 @@ children:
   - Guia transversal versionada.
   - Evidencia de compilacion.
   implementation:
-    status: PASS
+    status: PASS_WITH_LIMITATIONS
     evidence:
     - project/guides/firmware/mqtt-delivery-resilience-standard.md
     - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-validation-2026-09-22.md
+    - project/evidence/firmware/HU-FW-MQTT-MEMORY-001-validation-2026-09-22.md
+    - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
+    - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-ALL-001-validation-2026-09-24.md
     firmware_files:
     - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
     - /home/chuchosam/Documentos/github/invernadero/green-house/esp32-sht40/src/main.cpp
@@ -51,11 +55,13 @@ children:
   risks:
   - risk: Duplicar logica MQTT en varios firmwares puede generar divergencia.
     mitigation: Mantener estandar documentado ahora y crear libreria compartida cuando haya mas de tres nodos activos.
+  - risk: El patron compila en SHT40/exterior pero no tiene prueba fisica broker off/on por placa.
+    mitigation: Registrar hardening de prueba por familia de nodo antes de despliegue productivo.
 
 - id: HU-FW-MQTT-MEMORY-001
   title: Endurecer cola MQTT con buffers fijos para evitar fragmentacion de memoria
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   target: MVP
   expert_role: Firmware / Edge Engineer
@@ -86,10 +92,13 @@ children:
   - Guia MQTT actualizada.
   - Evidencia de laboratorio actualizada.
   implementation:
-    status: READY_FOR_LAB_VALIDATION
+    status: PASS_WITH_LIMITATIONS
     evidence:
     - project/guides/firmware/mqtt-delivery-resilience-standard.md
     - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-lab-2026-09-04.md
+    - project/evidence/firmware/HU-FW-WATCHDOG-001-lab-2026-09-09.md
+    - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/evidence/firmware/HU-FW-MQTT-MEMORY-001-validation-2026-09-22.md
     firmware_files:
     - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
     - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/platformio.ini
@@ -102,7 +111,7 @@ children:
 - id: HU-FW-OFFLINE-RETENTION-001
   title: Retencion offline adaptativa para desconexiones largas
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   target: MVP
   expert_role: Firmware / Data IoT Architect
@@ -137,11 +146,14 @@ children:
   - Guia de retencion offline versionada.
   - Evidencia de build y validacion de status.
   implementation:
-    status: READY_FOR_LAB_VALIDATION
+    status: PASS_WITH_LIMITATIONS
     evidence:
     - project/guides/firmware/offline-retention-adaptive-standard.md
     - project/guides/firmware/mqtt-delivery-resilience-standard.md
     - project/evidence/firmware/HU-FW-OFFLINE-RETENTION-001-build-2026-09-09.md
+    - project/evidence/firmware/HU-FW-OFFLINE-RECOVERY-PROTOCOL-001-build-2026-09-09.md
+    - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
+    - project/evidence/firmware/HU-FW-OFFLINE-RETENTION-001-validation-2026-09-22.md
     firmware_files:
     - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
     - /home/chuchosam/Documentos/github/invernadero/green-house/esp32-sht40/src/main.cpp
@@ -155,7 +167,7 @@ children:
 - id: HU-FW-OFFLINE-RECOVERY-PROTOCOL-001
   title: Emitir paquetes MQTT de recuperacion offline compacta
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   target: MVP
   expert_role: Firmware / Data IoT Architect
@@ -190,7 +202,7 @@ children:
   - Laboratorio broker off/on de al menos 15 min.
   - Evidencia de payload recibido en Raspberry.
   implementation:
-    status: READY_FOR_LAB_VALIDATION
+    status: PASS
     evidence:
     - project/contracts/mqtt/offline-recovery-v1.md
     - project/contracts/mqtt/offline-recovery-v1.schema.json
@@ -342,7 +354,7 @@ children:
 - id: HU-FW-CONFIG-001
   title: Configurar WiFi/MQTT del dispositivo sin reflashear
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   target: MVP
   expert_role: Firmware Engineer
@@ -378,6 +390,8 @@ children:
     status: READY_FOR_LAB_VALIDATION
     evidence:
     - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/evidence/firmware/HU-FW-CONFIG-PORTAL-001-lab-2026-09-09.md
+    - project/evidence/firmware/HU-FW-CONFIG-001-validation-2026-09-22.md
     - project/evidence/firmware/INC-FW-CONFIG-NVS-001-mqtt-host-corrupt-2026-09-16.md
     - project/guides/firmware/wifi-mqtt-config-portal-standard.md
     firmware_files:
@@ -385,7 +399,7 @@ children:
     - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/README.md
     notes:
     - Laboratorio cerrado como `PASS_WITH_LIMITATIONS`; `reset_reason=unknown` queda como mejora menor de diagnostico.
-    - Primera iteracion implementa configuracion persistente por Serial/NVS y portal AP temporal en sensor de suelo.
+    - Primera iteracion implementa y valida configuracion persistente por Serial/NVS y portal AP temporal en sensor de suelo.
     - Pendiente portar el portal de configuracion a `esp32-sht40` y `esp32d-outside`; resiliencia MQTT ya esta portada a esos firmwares.
   risks:
   - risk: Portal de configuracion expone credenciales o queda abierto permanentemente.
@@ -434,7 +448,7 @@ children:
   - Evidencia de prueba fisica con cambio de red y broker.
   - Pendientes de portabilidad registrados.
   implementation:
-    status: READY_FOR_LAB_VALIDATION
+    status: PASS
     evidence:
     - project/guides/firmware/wifi-mqtt-config-portal-lab.md
     - project/guides/firmware/wifi-mqtt-config-portal-standard.md
@@ -494,6 +508,7 @@ children:
     status: READY_FOR_LAB_VALIDATION
     evidence:
     - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/guides/firmware/ota-update-lab.md
     notes:
     - OTA queda apagado por defecto, requiere password y solo abre ventana temporal por comando Serial.
   risks:
@@ -503,7 +518,7 @@ children:
 - id: HU-FW-MQTT-RESILIENCE-001
   title: Evitar perdida silenciosa de telemetria cuando MQTT se desconecta
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   target: MVP
   expert_role: Firmware / Edge Engineer
@@ -543,13 +558,21 @@ children:
   - Prueba de desconexion/reconexion documentada.
   - Limitaciones de entrega declaradas para MVP.
   implementation:
-    status: READY_FOR_LAB_VALIDATION
+    status: PASS_WITH_LIMITATIONS
     evidence:
     - project/evidence/firmware/HU-FW-REMOTE-OPS-implementation-2026-09-01.md
+    - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-lab-2026-09-04.md
+    - project/evidence/firmware/HU-FW-MQTT-RESILIENCE-001-validation-2026-09-22.md
+    - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
+    - project/guides/firmware/mqtt-delivery-resilience-standard.md
     - project/guides/sensors/mqtt-gap-logger-runbook.md
     files:
     - /home/chuchosam/Documentos/github/invernadero/green-house/xiao-esp32c3-soil/src/main.cpp
     - tools/mqtt_gap_logger.py
+    notes:
+    - Validado en sensor de suelo con replay corto, status MQTT corregido y edge detectando gaps/liveness.
+    - Retencion offline larga queda en HU-FW-OFFLINE-RETENTION-001.
+    - Port completo a todos los sensores queda en HU-FW-MQTT-RESILIENCE-ALL-001.
   risks:
   - risk: Reintentos bloquean lectura del sensor o consumen demasiada memoria.
     mitigation: Usar cola corta, no bloqueante y con descarte explicito.

@@ -26,5 +26,7 @@ prohibited:
 - No desplegar criticamente sin aprobacion
 - No modificar HU congeladas
 - No implementar una HU si no pasa READY/IN_PROGRESS gate, salvo discovery/refinamiento reversible aprobado
+- No empezar codigo, firmware, infraestructura, laboratorio ni cambios de estado cuando la HU seleccionada no tenga contrato completo: criterios, Gherkin/exception, DoR, DoD y evidencia esperada
+- Si el humano pide trabajar una HU nueva, devolver CHANGES_REQUIRED/refinamiento necesario antes de implementar
 review_required: true
 kiro_agent: project-engineering

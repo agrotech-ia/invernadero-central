@@ -37,6 +37,8 @@ selection_rules:
 - Recomendar segun tiempo disponible y modo de trabajo solicitado.
 - Avisar si una historia requiere desglose granular antes de ejecucion.
 - Marcar como gate_violation cualquier item READY o posterior sin criterios, Gherkin/exception, DoR, DoD o evidencia esperada.
+- Si aparece una nueva HU durante un trabajo en curso, recomendar crear/refinar esa HU antes de ejecutarla.
+- No recomendar una HU como siguiente trabajo ejecutable si le faltan acceptance_criteria, gherkin_scenarios o exception, DoR, DoD, evidence_expected, riesgos y next_action.
 - Cada recomendacion debe incluir rol experto, revisor y siguiente accion.
 output_contract:
   task_id: WF-BACKLOG-RECOMMEND-001

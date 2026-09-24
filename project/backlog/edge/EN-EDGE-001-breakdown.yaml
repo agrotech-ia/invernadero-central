@@ -1,7 +1,7 @@
 id: EN-EDGE-001
 title: Validar runtime Raspberry MQTT a DB
 type: ENABLER
-status: IN_PROGRESS
+status: DONE
 priority: P0
 target: MVP
 owner_role: DevOps / Platform Engineer
@@ -28,7 +28,7 @@ stories:
 - id: HU-EDGE-DB-001
   title: Crear almacenamiento edge SQLite compatible con PostgreSQL
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   outcome: Raspberry guarda mensajes MQTT, lecturas, resumenes offline, puntos reconstruidos y liveness en SQLite.
   acceptance_criteria:
@@ -42,7 +42,7 @@ stories:
 - id: HU-EDGE-INGESTOR-001
   title: Ingerir MQTT desde Mosquitto hacia almacenamiento edge
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   outcome: Un proceso en Raspberry consume `mosquitto_sub -v` y persiste cada mensaje usando adaptador de almacenamiento.
   acceptance_criteria:
@@ -57,10 +57,11 @@ stories:
   - tools/edge_sqlite_status.py
   - project/guides/edge/sqlite-mqtt-ingestor-runbook.md
   - project/evidence/edge/HU-EDGE-INGESTOR-001-local-validation-2026-09-17.md
+  - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
 - id: HU-EDGE-OFFLINE-RECOVERY-001
   title: Reconstruir recuperacion offline en Raspberry
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   outcome: El edge persiste `telemetry/recovery` y crea puntos visuales reconstruidos con calidad explicita.
   acceptance_criteria:
@@ -71,10 +72,11 @@ stories:
   evidence:
   - project/contracts/mqtt/offline-recovery-v1.md
   - edge/ingestor/storage.py
+  - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
 - id: HU-OPS-SENSOR-LIVENESS-001
   title: Registrar ultimo visto por sensor
   type: STORY
-  status: VALIDATION
+  status: DONE
   priority: P0
   outcome: La base permite detectar sensores/gateway sin datos recientes y registrar transiciones operativas.
   acceptance_criteria:
@@ -94,6 +96,7 @@ stories:
   - project/guides/edge/device-liveness-runbook.md
   - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-local-validation-2026-09-22.md
   - project/evidence/edge/HU-OPS-SENSOR-LIVENESS-001-raspberry-validation-2026-09-22.md
+  - project/evidence/edge/EN-EDGE-001-raspberry-runtime-validation-2026-09-22.md
 risks:
 - risk: SQLite resuelve laboratorio pero no concurrencia productiva multiusuario.
   mitigation: Mantener adaptador y migracion PostgreSQL equivalente desde el inicio.

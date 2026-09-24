@@ -1,6 +1,6 @@
 # Offline Retention Adaptive Standard
 
-Estado: DRAFT  
+Estado: APPROVED_BASELINE  
 Fecha: 2026-09-09  
 Aplica a: nodos ESP32/XIAO con MQTT
 

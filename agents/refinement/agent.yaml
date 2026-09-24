@@ -29,6 +29,7 @@ prohibited:
 - No modificar Shared Contract dentro del refinamiento
 - No mezclar prueba funcional, caracterizacion y calibracion de sensores en una sola HU
 - No entregar refinamiento sin acceptance_criteria, gherkin_scenarios, definition_of_ready, definition_of_done, evidence_expected y tareas o plan de ejecucion
+- No recomendar READY si queda una pregunta abierta que cambie alcance, evidencia o criterio de aceptacion
 review_required: true
 output_must_include:
 - problem
@@ -44,3 +45,25 @@ output_must_include:
 - risks
 - open_questions
 - state_gate_check
+trigger_phrases:
+- nueva HU
+- creemos una HU
+- crear HU
+- salio otra HU
+- trabajemos esta HU
+- primero armemos la HU
+- refinemos la HU
+minimum_hu_contract:
+- problem
+- outcome
+- scope
+- expert_role
+- reviewer_role
+- acceptance_criteria
+- gherkin_scenarios
+- definition_of_ready
+- definition_of_done
+- evidence_expected
+- risks
+- dependencies_or_blockers
+- next_action

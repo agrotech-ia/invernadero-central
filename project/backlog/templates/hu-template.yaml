@@ -34,9 +34,14 @@ dependencies:
   reason: Motivo de dependencia.
 acceptance_criteria:
 - Dado/Cuando/Entonces o criterio verificable.
+gherkin_scenarios:
+- given: Contexto inicial observable
+  when: Accion o evento que ejecuta la HU
+  then: Resultado verificable esperado
 definition_of_ready:
 - Contexto minimo identificado.
 - Criterios de aceptacion claros.
+- Escenarios Gherkin claros o excepcion aprobada.
 - Riesgos conocidos.
 - Evidencia esperada definida.
 - Rol experto y revisor asignados.
